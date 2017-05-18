@@ -56,5 +56,20 @@ namespace TagProcess
              
             this.Close();
         }
+
+        private void changeTagID_Click(object sender, EventArgs e)
+        {
+            // TODO scan form
+            string tag = "AAA";
+            if (false == ParticipantHelper.tryAddTag(tag))
+            {
+                MessageBox.Show("這個晶片已經被其他選手使用");
+            }
+            else
+            {
+                retParticipant.tag_id = tag;
+                textBox_tag_id.Text = tag;
+            }
+        }
     }
 }

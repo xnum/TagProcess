@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Data;
 using RestSharp;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
 
 namespace TagProcess
 {
@@ -106,18 +107,8 @@ namespace TagProcess
             set
             {
                 if (_tag_id == value) return; // check if is same tag id
-                // TODO duplicated check
-                if(false == ParticipantHelper.tryAddTag(value))
-                {
-                    MessageBox.Show("這個晶片已經被其他選手使用");
-                }
-                else
-                { 
-                    is_dirty = true; // decided to use new tag, make it dirty
-                    ParticipantHelper.cancelTag(_tag_id); // make old tag unused
-                    _tag_id = value; // assign new tag
-                }
-                
+                if (_tag_id != String.Empty) is_dirty = true;
+                _tag_id = value;
             }
         }
 
@@ -293,6 +284,63 @@ namespace TagProcess
             ParticipantHelper.setGroups(groups);
 
             return true;
+        }
+
+        internal class updateResult
+        {
+            public string code = String.Empty;
+            public Participant p = null;
+            public string msg = String.Empty;
+        }
+
+        /// <summary>
+        /// 將參賽選手資料傳回伺服器進行更新，blocking IO
+        /// </summary>
+        public void updateParticipant(Participant p)
+        {
+            RestClient client = new RestClient(serverUrl);
+            RestRequest req_for_parti = new RestRequest("participant", Method.PATCH);
+            req_for_parti.AddParameter("id", p.id);
+            req_for_parti.AddParameter("group_id", p.group_id);
+            req_for_parti.AddParameter("race_id", p.race_id);
+            req_for_parti.AddParameter("male", p.male);
+            req_for_parti.AddParameter("tag_id", p.tag_id);
+            req_for_parti.AddParameter("name", p.name);
+            req_for_parti.AddParameter("birth", p.birth);
+            req_for_parti.AddParameter("address", p.address);
+            req_for_parti.AddParameter("zipcode", p.zipcode);
+            req_for_parti.AddParameter("phone", p.phone);
+            IRestResponse res_for_parti = client.Execute(req_for_parti);
+
+            if (res_for_parti.ErrorException != null || res_for_parti.ResponseStatus != ResponseStatus.Completed)
+            {
+                MessageBox.Show("連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
+                return;
+            }
+
+            if (res_for_parti.StatusCode != HttpStatusCode.OK || res_for_parti.Content == "")
+            {
+                msgCallback(0, "HTTP NOT OK: " + res_for_parti.StatusCode);
+                return;
+            }
+
+            updateResult res = JsonConvert.DeserializeObject<updateResult>(res_for_parti.Content);
+            if (res.code != "200")
+            {
+                MessageBox.Show(res.msg);
+                return;
+            }
+            var result_body = res.p;
+            for(int i = 0; i < participants.Count; ++i)
+            {
+                if(participants[i].id == result_body.id)
+                {
+                    ParticipantHelper.cancelTag(participants[i].tag_id);
+                    ParticipantHelper.tryAddTag(result_body.tag_id);
+                    participants[i] = result_body;
+                    break;
+                }
+            }
         }
     }
 }

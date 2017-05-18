@@ -30,7 +30,7 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_tag_id = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.changeTagID = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
             this.comboBox_groups = new System.Windows.Forms.ComboBox();
@@ -73,14 +73,15 @@
             this.textBox_tag_id.Size = new System.Drawing.Size(182, 22);
             this.textBox_tag_id.TabIndex = 1;
             // 
-            // button1
+            // changeTagID
             // 
-            this.button1.Location = new System.Drawing.Point(209, 37);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "晶片變更";
-            this.button1.UseVisualStyleBackColor = true;
+            this.changeTagID.Location = new System.Drawing.Point(209, 37);
+            this.changeTagID.Name = "changeTagID";
+            this.changeTagID.Size = new System.Drawing.Size(75, 23);
+            this.changeTagID.TabIndex = 2;
+            this.changeTagID.Text = "晶片變更";
+            this.changeTagID.UseVisualStyleBackColor = true;
+            this.changeTagID.Click += new System.EventHandler(this.changeTagID_Click);
             // 
             // groupBox1
             // 
@@ -118,14 +119,14 @@
             this.label11.TabIndex = 18;
             this.label11.Text = "比賽組別";
             // 
-            // comboBox1
+            // comboBox_groups
             // 
             this.comboBox_groups.FormattingEnabled = true;
             this.comboBox_groups.Items.AddRange(new object[] {
             "男1",
             "男2"});
             this.comboBox_groups.Location = new System.Drawing.Point(318, 93);
-            this.comboBox_groups.Name = "comboBox1";
+            this.comboBox_groups.Name = "comboBox_groups";
             this.comboBox_groups.Size = new System.Drawing.Size(86, 20);
             this.comboBox_groups.TabIndex = 17;
             // 
@@ -301,7 +302,7 @@
             this.Controls.Add(this.textBox_race_id);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.changeTagID);
             this.Controls.Add(this.textBox_tag_id);
             this.Controls.Add(this.label1);
             this.Name = "ParticipantsEdit";
@@ -317,7 +318,7 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox_tag_id;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button changeTagID;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBox_id;
         private System.Windows.Forms.Label label10;

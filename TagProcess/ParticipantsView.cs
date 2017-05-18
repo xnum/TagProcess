@@ -63,13 +63,14 @@ namespace TagProcess
 
                 using (var form = new ParticipantsEdit(core.participants[e.RowIndex]))
                 {
-                    if (form.ShowDialog() == DialogResult.OK)
+                    if (form.ShowDialog() != DialogResult.OK)
+                        return;
+
+                    var val = form.retParticipant;
+                    if (val.needWriteBack())
                     {
-                        var val = form.retParticipant;
-                        if(val.needWriteBack())
-                        {
-                            Debug.WriteLine(JsonConvert.SerializeObject(val));
-                        }
+                        core.updateParticipant(val);
+                        updateDataGridView();
                     }
                 }
             }
