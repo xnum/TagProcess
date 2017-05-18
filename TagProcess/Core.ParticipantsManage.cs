@@ -9,6 +9,39 @@ using System.Windows.Forms;
 
 namespace TagProcess
 {
+    public static class ParticipantHelper
+    {
+        public static bool isUsedTag(string tag) 
+        {
+            /* If False were returned, also insert it to used tag sets */
+            return false;
+        }
+
+        public static void cancelTag(string tag)
+        {
+
+        }
+
+        public static string maleIntToString(int male)
+        {
+            return "";
+        }
+
+        public static int maleStringToInt(string male_s)
+        {
+            return 1;
+        }
+
+        public static string groupIntToString(int group_id)
+        {
+            return "男1";
+        }
+
+        public static int groupStringToInt(string group)
+        {
+            return 1;
+        }
+    }
     public class Participant
     {
         /* mapping to JSON data */
@@ -23,11 +56,19 @@ namespace TagProcess
             get { return _tag_id; }
             set
             {
-                if (_tag_id == value) return;
-                if (_tag_id != String.Empty) is_dirty = true;
+                if (_tag_id == value) return; // check if is same tag id
                 // TODO duplicated check
-
-                _tag_id = value;
+                if(ParticipantHelper.isUsedTag(value))
+                {
+                    MessageBox.Show("這個晶片已經被其他選手使用");
+                }
+                else
+                { 
+                    is_dirty = true; // decided to use new tag, make it dirty
+                    ParticipantHelper.cancelTag(_tag_id); // make old tag unused
+                    _tag_id = value; // assign new tag
+                }
+                
             }
         }
 
@@ -103,35 +144,12 @@ namespace TagProcess
         /* data represetation helper members */
         public string male_s
         {
-            get
-            {
-                switch (male)
-                {
-                    case 0:
-                        return "男";
-                    case 1:
-                        return "女";
-                    default:
-                        return "無";
-                }
-            }
+            get { return ParticipantHelper.maleIntToString(male); }
             set
             {
-                switch (value)
-                {
-                    case "男":
-                        if (male != 0) is_dirty = true;
-                        male = 0;
-                        break;
-                    case "女":
-                        if (male != 1) is_dirty = true;
-                        male = 1;
-                        break;
-                    default:
-                        if (male == 1 || male == 0) is_dirty = true;
-                        male = 2;
-                        break;
-                }
+                int tmp = ParticipantHelper.maleStringToInt(value);
+                if (tmp != male) is_dirty = true;
+                male = tmp;
             }
         }
 
@@ -154,25 +172,22 @@ namespace TagProcess
         public string group
         {
             get
-            {
-                return "男1";
-            }
+            { return ParticipantHelper.groupIntToString(group_id); }
             set
             {
-                group_id = 0;
-                is_dirty = true;
+                int tmp = ParticipantHelper.groupStringToInt(value);
+                if (tmp != group_id) is_dirty = true;
+                group_id = tmp;
             }
         }
 
         /* for update data to server */
         private bool is_dirty = false;
 
-        public Participant()
+        public bool needWriteBack()
         {
-            is_dirty = false;
-            _birth = DateTime.MinValue;
+            return is_dirty;
         }
-
     }
 
     /// <summary>
