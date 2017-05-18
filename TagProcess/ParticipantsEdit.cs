@@ -16,8 +16,8 @@ namespace TagProcess
         public ParticipantsEdit(Participant current)
         {
             InitializeComponent();
-            comboBoxGroups.Items.Clear();
-            comboBoxGroups.Items.AddRange(ParticipantHelper.getGroupNames().ToArray());
+            comboBox_groups.Items.Clear();
+            comboBox_groups.Items.AddRange(ParticipantHelper.getGroupNames().ToArray());
             retParticipant = current;
 
             textBox_id.Text = retParticipant.id.ToString();
@@ -31,6 +31,7 @@ namespace TagProcess
             textBox_age.Text = retParticipant.age;
 
             comboBox_male.Text = retParticipant.male_s;
+            comboBox_groups.Text = retParticipant.group;
         }
 
         private void button_ok_Click(object sender, EventArgs e)

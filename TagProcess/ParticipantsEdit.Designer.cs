@@ -33,7 +33,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.comboBoxGroups = new System.Windows.Forms.ComboBox();
+            this.comboBox_groups = new System.Windows.Forms.ComboBox();
             this.textBox_birth = new System.Windows.Forms.TextBox();
             this.textBox_id = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -85,7 +85,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.comboBoxGroups);
+            this.groupBox1.Controls.Add(this.comboBox_groups);
             this.groupBox1.Controls.Add(this.textBox_birth);
             this.groupBox1.Controls.Add(this.textBox_id);
             this.groupBox1.Controls.Add(this.label10);
@@ -120,14 +120,14 @@
             // 
             // comboBox1
             // 
-            this.comboBoxGroups.FormattingEnabled = true;
-            this.comboBoxGroups.Items.AddRange(new object[] {
+            this.comboBox_groups.FormattingEnabled = true;
+            this.comboBox_groups.Items.AddRange(new object[] {
             "男1",
             "男2"});
-            this.comboBoxGroups.Location = new System.Drawing.Point(318, 93);
-            this.comboBoxGroups.Name = "comboBox1";
-            this.comboBoxGroups.Size = new System.Drawing.Size(86, 20);
-            this.comboBoxGroups.TabIndex = 17;
+            this.comboBox_groups.Location = new System.Drawing.Point(318, 93);
+            this.comboBox_groups.Name = "comboBox1";
+            this.comboBox_groups.Size = new System.Drawing.Size(86, 20);
+            this.comboBox_groups.TabIndex = 17;
             // 
             // textBox_birth
             // 
@@ -339,6 +339,6 @@
         private System.Windows.Forms.Button button_ok;
         private System.Windows.Forms.TextBox textBox_birth;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.ComboBox comboBoxGroups;
+        private System.Windows.Forms.ComboBox comboBox_groups;
     }
 }

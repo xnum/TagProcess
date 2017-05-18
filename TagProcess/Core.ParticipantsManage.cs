@@ -17,16 +17,20 @@ namespace TagProcess
 
     public static class ParticipantHelper
     {
-        public static List<RaceGroups> groups;
-        public static bool isUsedTag(string tag) 
+        private static List<RaceGroups> groups = new List<RaceGroups>();
+        private static HashSet<string> tags = new HashSet<string>();
+
+        public static bool tryAddTag(string tag) 
         {
-            /* If False were returned, also insert it to used tag sets */
-            return false;
+            /* 如果Add返回True，代表還沒被新增，所以被新增成功
+             * 如果Add返回False，代表已經在目前的Set裡
+             */
+            return tags.Add(tag);
         }
 
         public static void cancelTag(string tag)
         {
-
+            tags.Remove(tag);
         }
 
         public static string maleIntToString(int male)
@@ -73,11 +77,24 @@ namespace TagProcess
 
             return ret;
         }
+
+        internal static void setGroups(List<RaceGroups> g)
+        {
+            groups = g;
+        }
+
+        internal static void Clear()
+        {
+            tags.Clear();
+            groups.Clear();
+        }
     }
     public class Participant
     {
         /* mapping to JSON data */
         public int id; /* PK MUST NOT modify it*/
+
+        [JsonIgnore]
         public int competition_id; // don't care
         public int group_id; /* modified by __group__ */
         public string race_id; /* TODO: how to modify */
@@ -90,7 +107,7 @@ namespace TagProcess
             {
                 if (_tag_id == value) return; // check if is same tag id
                 // TODO duplicated check
-                if(ParticipantHelper.isUsedTag(value))
+                if(false == ParticipantHelper.tryAddTag(value))
                 {
                     MessageBox.Show("這個晶片已經被其他選手使用");
                 }
@@ -174,6 +191,7 @@ namespace TagProcess
         public int male; /* modified by male_s */
 
         /* data represetation helper members */
+        [JsonIgnore]
         public string male_s
         {
             get { return ParticipantHelper.maleIntToString(male); }
@@ -185,6 +203,7 @@ namespace TagProcess
             }
         }
 
+        [JsonIgnore]
         public string age
         {
             get
@@ -201,6 +220,7 @@ namespace TagProcess
             private set { } /* Not allow change age directly */
         }
 
+        [JsonIgnore]
         public string group
         {
             get
@@ -251,6 +271,7 @@ namespace TagProcess
                 return false;
             }
 
+            ParticipantHelper.Clear();
             participants = JsonConvert.DeserializeObject<List<Participant>>(res_for_parti.Content);
 
             RestRequest req_for_groups = new RestRequest("race_groups/current", Method.GET);
@@ -268,7 +289,8 @@ namespace TagProcess
                 return false;
             }
 
-            ParticipantHelper.groups = JsonConvert.DeserializeObject<List<RaceGroups>>(res_for_groups.Content);
+            var groups = JsonConvert.DeserializeObject<List<RaceGroups>>(res_for_groups.Content);
+            ParticipantHelper.setGroups(groups);
 
             return true;
         }
