@@ -16,6 +16,17 @@ namespace TagProcess
         private Form parent = null;
         private Core core = null;
 
+        /* Helper Functions*/
+        private void updateDataGridView()
+        {
+            mainDGV.Rows.Clear();
+            foreach (var row in core.participants)
+            {
+                mainDGV.Rows.Add(row.id, row.name, row.age, row.male_s, row.group_id, row.tag_id, row.race_id, "編輯");
+            }
+            mainDGV.Refresh();
+        }
+
         public ParticipantsView(Form parentForm, Core c)
         {
             parent = parentForm;
@@ -23,12 +34,7 @@ namespace TagProcess
 
             InitializeComponent();
 
-            foreach(var row in core.participants)
-            {
-                mainDGV.Rows.Add(row.id, row.name, row.age, row.male_s, row.group_id, row.tag_id, row.race_id, "編輯");
-            }
-
-            mainDGV.Refresh();
+            updateDataGridView();
         }
 
         /// <summary>
@@ -41,14 +47,27 @@ namespace TagProcess
             parent.Show();
         }
 
+        /// <summary>
+        /// 當編輯按鈕被按下時，跳出對應列選手的編輯視窗
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mainDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             var senderGrid = (DataGridView)sender;
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
-                //TODO - Button Clicked - Execute Code Here
                 Debug.WriteLine(e.ColumnIndex + " , " + e.RowIndex);
+
+                using (var form = new ParticipantsEdit(core.participants[e.RowIndex]))
+                {
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        var val = form.retParticipant;
+
+                    }
+                }
             }
         }
     }

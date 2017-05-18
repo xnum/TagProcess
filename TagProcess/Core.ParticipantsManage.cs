@@ -1,5 +1,4 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -12,18 +11,96 @@ namespace TagProcess
 {
     public class Participant
     {
-        public int id;
+        /* mapping to JSON data */
+        public int id; /* PK MUST NOT modify it*/
         public int competition_id; // don't care
-        public int group_id;
-        public string race_id;
-        public string tag_id;
-        public string name;
-        public DateTime birth;
-        public int male;
-        public string address;
-        public string zipcode;
-        public string phone;
+        public int group_id; /* modified by __group__ */
+        public string race_id; /* TODO: how to modify */
 
+        private string _tag_id = String.Empty;
+        public string tag_id
+        {
+            get { return _tag_id; }
+            set
+            {
+                if (_tag_id == value) return;
+                if (_tag_id != String.Empty) is_dirty = true;
+                // TODO duplicated check
+
+                _tag_id = value;
+            }
+        }
+
+        private string _name = String.Empty;
+        public string name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name == value) return;
+                if (_name != String.Empty) is_dirty = true;
+                _name = value;
+            }
+        }
+
+        private DateTime _birth = DateTime.MinValue;
+        public string birth
+        {
+            get { return _birth.ToString("yyyy-M-d"); }
+            set
+            {
+                try
+                {
+                    if (_birth.Equals(DateTime.ParseExact(value, "yyyy-M-d", null))) return;
+                    if (!_birth.Equals(DateTime.MinValue)) is_dirty = true;
+                    _birth = DateTime.ParseExact(value, "yyyy-M-d", null);
+                }
+                catch (FormatException e)
+                {
+                    MessageBox.Show("日期格式錯誤，必須為1970-1-1");
+                }
+            }
+        }
+
+        private string _address = String.Empty;
+        public string address
+        {
+            get { return _address; }
+            set
+            {
+                if (_address == value) return;
+                if (_address != String.Empty) is_dirty = true;
+                _address = value;
+            }
+        }
+
+        private string _zipcode = String.Empty;
+        public string zipcode
+        {
+            get { return _zipcode; }
+            set
+            {
+                if (_zipcode == value) return;
+                if (_zipcode != String.Empty)is_dirty = true;;
+                _zipcode = value;
+            }
+        }
+
+        private string _phone = String.Empty;
+        public string phone
+        {
+            get { return _phone; }
+            set
+            {
+                if (_phone == value) return;
+                if (_phone != String.Empty) is_dirty = true; ;
+                _phone = value;
+            }
+        }
+
+        public int male; /* modified by male_s */
+
+        /* data represetation helper members */
         public string male_s
         {
             get
@@ -65,20 +142,35 @@ namespace TagProcess
                 // Save today's date.
                 var today = DateTime.Today;
                 // Calculate the age.
-                var age = today.Year - birth.Year;
+                var age = today.Year - _birth.Year;
                 // Go back to the year the person was born in case of a leap year
-                if (birth > today.AddYears(-age)) age--;
+                if (_birth > today.AddYears(-age)) age--;
 
                 return age;
             }
-            private set { }
+            private set { } /* Not allow change age directly */
         }
 
-        bool is_dirty;
+        public string group
+        {
+            get
+            {
+                return "男1";
+            }
+            set
+            {
+                group_id = 0;
+                is_dirty = true;
+            }
+        }
 
-        Participant()
+        /* for update data to server */
+        private bool is_dirty = false;
+
+        public Participant()
         {
             is_dirty = false;
+            _birth = DateTime.MinValue;
         }
 
     }

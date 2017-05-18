@@ -57,7 +57,7 @@ namespace TagProcess
                 MessageBox.Show("下載選手資料失敗，請重試");
                 return;
             }
-
+            logging(0, "下載選手資料完成");
             pv = new ParticipantsView(this, core);
             this.Hide();
             pv.Show();
