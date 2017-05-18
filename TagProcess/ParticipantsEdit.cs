@@ -14,7 +14,6 @@ namespace TagProcess
     public partial class ParticipantsEdit : Form
     {
         public Participant retParticipant;
-        private ParticipantsEditTag editTagForm = null;
         string currentReceivedTag = String.Empty;
         Func<string> get_tag_callback = null;
         public ParticipantsEdit(Participant current, Func<string> get_tag_id)

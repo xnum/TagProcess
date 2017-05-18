@@ -27,31 +27,11 @@ namespace TagProcess
             refreshCOMPort();
         }
 
-        private void refreshCOMPort()
-        {
-            this.COMToolStripMenuItem.DropDownItems.Clear();
-            this.COMToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.重新整理ToolStripMenuItem});
-
-            string[] ports = SerialPort.GetPortNames();
-            foreach(string port in ports)
-            {
-                var item = new ToolStripMenuItem();
-                item.Name = port + "ToolStripMenuItem";
-                item.Size = new Size(152, 22);
-                item.Text = port;
-                item.Click += new EventHandler(this.COMPortConnect_Click);
-                this.COMToolStripMenuItem.DropDownItems.Add(item);
-            }
-        }
-
-        public void logging(int level, string msg)
-        {
-            output_StatusLabel.Text = msg;
-
-            Debug.WriteLine(msg);
-        }
-
+        /// <summary>
+        /// 顯示輸入伺服器網址視窗
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void 伺服器ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ServerUrlInputForm input = new ServerUrlInputForm();
@@ -63,12 +43,23 @@ namespace TagProcess
             }
         }
 
+        /// <summary>
+        /// 從伺服器下載並顯示選手資料
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void partcipants_view_button_Click(object sender, EventArgs e)
         {
             if(!core.checkServerStatus())
             {
                 MessageBox.Show("請先設定伺服器網址");
                 伺服器ToolStripMenuItem_Click(null, null);
+                return;
+            }
+
+            if(!core.is_comport_opened())
+            {
+                MessageBox.Show("請先設定讀卡機COM Port");
                 return;
             }
 
@@ -84,6 +75,11 @@ namespace TagProcess
             pv.Show();
         }
 
+        /// <summary>
+        /// 從伺服器下載選手資料並產生PDF檔
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void print_mail_button_Click(object sender, EventArgs e)
         {
             if (!core.checkServerStatus())
@@ -99,14 +95,25 @@ namespace TagProcess
                 MessageBox.Show("下載選手資料失敗，請重試");
                 return;
             }
+            logging(0, "下載選手資料完成");
             core.gen_mail_pdf();
         }
 
+        /// <summary>
+        /// 重新抓取目前的所有COMPort
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void 重新整理ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             refreshCOMPort();
         }
 
+        /// <summary>
+        /// 連接到特定COMPort
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void COMPortConnect_Click(object sender, EventArgs e)
         {
             foreach (ToolStripMenuItem t in COMToolStripMenuItem.DropDownItems)
@@ -115,7 +122,7 @@ namespace TagProcess
             }
 
             ToolStripMenuItem item = (ToolStripMenuItem)sender;
-            if(core.connect_COMPort(item.Text))
+            if(core.connect_comport(item.Text))
             {
                 item.Checked = true;
             }

@@ -11,7 +11,7 @@ namespace TagProcess
     public partial class Core
     {
         private SerialPort comport = null;
-        public bool connect_COMPort(string port)
+        public bool connect_comport(string port)
         {
             try
             {
@@ -28,6 +28,15 @@ namespace TagProcess
             return true;
         }
 
+        public bool is_comport_opened()
+        {
+            return comport != null && comport.IsOpen;
+        }
+
+        /// <summary>
+        /// 取得感應到的tag，如果沒有感應到會在500ms後回傳Empty
+        /// </summary>
+        /// <returns></returns>
         public string comport_get_tag()
         {
             comport.ReadTimeout = 500;

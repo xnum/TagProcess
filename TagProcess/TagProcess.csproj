@@ -66,6 +66,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form1.Helper.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ParticipantsEdit.cs">
       <SubType>Form</SubType>
     </Compile>
