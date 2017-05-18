@@ -29,6 +29,11 @@ namespace TagProcess
             return tags.Add(tag);
         }
 
+        public static bool isExistsTag(string tag)
+        {
+            return tags.Contains(tag);
+        }
+
         public static void cancelTag(string tag)
         {
             tags.Remove(tag);

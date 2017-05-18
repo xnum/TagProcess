@@ -61,17 +61,20 @@ namespace TagProcess
             {
                 Debug.WriteLine(e.ColumnIndex + " , " + e.RowIndex);
 
-                using (var form = new ParticipantsEdit(core.participants[e.RowIndex]))
-                {
-                    if (form.ShowDialog() != DialogResult.OK)
-                        return;
+                var form = new ParticipantsEdit(core.participants[e.RowIndex], core.comport_get_tag);
+                
+                var result = form.ShowDialog();
 
-                    var val = form.retParticipant;
-                    if (val.needWriteBack())
-                    {
-                        core.updateParticipant(val);
-                        updateDataGridView();
-                    }
+                if (result != DialogResult.OK)
+                {
+                    return;
+                }
+
+                var val = form.retParticipant;
+                if (val.needWriteBack())
+                {
+                    core.updateParticipant(val);
+                    updateDataGridView();
                 }
             }
         }

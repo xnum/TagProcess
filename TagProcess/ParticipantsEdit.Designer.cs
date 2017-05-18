@@ -53,7 +53,11 @@
             this.textBox_race_id = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.button_ok = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.getTagWorker = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -70,12 +74,12 @@
             this.textBox_tag_id.Location = new System.Drawing.Point(26, 38);
             this.textBox_tag_id.Name = "textBox_tag_id";
             this.textBox_tag_id.ReadOnly = true;
-            this.textBox_tag_id.Size = new System.Drawing.Size(182, 22);
+            this.textBox_tag_id.Size = new System.Drawing.Size(116, 22);
             this.textBox_tag_id.TabIndex = 1;
             // 
             // changeTagID
             // 
-            this.changeTagID.Location = new System.Drawing.Point(209, 37);
+            this.changeTagID.Location = new System.Drawing.Point(148, 37);
             this.changeTagID.Name = "changeTagID";
             this.changeTagID.Size = new System.Drawing.Size(75, 23);
             this.changeTagID.TabIndex = 2;
@@ -293,11 +297,33 @@
             this.button_ok.UseVisualStyleBackColor = true;
             this.button_ok.Click += new System.EventHandler(this.button_ok_Click);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 229);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(506, 22);
+            this.statusStrip1.TabIndex = 7;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(0, 17);
+            // 
+            // getTagWorker
+            // 
+            this.getTagWorker.WorkerSupportsCancellation = true;
+            this.getTagWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.getTagWorker_DoWork);
+            this.getTagWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.getTagWorker_RunWorkerCompleted);
+            // 
             // ParticipantsEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(506, 231);
+            this.ClientSize = new System.Drawing.Size(506, 251);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.button_ok);
             this.Controls.Add(this.textBox_race_id);
             this.Controls.Add(this.label9);
@@ -307,8 +333,11 @@
             this.Controls.Add(this.label1);
             this.Name = "ParticipantsEdit";
             this.Text = "參賽選手編輯";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ParticipantsEdit_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -341,5 +370,8 @@
         private System.Windows.Forms.TextBox textBox_birth;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox comboBox_groups;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabel;
+        private System.ComponentModel.BackgroundWorker getTagWorker;
     }
 }
