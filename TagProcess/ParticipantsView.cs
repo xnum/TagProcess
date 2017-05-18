@@ -23,16 +23,11 @@ namespace TagProcess
 
             InitializeComponent();
 
-            DataSet datas = core.getParticipants();
-            DataTable table = datas.Tables["Table1"];
-            foreach(DataRow row in table.Rows)
+            foreach(var row in core.participants)
             {
-                string age = (string)row["birth"];
-                string male = (0 == (Int64)row["male"]) ? "男" : "女";
-                long group_id = (long)row["group_id"];
-                string group = (0 == group_id) ? "男1" : "男2";
-                mainDGV.Rows.Add(row["id"], row["name"], age, male, group, row["tag_id"], row["race_id"], "編輯");
+                mainDGV.Rows.Add(row.id, row.name, row.age, row.male_s, row.group_id, row.tag_id, row.race_id, "編輯");
             }
+
             mainDGV.Refresh();
         }
 

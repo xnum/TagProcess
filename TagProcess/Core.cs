@@ -28,8 +28,8 @@ namespace TagProcess
         public void setServerUrl(string url)
         {
             this.serverUrl = url;
-            Debug.WriteLine(url);
-            RestClient client = new RestClient(url);
+            Debug.WriteLine(serverUrl);
+            RestClient client = new RestClient(serverUrl);
             RestRequest request = new RestRequest("competitions/current", Method.GET);
             client.GetAsync(request, (response, handler) => {
                 if(response.ErrorException != null || response.ResponseStatus != ResponseStatus.Completed)
@@ -58,6 +58,7 @@ namespace TagProcess
                     else
                     {
                         msgCallback(0, "成功： 目前進行中活動[" + name + "]");
+                        competition_id = id;
                     }
                 }
                 catch (Exception e)
