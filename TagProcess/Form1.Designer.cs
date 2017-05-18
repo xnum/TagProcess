@@ -29,9 +29,6 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.print_mail_button = new System.Windows.Forms.Button();
             this.partcipants_view_button = new System.Windows.Forms.Button();
@@ -51,44 +48,16 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button6);
-            this.groupBox1.Controls.Add(this.button5);
-            this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.print_mail_button);
             this.groupBox1.Controls.Add(this.partcipants_view_button);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Location = new System.Drawing.Point(13, 26);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(204, 142);
+            this.groupBox1.Size = new System.Drawing.Size(176, 85);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "前置作業";
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(7, 113);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 7;
-            this.button6.Text = "晶片搜尋";
-            this.button6.UseVisualStyleBackColor = true;
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(113, 81);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 6;
-            this.button5.Text = "號碼布搜尋";
-            this.button5.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(7, 82);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 22);
-            this.textBox1.TabIndex = 5;
             // 
             // button4
             // 
@@ -134,9 +103,9 @@
             this.output_StatusLabel,
             this.statusLabel_tag});
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.statusStrip1.Location = new System.Drawing.Point(0, 177);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 122);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(231, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(206, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -157,7 +126,7 @@
             this.設定ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(231, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(206, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -196,7 +165,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(231, 199);
+            this.ClientSize = new System.Drawing.Size(206, 144);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox1);
@@ -204,7 +173,6 @@
             this.Name = "Form1";
             this.Text = "主選單";
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -217,9 +185,6 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button print_mail_button;
         private System.Windows.Forms.Button partcipants_view_button;
