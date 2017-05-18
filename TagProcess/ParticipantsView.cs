@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace TagProcess
 {
@@ -65,7 +66,10 @@ namespace TagProcess
                     if (form.ShowDialog() == DialogResult.OK)
                     {
                         var val = form.retParticipant;
-
+                        if(val.needWriteBack())
+                        {
+                            Debug.WriteLine(JsonConvert.SerializeObject(val));
+                        }
                     }
                 }
             }

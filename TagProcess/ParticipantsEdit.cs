@@ -16,7 +16,8 @@ namespace TagProcess
         public ParticipantsEdit(Participant current)
         {
             InitializeComponent();
-
+            comboBoxGroups.Items.Clear();
+            comboBoxGroups.Items.AddRange(ParticipantHelper.getGroupNames().ToArray());
             retParticipant = current;
 
             textBox_id.Text = retParticipant.id.ToString();
@@ -27,12 +28,31 @@ namespace TagProcess
             textBox_birth.Text = retParticipant.birth;
             textBox_addr.Text = retParticipant.address;
             textBox_zipcode.Text = retParticipant.zipcode;
-            textBox_age.Text = retParticipant.age.ToString();
+            textBox_age.Text = retParticipant.age;
+
             comboBox_male.Text = retParticipant.male_s;
         }
 
         private void button_ok_Click(object sender, EventArgs e)
         {
+            if (textBox_name.Text != retParticipant.name)
+                retParticipant.name = textBox_name.Text;
+
+            if (textBox_phone.Text != retParticipant.phone)
+                retParticipant.phone = textBox_phone.Text;
+
+            if (textBox_tag_id.Text != retParticipant.tag_id)
+                retParticipant.tag_id = textBox_tag_id.Text;
+
+            if (textBox_birth.Text != retParticipant.birth)
+                retParticipant.birth = textBox_birth.Text;
+
+            if (textBox_addr.Text != retParticipant.address)
+                retParticipant.address = textBox_addr.Text;
+
+            if (textBox_zipcode.Text != retParticipant.zipcode)
+                retParticipant.zipcode = textBox_zipcode.Text;
+             
             this.Close();
         }
     }

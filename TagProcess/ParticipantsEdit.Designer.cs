@@ -32,6 +32,8 @@
             this.textBox_tag_id = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.comboBoxGroups = new System.Windows.Forms.ComboBox();
             this.textBox_birth = new System.Windows.Forms.TextBox();
             this.textBox_id = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -51,8 +53,6 @@
             this.textBox_race_id = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.button_ok = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label11 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,7 +85,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.comboBoxGroups);
             this.groupBox1.Controls.Add(this.textBox_birth);
             this.groupBox1.Controls.Add(this.textBox_id);
             this.groupBox1.Controls.Add(this.label10);
@@ -108,6 +108,26 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "選手資料";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(316, 75);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(53, 12);
+            this.label11.TabIndex = 18;
+            this.label11.Text = "比賽組別";
+            // 
+            // comboBox1
+            // 
+            this.comboBoxGroups.FormattingEnabled = true;
+            this.comboBoxGroups.Items.AddRange(new object[] {
+            "男1",
+            "男2"});
+            this.comboBoxGroups.Location = new System.Drawing.Point(318, 93);
+            this.comboBoxGroups.Name = "comboBox1";
+            this.comboBoxGroups.Size = new System.Drawing.Size(86, 20);
+            this.comboBoxGroups.TabIndex = 17;
             // 
             // textBox_birth
             // 
@@ -247,6 +267,7 @@
             // 
             this.textBox_race_id.Location = new System.Drawing.Point(291, 38);
             this.textBox_race_id.Name = "textBox_race_id";
+            this.textBox_race_id.ReadOnly = true;
             this.textBox_race_id.Size = new System.Drawing.Size(63, 22);
             this.textBox_race_id.TabIndex = 5;
             // 
@@ -270,26 +291,6 @@
             this.button_ok.Text = "儲存變更";
             this.button_ok.UseVisualStyleBackColor = true;
             this.button_ok.Click += new System.EventHandler(this.button_ok_Click);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "男1",
-            "男2"});
-            this.comboBox1.Location = new System.Drawing.Point(318, 93);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(86, 20);
-            this.comboBox1.TabIndex = 17;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(316, 75);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(53, 12);
-            this.label11.TabIndex = 18;
-            this.label11.Text = "比賽組別";
             // 
             // ParticipantsEdit
             // 
@@ -338,6 +339,6 @@
         private System.Windows.Forms.Button button_ok;
         private System.Windows.Forms.TextBox textBox_birth;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBoxGroups;
     }
 }

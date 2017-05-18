@@ -9,8 +9,15 @@ using System.Windows.Forms;
 
 namespace TagProcess
 {
+    public class RaceGroups
+    {
+        public int id;
+        public string name;
+    }
+
     public static class ParticipantHelper
     {
+        public static List<RaceGroups> groups;
         public static bool isUsedTag(string tag) 
         {
             /* If False were returned, also insert it to used tag sets */
@@ -24,22 +31,47 @@ namespace TagProcess
 
         public static string maleIntToString(int male)
         {
-            return "";
+            string[] table = { "男", "女", "無"};
+            return table[male];
         }
 
         public static int maleStringToInt(string male_s)
         {
-            return 1;
+            if (male_s == "男") return 0;
+            if (male_s == "女") return 1;
+            return 2;
         }
 
         public static string groupIntToString(int group_id)
         {
-            return "男1";
+            foreach(RaceGroups g in groups)
+            {
+                if (group_id == g.id) return g.name;
+            }
+
+            throw new Exception("Unknown Group ID: " + group_id);
         }
 
         public static int groupStringToInt(string group)
         {
-            return 1;
+            foreach (RaceGroups g in groups)
+            {
+                if (group == g.name) return g.id;
+            }
+
+            throw new Exception("Unknown Group Name: " + group);
+        }
+
+        public static List<string> getGroupNames()
+        {
+            List<string> ret = new List<string>();
+
+            foreach (RaceGroups g in groups)
+            {
+                ret.Add(g.name);
+            }
+
+            return ret;
         }
     }
     public class Participant
@@ -98,7 +130,7 @@ namespace TagProcess
                 }
                 catch (FormatException e)
                 {
-                    MessageBox.Show("日期格式錯誤，必須為1970-1-1");
+                    MessageBox.Show("日期格式錯誤，必須為1970-1-1" + e.Message);
                 }
             }
         }
@@ -153,7 +185,7 @@ namespace TagProcess
             }
         }
 
-        public int age
+        public string age
         {
             get
             {
@@ -164,7 +196,7 @@ namespace TagProcess
                 // Go back to the year the person was born in case of a leap year
                 if (_birth > today.AddYears(-age)) age--;
 
-                return age;
+                return age.ToString();
             }
             private set { } /* Not allow change age directly */
         }
@@ -204,22 +236,39 @@ namespace TagProcess
         public bool loadParticipants()
         {
             RestClient client = new RestClient(serverUrl);
-            RestRequest request = new RestRequest("participants/current", Method.GET);
-            IRestResponse response = client.Execute(request);
+            RestRequest req_for_participants = new RestRequest("participants/current", Method.GET);
+            IRestResponse res_for_parti = client.Execute(req_for_participants);
 
-            if (response.ErrorException != null || response.ResponseStatus != ResponseStatus.Completed)
+            if (res_for_parti.ErrorException != null || res_for_parti.ResponseStatus != ResponseStatus.Completed)
             {
-                MessageBox.Show("連線伺服器失敗，請重試: " + response.ErrorMessage);
+                MessageBox.Show("連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
                 return false;
             }
 
-            if (response.StatusCode != HttpStatusCode.OK || response.Content == "")
+            if (res_for_parti.StatusCode != HttpStatusCode.OK || res_for_parti.Content == "")
             {
-                msgCallback(0, "HTTP NOT OK: " + response.StatusCode);
+                msgCallback(0, "HTTP NOT OK: " + res_for_parti.StatusCode);
                 return false;
             }
 
-            participants = JsonConvert.DeserializeObject<List<Participant>>(response.Content);
+            participants = JsonConvert.DeserializeObject<List<Participant>>(res_for_parti.Content);
+
+            RestRequest req_for_groups = new RestRequest("race_groups/current", Method.GET);
+            IRestResponse res_for_groups = client.Execute(req_for_groups);
+
+            if (res_for_groups.ErrorException != null || res_for_groups.ResponseStatus != ResponseStatus.Completed)
+            {
+                MessageBox.Show("連線伺服器失敗，請重試: " + res_for_groups.ErrorMessage);
+                return false;
+            }
+
+            if (res_for_groups.StatusCode != HttpStatusCode.OK || res_for_groups.Content == "")
+            {
+                msgCallback(0, "HTTP NOT OK: " + res_for_groups.StatusCode);
+                return false;
+            }
+
+            ParticipantHelper.groups = JsonConvert.DeserializeObject<List<RaceGroups>>(res_for_groups.Content);
 
             return true;
         }
