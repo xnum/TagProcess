@@ -23,9 +23,6 @@ namespace TagProcess
 
             InitializeComponent();
 
-            //mainDGV.CellValueChanged -= mainDGV_CellValueChanged;
-            //mainDGV.CurrentCellDirtyStateChanged -= mainDGV_CurrentCellDirtyStateChanged;
-
             DataSet datas = core.getParticipants();
             DataTable table = datas.Tables["Table1"];
             foreach(DataRow row in table.Rows)
@@ -39,6 +36,11 @@ namespace TagProcess
             mainDGV.Refresh();
         }
 
+        /// <summary>
+        /// 視窗關閉時跳回主選單，目前只有主選單視窗可以打開此視窗
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ParticipantsView_FormClosed(object sender, FormClosedEventArgs e)
         {
             parent.Show();

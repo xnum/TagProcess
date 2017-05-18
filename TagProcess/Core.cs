@@ -4,13 +4,14 @@ using System.Diagnostics;
 using System.Net;
 using Newtonsoft.Json;
 using System.Data;
+using RestSharp;
+using Newtonsoft.Json.Linq;
 
 namespace TagProcess
 {
-    public class Core
+    public partial class Core
     {
         private string serverUrl = null;
-        private System.Windows.Forms.ToolStripStatusLabel statusLabel = null;
         Action<int, string> msgCallback = null;
 
         private int competition_id = -5;
@@ -28,48 +29,43 @@ namespace TagProcess
         {
             this.serverUrl = url;
             Debug.WriteLine(url);
-            WebClient client = new WebClient();
-            client.DownloadStringCompleted += (sender, e) =>
-            {
-                DownloadStringCompletedEventArgs args = (DownloadStringCompletedEventArgs)e;
-                if (args.Cancelled || args.Error != null)
+            RestClient client = new RestClient(url);
+            RestRequest request = new RestRequest("competitions/current", Method.GET);
+            client.GetAsync(request, (response, handler) => {
+                if(response.ErrorException != null || response.ResponseStatus != ResponseStatus.Completed)
                 {
-                    msgCallback(0, "連線伺服器失敗" + args.Error);
+                    msgCallback(0, "連線伺服器失敗: " + response.ErrorMessage);
                     return;
                 }
 
-                string response = args.Result;
-
-                if (response == null)
+                if(response.StatusCode != HttpStatusCode.OK || response.Content == "")
                 {
-                    msgCallback(0, "連線伺服器失敗");
+                    msgCallback(0, "HTTP NOT OK: " + response.StatusCode);
+                    return;
                 }
-                else
+
+                try
                 {
-                    msgCallback(0, "連線伺服器成功");
-                    try
+                    JObject result = JsonConvert.DeserializeObject<JObject>(response.Content);
+                    int id = (int)result["id"];
+                    string name = (string)result["name"];
+
+                    if(id < 0)
                     {
-                        int tmp = Int32.Parse(response);
-                        if (tmp < 0)
-                        {
-                            msgCallback(0, "目前無進行中的活動");
-                        }
-                        else
-                        {
-                            msgCallback(0, "成功取得活動id" + tmp);
-                            competition_id = tmp;
-                        }
-                    } catch 
+                        msgCallback(0, "警告： 目前無啟用中活動");
+                        return;
+                    }
+                    else
                     {
-                        competition_id = -4;
-                        msgCallback(0, "活動id解析錯誤，可能是伺服器端問題");
+                        msgCallback(0, "成功： 目前進行中活動[" + name + "]");
                     }
                 }
-
-
-            };
-
-            client.DownloadStringAsync(new Uri(url + "/competitions/current"));
+                catch (Exception e)
+                {
+                    msgCallback(0, "Json解析錯誤: " + e.Message);
+                    return;
+                }
+            });
         }
 
         /// <summary>
@@ -81,20 +77,6 @@ namespace TagProcess
             return competition_id >= 0;
         }
 
-        /// <summary>
-        /// 從伺服器撈取目前進行中活動的選手清單
-        /// JSON格式
-        /// </summary>
-        /// <returns></returns>
-        public DataSet getParticipants()
-        {
-            WebClient client = new WebClient();
-            string response = client.DownloadString(serverUrl + "/participants/current");
-            
-            response = @"{'Table1': " + response + @"}";
-            Debug.WriteLine(response);
-            DataSet res = JsonConvert.DeserializeObject<DataSet>(response);
-            return res;
-        }
+
     }
 }
