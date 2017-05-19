@@ -28,6 +28,52 @@ namespace TagProcess
             mainDGV.Refresh();
         }
 
+        private void showEditForm(Participant p, Func<string> f)
+        {
+            var old_tag = p.tag_id;
+
+            var form = new ParticipantsEditForm(p, f);
+
+            var result = form.ShowDialog();
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            /* 
+             * 在編輯視窗變更晶片時，還不確定是否真的要變更
+             * 因此我們只檢查是否新晶片已經被使用
+             * 接下來儲存時，要根據是否更換做Tags集合的維護使其同步
+             */
+            var val = form.retParticipant;
+            if(val.tag_id != old_tag)
+            {
+                // 先前變更時已經檢查過是否已被使用
+                // 現在新增一定會成功
+                ParticipantHelper.tryAddTag(val.tag_id);
+
+                // 刪除舊的晶片ID
+                ParticipantHelper.cancelTag(old_tag);
+            }
+            if (val.needWriteBack())
+            {
+                // 更新時還會去尋找該選手，並對他的晶片ID做一次移除後新增的動作
+                // 假設更新成功，就會對新晶片做一次移除再新增，不影響結果
+                // 假設更新失敗，會跳出錯誤，且本地物件未被更新，則狀態不一致
+                // 因此在失敗時做回復修正
+                if(false == core.updateParticipant(val))
+                {
+                    if (val.tag_id != old_tag)
+                    {
+                        ParticipantHelper.cancelTag(val.tag_id); // 移除新的晶片
+                        ParticipantHelper.tryAddTag(old_tag); // 新增舊的晶片
+                    }
+                }
+                updateDataGridView();
+            }
+        }
+
         public ParticipantsViewForm(Form parentForm, Core c)
         {
             parent = parentForm;
@@ -61,21 +107,7 @@ namespace TagProcess
             {
                 Debug.WriteLine(e.ColumnIndex + " , " + e.RowIndex);
 
-                var form = new ParticipantsEditForm(core.participants[e.RowIndex], core.comport_get_tag);
-                
-                var result = form.ShowDialog();
-
-                if (result != DialogResult.OK)
-                {
-                    return;
-                }
-
-                var val = form.retParticipant;
-                if (val.needWriteBack())
-                {
-                    core.updateParticipant(val);
-                    updateDataGridView();
-                }
+                showEditForm(core.participants[e.RowIndex], core.comport_get_tag);
             }
         }
 
@@ -91,21 +123,7 @@ namespace TagProcess
             {
                 if(core.participants[i].race_id == race_id)
                 {
-                    var form = new ParticipantsEditForm(core.participants[i], core.comport_get_tag);
-
-                    var result = form.ShowDialog();
-
-                    if (result != DialogResult.OK)
-                    {
-                        return;
-                    }
-
-                    var val = form.retParticipant;
-                    if (val.needWriteBack())
-                    {
-                        core.updateParticipant(val);
-                        updateDataGridView();
-                    }
+                    showEditForm(core.participants[i], core.comport_get_tag);
 
                     return;
                 }
@@ -130,33 +148,19 @@ namespace TagProcess
                     tag = core.comport_get_tag();
                     if (tag == String.Empty)
                         continue;
-
+                    textBox_tag_id.Text = tag;
                     // 感應到晶片，進行搜尋
                     for (int k = 0; k < core.participants.Count; ++k)
                     {
-                        if (core.participants[k].race_id == tag)
+                        if (core.participants[k].tag_id == tag)
                         {
-                            var form = new ParticipantsEditForm(core.participants[k], core.comport_get_tag);
-
-                            var result = form.ShowDialog();
-
-                            if (result != DialogResult.OK)
-                            {
-                                return;
-                            }
-
-                            var val = form.retParticipant;
-                            if (val.needWriteBack())
-                            {
-                                core.updateParticipant(val);
-                                updateDataGridView();
-                            }
+                            showEditForm(core.participants[k], core.comport_get_tag);
 
                             return;
                         }
                     }
 
-                    MessageBox.Show("找不到該晶片所屬選手");
+                    MessageBox.Show("找不到該晶片所屬選手" + tag);
 
                     return;
                 }

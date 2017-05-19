@@ -34,24 +34,26 @@ namespace TagProcess
         }
 
         /// <summary>
-        /// 取得感應到的tag，如果沒有感應到會在500ms後回傳Empty
+        /// 取得感應到的tag，如果沒有感應到會回傳String.Empty，500ms Timeout
         /// </summary>
         /// <returns></returns>
         public string comport_get_tag()
         {
             comport.ReadTimeout = 500;
-            string lastTag = String.Empty;
-            while (true) {
+            string lastValidTag = String.Empty;
+            while (true)
+            {
                 try
                 {
+                    comport.DiscardInBuffer();
+                    comport.DiscardOutBuffer();
                     // look like this aa00058003235b7001000401010035365676
                     string data = comport.ReadLine();
                     if (data[0] == 'a' && data[1] == 'a')
                     {
                         string tag_id = data.Substring(4, 12);
-                        Debug.WriteLine(tag_id);
-                        lastTag = tag_id;
-                        return lastTag;
+                        lastValidTag = tag_id;
+                        comport.ReadTimeout = 100;
                     }
                 }
                 catch (InvalidOperationException e)
@@ -60,11 +62,10 @@ namespace TagProcess
                 }
                 catch (TimeoutException)
                 {
-                     break;
+                    // 確保緩衝區內已無任何資料
+                    return lastValidTag;
                 }
             }
-
-            return lastTag;
         }
     }
 }

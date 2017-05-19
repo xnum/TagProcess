@@ -16,6 +16,7 @@ namespace TagProcess
         public Participant retParticipant;
         string currentReceivedTag = String.Empty;
         Func<string> get_tag_callback = null;
+
         public ParticipantsEditForm(Participant current, Func<string> get_tag_id)
         {
             InitializeComponent();
@@ -38,6 +39,11 @@ namespace TagProcess
             comboBox_groups.Text = retParticipant.group;
         }
 
+        /// <summary>
+        /// 儲存並關閉視窗
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_ok_Click(object sender, EventArgs e)
         {
             if (textBox_name.Text != retParticipant.name)
@@ -61,8 +67,14 @@ namespace TagProcess
             this.Close();
         }
 
+        /// <summary>
+        /// 變更晶片按紐，呼叫Worker等候接收資料
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void changeTagID_Click(object sender, EventArgs e)
         {
+            currentReceivedTag = String.Empty;
             if (changeTagID.Text == "晶片變更")
             {
                 statusLabel.Text = "等候晶片感應中";
@@ -99,6 +111,7 @@ namespace TagProcess
                     break;
                 }
 
+                // 收到晶片ID後立即結束工作
                 if (result != String.Empty)
                 {
                     currentReceivedTag = result;
@@ -119,8 +132,10 @@ namespace TagProcess
                 
                 return;
             }
+
+            if (currentReceivedTag == String.Empty) return;
             
-            if (false == ParticipantHelper.tryAddTag(currentReceivedTag))
+            if (true == ParticipantHelper.isExistsTag(currentReceivedTag))
             {
                 statusLabel.Text = "這個晶片已經被其他選手使用";
             }
@@ -130,9 +145,6 @@ namespace TagProcess
                 retParticipant.tag_id = currentReceivedTag;
                 textBox_tag_id.Text = currentReceivedTag;
             }
-
-            if ((string)e.Result != "")
-                statusLabel.Text = (string)e.Result;
         }
 
         private void ParticipantsEdit_FormClosing(object sender, FormClosingEventArgs e)

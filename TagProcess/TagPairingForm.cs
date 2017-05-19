@@ -23,7 +23,7 @@ namespace TagProcess
 
             core = c;
 
-            foreach(var p in c.participants)
+            foreach (var p in c.participants)
             {
                 pairDGV.Rows.Add(p.tag_id, p.race_id, p.name, p.group);
             }
@@ -49,13 +49,13 @@ namespace TagProcess
         private void getTagWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
-            while(!worker.CancellationPending)
+            while (!worker.CancellationPending)
             {
                 string tag = String.Empty;
                 try
                 {
                     tag = core.comport_get_tag();
-                } 
+                }
                 catch (InvalidOperationException)
                 {
                     worker.CancelAsync();
@@ -71,7 +71,7 @@ namespace TagProcess
                 Debug.WriteLine("Tag Added: " + tag);
             }
 
-            if(worker.CancellationPending)
+            if (worker.CancellationPending)
             {
                 incomingTags.CompleteAdding();
                 e.Cancel = true;
@@ -80,7 +80,7 @@ namespace TagProcess
 
         private void getTagWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if(!e.Cancelled && e.Result != null)
+            if (!e.Cancelled && e.Result != null)
             {
                 statusLabel.Text = "已停止接收資料";
             }
@@ -93,7 +93,7 @@ namespace TagProcess
         /// <param name="e"></param>
         private void consumer_timer_Tick(object sender, EventArgs e)
         {
-            if(incomingTags.IsCompleted)
+            if (incomingTags.IsCompleted)
             {
                 consumer_timer.Enabled = false;
             }
@@ -103,22 +103,22 @@ namespace TagProcess
             if (result == false || tag == String.Empty) return;
 
             // 先檢測是否重複
-            if(tag == lastTag)
+            if (tag == lastTag)
             {
                 //statusLabel.Text = "已忽略重複感應的晶片:" + tag;
                 return;
             }
 
             lastTag = tag;
-            
+
             // 嘗試配對到目前選取的Cell
             var cell = pairDGV.CurrentCell;
-            if(cell != null)
+            if (cell != null)
             {
                 var row_index = cell.RowIndex;
-                if(core.participants[row_index].tag_id == "") // 發現該員沒有配對晶片
+                if (core.participants[row_index].tag_id == "") // 發現該員沒有配對晶片
                 {
-                    if(false == ParticipantHelper.tryAddTag(tag))
+                    if (false == ParticipantHelper.tryAddTag(tag))
                     {
                         statusLabel.Text = "此晶片已經被配對過，無法再被配對";
                         return;
@@ -132,8 +132,22 @@ namespace TagProcess
                     if (core.participants[row_index].needWriteBack())
                     {
                         statusLabel_API.Text = "儲存變更中";
-                        core.updateParticipant(core.participants[row_index]);
-                        statusLabel_API.Text = "已儲存所有變更";
+
+                        if (false == core.updateParticipant(core.participants[row_index]))
+                        {
+                           /*
+                            * 這邊只限定從無晶片變成有晶片
+                            * 所以新增失敗時，移除新晶片就好
+                            */
+                            ParticipantHelper.cancelTag(tag);
+                            statusLabel_API.Text = "儲存變更失敗";
+                            core.participants[row_index].tag_id = "";
+                            pairDGV[0, cell.RowIndex].Value = "";
+                        }
+                        else
+                        {
+                            statusLabel_API.Text = "已儲存所有變更";
+                        }
                     }
 
                     if (cell.RowIndex + 1 < pairDGV.Rows.Count)

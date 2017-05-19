@@ -291,6 +291,11 @@ namespace TagProcess
             ParticipantHelper.Clear();
             participants = JsonConvert.DeserializeObject<List<Participant>>(res_for_parti.Content);
 
+            foreach(var p in participants)
+            {
+                ParticipantHelper.tryAddTag(p.tag_id);
+            }
+
             RestRequest req_for_groups = new RestRequest("race_groups/current", Method.GET);
             IRestResponse res_for_groups = client.Execute(req_for_groups);
 
@@ -322,7 +327,7 @@ namespace TagProcess
         /// <summary>
         /// 將參賽選手資料傳回伺服器進行更新，blocking IO
         /// </summary>
-        public void updateParticipant(Participant p)
+        public bool updateParticipant(Participant p)
         {
             RestClient client = new RestClient(serverUrl);
             RestRequest req_for_parti = new RestRequest("participant", Method.PATCH);
@@ -341,20 +346,20 @@ namespace TagProcess
             if (res_for_parti.ErrorException != null || res_for_parti.ResponseStatus != ResponseStatus.Completed)
             {
                 MessageBox.Show("連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
-                return;
+                return false;
             }
 
             if (res_for_parti.StatusCode != HttpStatusCode.OK || res_for_parti.Content == "")
             {
                 msgCallback(0, "HTTP NOT OK: " + res_for_parti.StatusCode);
-                return;
+                return false;
             }
 
             updateResult res = JsonConvert.DeserializeObject<updateResult>(res_for_parti.Content);
             if (res.code != "200")
             {
                 MessageBox.Show(res.msg);
-                return;
+                return false;
             }
 
             /* 將伺服器UPDATE後的資料，同步回本地物件中 */
@@ -367,9 +372,12 @@ namespace TagProcess
                     ParticipantHelper.tryAddTag(result_body.tag_id);
                     participants[i] = result_body;
                     participants[i].beenWriteBack();
-                    break;
+                    return true;
                 }
             }
+
+            MessageBox.Show("嚴重錯誤： 伺服器傳回了一個不存在的選手");
+            return false;
         }
     }
 }
