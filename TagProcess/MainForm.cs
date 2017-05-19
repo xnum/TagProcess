@@ -96,6 +96,7 @@ namespace TagProcess
                 return;
             }
             logging(0, "下載選手資料完成");
+
             core.gen_mail_pdf();
         }
 
@@ -126,6 +127,27 @@ namespace TagProcess
             {
                 item.Checked = true;
             }
+        }
+
+        private void pair_form_button_Click(object sender, EventArgs e)
+        {
+            if (!core.checkServerStatus())
+            {
+                MessageBox.Show("請先設定伺服器網址");
+                伺服器ToolStripMenuItem_Click(null, null);
+                return;
+            }
+
+            logging(0, "下載選手資料中，請稍後");
+            if (!core.loadParticipants())
+            {
+                MessageBox.Show("下載選手資料失敗，請重試");
+                return;
+            }
+            logging(0, "下載選手資料完成");
+
+            TagPairingForm form = new TagPairingForm(core);
+            form.ShowDialog();
         }
     }
 }

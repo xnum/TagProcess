@@ -51,9 +51,14 @@ namespace TagProcess
                         string tag_id = data.Substring(4, 12);
                         Debug.WriteLine(tag_id);
                         lastTag = tag_id;
+                        return lastTag;
                     }
                 }
-                catch
+                catch (InvalidOperationException e)
+                {
+                    throw e;
+                }
+                catch (TimeoutException)
                 {
                      break;
                 }

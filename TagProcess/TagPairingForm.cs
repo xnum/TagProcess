@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,9 +14,127 @@ namespace TagProcess
 {
     public partial class TagPairingForm : Form
     {
-        public TagPairingForm()
+        public Core core;
+        private BlockingCollection<string> incomingTags = null; // ConcurrentQueue
+        private string lastTag = String.Empty;
+        public TagPairingForm(Core c)
         {
             InitializeComponent();
+
+            core = c;
+
+            foreach(var p in c.participants)
+            {
+                pairDGV.Rows.Add(p.tag_id, p.race_id, p.name, p.group);
+            }
+
+            pairDGV.Refresh();
+        }
+
+        private void start_pair_button_Click(object sender, EventArgs e)
+        {
+            incomingTags = new BlockingCollection<string>(50);
+            consumer_timer.Enabled = true;
+            getTagWorker.RunWorkerAsync();
+            statusLabel.Text = "已開始接收讀卡機資料";
+            var btn = (Button)sender;
+            btn.Enabled = false;
+        }
+
+        /// <summary>
+        /// 扮演Producer角色
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void getTagWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = (BackgroundWorker)sender;
+            while(!worker.CancellationPending)
+            {
+                string tag = String.Empty;
+                try
+                {
+                    tag = core.comport_get_tag();
+                } 
+                catch (InvalidOperationException)
+                {
+                    worker.CancelAsync();
+                    e.Result = "COMPort已斷線";
+                    e.Cancel = true;
+                    incomingTags.CompleteAdding();
+                    return;
+                }
+
+                if (tag == String.Empty) continue;
+
+                incomingTags.Add(tag);
+                Debug.WriteLine("Tag Added: " + tag);
+            }
+
+            if(worker.CancellationPending)
+            {
+                incomingTags.CompleteAdding();
+                e.Result = "已停止接收資料";
+                e.Cancel = true;
+            }
+        }
+
+        private void getTagWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if(e.Result != null)
+            {
+                statusLabel.Text = (string)e.Result;
+            }
+        }
+
+        /// <summary>
+        /// Consumer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void consumer_timer_Tick(object sender, EventArgs e)
+        {
+            if(incomingTags.IsCompleted)
+            {
+                consumer_timer.Enabled = false;
+            }
+
+            string tag = String.Empty;
+            bool result = incomingTags.TryTake(out tag);
+            if (result == false || tag == String.Empty) return;
+
+            // 先檢測是否重複
+            if(tag == lastTag)
+            {
+                //statusLabel.Text = "已忽略重複感應的晶片:" + tag;
+                return;
+            }
+
+            lastTag = tag;
+            
+            // 嘗試配對到目前選取的Cell
+            var cell = pairDGV.CurrentCell;
+            if(cell != null)
+            {
+                var row_index = cell.RowIndex;
+                if(core.participants[row_index].tag_id == "") // 發現該員沒有配對晶片
+                {
+                    if(false == ParticipantHelper.tryAddTag(tag))
+                    {
+                        statusLabel.Text = "此晶片已經被配對過，無法再被配對";
+                        return;
+                    }
+
+                    // 配對成功
+                    core.participants[row_index].tag_id = tag;
+                    pairDGV[0, cell.RowIndex].Value = tag;
+                    Debug.WriteLine("寫入到Row: " + row_index);
+                    statusLabel.Text = "新增成功";
+                    if (cell.RowIndex + 1 < pairDGV.Rows.Count)
+                        pairDGV.CurrentCell = pairDGV[0, cell.RowIndex + 1];
+                    return;
+                }
+            }
         }
     }
 }

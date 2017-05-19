@@ -117,7 +117,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(316, 75);
+            this.label11.Location = new System.Drawing.Point(316, 80);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(53, 12);
             this.label11.TabIndex = 18;
@@ -129,7 +129,7 @@
             this.comboBox_groups.Items.AddRange(new object[] {
             "男1",
             "男2"});
-            this.comboBox_groups.Location = new System.Drawing.Point(318, 93);
+            this.comboBox_groups.Location = new System.Drawing.Point(318, 95);
             this.comboBox_groups.Name = "comboBox_groups";
             this.comboBox_groups.Size = new System.Drawing.Size(86, 20);
             this.comboBox_groups.TabIndex = 17;
@@ -143,7 +143,7 @@
             // 
             // textBox_id
             // 
-            this.textBox_id.Location = new System.Drawing.Point(410, 93);
+            this.textBox_id.Location = new System.Drawing.Point(410, 95);
             this.textBox_id.Name = "textBox_id";
             this.textBox_id.ReadOnly = true;
             this.textBox_id.Size = new System.Drawing.Size(39, 22);
@@ -152,7 +152,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(408, 75);
+            this.label10.Location = new System.Drawing.Point(408, 80);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(29, 12);
             this.label10.TabIndex = 14;
@@ -160,7 +160,7 @@
             // 
             // textBox_age
             // 
-            this.textBox_age.Location = new System.Drawing.Point(178, 94);
+            this.textBox_age.Location = new System.Drawing.Point(178, 95);
             this.textBox_age.Name = "textBox_age";
             this.textBox_age.ReadOnly = true;
             this.textBox_age.Size = new System.Drawing.Size(27, 22);
@@ -169,7 +169,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(176, 77);
+            this.label8.Location = new System.Drawing.Point(176, 80);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(29, 12);
             this.label8.TabIndex = 12;
@@ -178,7 +178,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(87, 78);
+            this.label7.Location = new System.Drawing.Point(87, 80);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(29, 12);
             this.label7.TabIndex = 10;
@@ -202,7 +202,7 @@
             // 
             // textBox_addr
             // 
-            this.textBox_addr.Location = new System.Drawing.Point(212, 37);
+            this.textBox_addr.Location = new System.Drawing.Point(212, 38);
             this.textBox_addr.Name = "textBox_addr";
             this.textBox_addr.Size = new System.Drawing.Size(210, 22);
             this.textBox_addr.TabIndex = 7;
@@ -210,7 +210,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(212, 21);
+            this.label5.Location = new System.Drawing.Point(212, 22);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(29, 12);
             this.label5.TabIndex = 6;
@@ -222,7 +222,7 @@
             this.comboBox_male.Items.AddRange(new object[] {
             "男",
             "女"});
-            this.comboBox_male.Location = new System.Drawing.Point(15, 97);
+            this.comboBox_male.Location = new System.Drawing.Point(15, 95);
             this.comboBox_male.Name = "comboBox_male";
             this.comboBox_male.Size = new System.Drawing.Size(66, 20);
             this.comboBox_male.TabIndex = 5;
@@ -230,7 +230,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(211, 76);
+            this.label4.Location = new System.Drawing.Point(211, 80);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(29, 12);
             this.label4.TabIndex = 4;
@@ -238,7 +238,7 @@
             // 
             // textBox_phone
             // 
-            this.textBox_phone.Location = new System.Drawing.Point(211, 93);
+            this.textBox_phone.Location = new System.Drawing.Point(211, 95);
             this.textBox_phone.Name = "textBox_phone";
             this.textBox_phone.Size = new System.Drawing.Size(100, 22);
             this.textBox_phone.TabIndex = 3;
@@ -246,7 +246,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 81);
+            this.label3.Location = new System.Drawing.Point(15, 80);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(29, 12);
             this.label3.TabIndex = 2;
@@ -318,7 +318,7 @@
             this.getTagWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.getTagWorker_DoWork);
             this.getTagWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.getTagWorker_RunWorkerCompleted);
             // 
-            // ParticipantsEdit
+            // ParticipantsEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -331,7 +331,7 @@
             this.Controls.Add(this.changeTagID);
             this.Controls.Add(this.textBox_tag_id);
             this.Controls.Add(this.label1);
-            this.Name = "ParticipantsEdit";
+            this.Name = "ParticipantsEditForm";
             this.Text = "參賽選手編輯";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ParticipantsEdit_FormClosing);
             this.groupBox1.ResumeLayout(false);

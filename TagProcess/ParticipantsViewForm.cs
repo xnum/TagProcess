@@ -23,7 +23,7 @@ namespace TagProcess
             mainDGV.Rows.Clear();
             foreach (var row in core.participants)
             {
-                mainDGV.Rows.Add(row.id, row.name, row.age, row.male_s, row.group_id, row.tag_id, row.race_id, "編輯");
+                mainDGV.Rows.Add(row.id, row.name, row.age, row.male_s, row.group, row.tag_id, row.race_id, "編輯");
             }
             mainDGV.Refresh();
         }

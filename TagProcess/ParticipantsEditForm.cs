@@ -87,7 +87,18 @@ namespace TagProcess
             BackgroundWorker worker = (BackgroundWorker)sender;
             while (!worker.CancellationPending)
             {
-                string result = get_tag_callback(); // blocking up to 500ms
+                string result = String.Empty;
+                try
+                {
+                    result = get_tag_callback(); // blocking up to 500ms
+                }
+                catch (InvalidOperationException)
+                {
+                    worker.CancelAsync();
+                    e.Result = "COMPort已斷線";
+                    break;
+                }
+
                 if (result != String.Empty)
                 {
                     currentReceivedTag = result;
@@ -119,6 +130,9 @@ namespace TagProcess
                 retParticipant.tag_id = currentReceivedTag;
                 textBox_tag_id.Text = currentReceivedTag;
             }
+
+            if ((string)e.Result != "")
+                statusLabel.Text = (string)e.Result;
         }
 
         private void ParticipantsEdit_FormClosing(object sender, FormClosingEventArgs e)

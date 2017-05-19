@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button4 = new System.Windows.Forms.Button();
+            this.pair_form_button = new System.Windows.Forms.Button();
             this.print_mail_button = new System.Windows.Forms.Button();
             this.partcipants_view_button = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -48,7 +48,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button4);
+            this.groupBox1.Controls.Add(this.pair_form_button);
             this.groupBox1.Controls.Add(this.print_mail_button);
             this.groupBox1.Controls.Add(this.partcipants_view_button);
             this.groupBox1.Controls.Add(this.button1);
@@ -59,14 +59,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "資料作業";
             // 
-            // button4
+            // pair_form_button
             // 
-            this.button4.Location = new System.Drawing.Point(88, 52);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "配對晶片";
-            this.button4.UseVisualStyleBackColor = true;
+            this.pair_form_button.Location = new System.Drawing.Point(88, 52);
+            this.pair_form_button.Name = "pair_form_button";
+            this.pair_form_button.Size = new System.Drawing.Size(75, 23);
+            this.pair_form_button.TabIndex = 3;
+            this.pair_form_button.Text = "晶片配對";
+            this.pair_form_button.UseVisualStyleBackColor = true;
+            this.pair_form_button.Click += new System.EventHandler(this.pair_form_button_Click);
             // 
             // print_mail_button
             // 
@@ -161,7 +162,7 @@
             this.伺服器ToolStripMenuItem.Text = "伺服器";
             this.伺服器ToolStripMenuItem.Click += new System.EventHandler(this.伺服器ToolStripMenuItem_Click);
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -170,7 +171,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "主選單";
             this.groupBox1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
@@ -185,7 +186,7 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button pair_form_button;
         private System.Windows.Forms.Button print_mail_button;
         private System.Windows.Forms.Button partcipants_view_button;
         private System.Windows.Forms.Button button1;

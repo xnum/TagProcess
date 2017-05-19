@@ -21,16 +21,20 @@ namespace TagProcess
         private static List<RaceGroups> groups = new List<RaceGroups>();
         private static HashSet<string> tags = new HashSet<string>();
 
+        /// <summary>
+        /// True如果還沒被使用過。False如果已經被使用
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public static bool tryAddTag(string tag) 
         {
-            /* 如果Add返回True，代表還沒被新增，所以被新增成功
-             * 如果Add返回False，代表已經在目前的Set裡
-             */
+            if (tag == "") return true;
             return tags.Add(tag);
         }
 
         public static bool isExistsTag(string tag)
         {
+            if (tag == "") return false;
             return tags.Contains(tag);
         }
 
@@ -111,6 +115,11 @@ namespace TagProcess
             get { return _tag_id; }
             set
             {
+                if (value == "")
+                {
+                    _tag_id = "";
+                    return;
+                }
                 if (_tag_id == value) return; // check if is same tag id
                 if (_tag_id != String.Empty) is_dirty = true;
                 _tag_id = value;

@@ -116,6 +116,9 @@
     <EmbeddedResource Include="ServerUrlInputForm.resx">
       <DependentUpon>ServerUrlInputForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TagPairingForm.resx">
+      <DependentUpon>TagPairingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
