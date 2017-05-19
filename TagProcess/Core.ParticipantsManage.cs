@@ -121,7 +121,7 @@ namespace TagProcess
                     return;
                 }
                 if (_tag_id == value) return; // check if is same tag id
-                if (_tag_id != String.Empty) is_dirty = true;
+                else is_dirty = true;
                 _tag_id = value;
             }
         }
@@ -241,9 +241,21 @@ namespace TagProcess
         /* for update data to server */
         private bool is_dirty = false;
 
+        /// <summary>
+        /// 查詢是否需要回寫到伺服器
+        /// </summary>
+        /// <returns></returns>
         public bool needWriteBack()
         {
             return is_dirty;
+        }
+
+        /// <summary>
+        /// 回寫成功後呼叫以重設狀態
+        /// </summary>
+        public void beenWriteBack()
+        {
+            is_dirty = false;
         }
     }
 
@@ -344,6 +356,8 @@ namespace TagProcess
                 MessageBox.Show(res.msg);
                 return;
             }
+
+            /* 將伺服器UPDATE後的資料，同步回本地物件中 */
             var result_body = res.p;
             for(int i = 0; i < participants.Count; ++i)
             {
@@ -352,6 +366,7 @@ namespace TagProcess
                     ParticipantHelper.cancelTag(participants[i].tag_id);
                     ParticipantHelper.tryAddTag(result_body.tag_id);
                     participants[i] = result_body;
+                    participants[i].beenWriteBack();
                     break;
                 }
             }

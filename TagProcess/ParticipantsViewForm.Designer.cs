@@ -37,10 +37,10 @@
             this.col_tag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_race_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_edit = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox_race_id = new System.Windows.Forms.TextBox();
+            this.search_by_race_id_button = new System.Windows.Forms.Button();
+            this.search_by_tag_id_button = new System.Windows.Forms.Button();
+            this.textBox_tag_id = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.mainDGV)).BeginInit();
             this.SuspendLayout();
             // 
@@ -137,50 +137,52 @@
             this.col_edit.Name = "col_edit";
             this.col_edit.ReadOnly = true;
             // 
-            // textBox1
+            // textBox_race_id
             // 
-            this.textBox1.Location = new System.Drawing.Point(13, 13);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 22);
-            this.textBox1.TabIndex = 1;
+            this.textBox_race_id.Location = new System.Drawing.Point(13, 13);
+            this.textBox_race_id.Name = "textBox_race_id";
+            this.textBox_race_id.Size = new System.Drawing.Size(100, 22);
+            this.textBox_race_id.TabIndex = 1;
             // 
-            // button1
+            // search_by_race_id_button
             // 
-            this.button1.Location = new System.Drawing.Point(120, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "號碼布搜尋";
-            this.button1.UseVisualStyleBackColor = true;
+            this.search_by_race_id_button.Location = new System.Drawing.Point(120, 13);
+            this.search_by_race_id_button.Name = "search_by_race_id_button";
+            this.search_by_race_id_button.Size = new System.Drawing.Size(75, 23);
+            this.search_by_race_id_button.TabIndex = 2;
+            this.search_by_race_id_button.Text = "號碼布搜尋";
+            this.search_by_race_id_button.UseVisualStyleBackColor = true;
+            this.search_by_race_id_button.Click += new System.EventHandler(this.search_by_race_id_button_Click);
             // 
-            // button2
+            // search_by_tag_id_button
             // 
-            this.button2.Location = new System.Drawing.Point(355, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "以晶片搜尋";
-            this.button2.UseVisualStyleBackColor = true;
+            this.search_by_tag_id_button.Location = new System.Drawing.Point(355, 12);
+            this.search_by_tag_id_button.Name = "search_by_tag_id_button";
+            this.search_by_tag_id_button.Size = new System.Drawing.Size(75, 23);
+            this.search_by_tag_id_button.TabIndex = 3;
+            this.search_by_tag_id_button.Text = "以晶片搜尋";
+            this.search_by_tag_id_button.UseVisualStyleBackColor = true;
+            this.search_by_tag_id_button.Click += new System.EventHandler(this.search_by_tag_id_button_Click);
             // 
-            // textBox2
+            // textBox_tag_id
             // 
-            this.textBox2.Location = new System.Drawing.Point(249, 13);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(100, 22);
-            this.textBox2.TabIndex = 4;
+            this.textBox_tag_id.Location = new System.Drawing.Point(249, 13);
+            this.textBox_tag_id.Name = "textBox_tag_id";
+            this.textBox_tag_id.ReadOnly = true;
+            this.textBox_tag_id.Size = new System.Drawing.Size(100, 22);
+            this.textBox_tag_id.TabIndex = 4;
             // 
-            // ParticipantsView
+            // ParticipantsViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(769, 411);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBox_tag_id);
+            this.Controls.Add(this.search_by_tag_id_button);
+            this.Controls.Add(this.search_by_race_id_button);
+            this.Controls.Add(this.textBox_race_id);
             this.Controls.Add(this.mainDGV);
-            this.Name = "ParticipantsView";
+            this.Name = "ParticipantsViewForm";
             this.Text = "參賽選手檢視";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ParticipantsView_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.mainDGV)).EndInit();
@@ -200,9 +202,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn col_tag;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_race_id;
         private System.Windows.Forms.DataGridViewButtonColumn col_edit;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox_race_id;
+        private System.Windows.Forms.Button search_by_race_id_button;
+        private System.Windows.Forms.Button search_by_tag_id_button;
+        private System.Windows.Forms.TextBox textBox_tag_id;
     }
 }

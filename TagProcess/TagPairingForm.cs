@@ -37,8 +37,8 @@ namespace TagProcess
             consumer_timer.Enabled = true;
             getTagWorker.RunWorkerAsync();
             statusLabel.Text = "已開始接收讀卡機資料";
-            var btn = (Button)sender;
-            btn.Enabled = false;
+            start_pair_button.Enabled = false;
+            stop_pair_button.Enabled = true;
         }
 
         /// <summary>
@@ -74,21 +74,20 @@ namespace TagProcess
             if(worker.CancellationPending)
             {
                 incomingTags.CompleteAdding();
-                e.Result = "已停止接收資料";
                 e.Cancel = true;
             }
         }
 
         private void getTagWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if(e.Result != null)
+            if(!e.Cancelled && e.Result != null)
             {
-                statusLabel.Text = (string)e.Result;
+                statusLabel.Text = "已停止接收資料";
             }
         }
 
         /// <summary>
-        /// Consumer
+        /// Consumer，負責將感應到的晶片寫入到欄位中，並回寫到伺服器
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -128,13 +127,43 @@ namespace TagProcess
                     // 配對成功
                     core.participants[row_index].tag_id = tag;
                     pairDGV[0, cell.RowIndex].Value = tag;
-                    Debug.WriteLine("寫入到Row: " + row_index);
                     statusLabel.Text = "新增成功";
+
+                    if (core.participants[row_index].needWriteBack())
+                    {
+                        statusLabel_API.Text = "儲存變更中";
+                        core.updateParticipant(core.participants[row_index]);
+                        statusLabel_API.Text = "已儲存所有變更";
+                    }
+
                     if (cell.RowIndex + 1 < pairDGV.Rows.Count)
                         pairDGV.CurrentCell = pairDGV[0, cell.RowIndex + 1];
                     return;
                 }
             }
+        }
+
+        /// <summary>
+        /// 停止晶片配對
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button1_Click(object sender, EventArgs e)
+        {
+            stopGetTag();
+            start_pair_button.Enabled = true;
+            stop_pair_button.Enabled = false;
+        }
+
+        private void TagPairingForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            stopGetTag();
+        }
+
+        private void stopGetTag()
+        {
+            getTagWorker.CancelAsync();
+            consumer_timer.Enabled = false;
         }
     }
 }
