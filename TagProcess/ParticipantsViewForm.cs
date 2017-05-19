@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace TagProcess
 {
-    public partial class ParticipantsView : Form
+    public partial class ParticipantsViewForm : Form
     {
         private Form parent = null;
         private Core core = null;
@@ -28,7 +28,7 @@ namespace TagProcess
             mainDGV.Refresh();
         }
 
-        public ParticipantsView(Form parentForm, Core c)
+        public ParticipantsViewForm(Form parentForm, Core c)
         {
             parent = parentForm;
             core = c;
@@ -61,7 +61,7 @@ namespace TagProcess
             {
                 Debug.WriteLine(e.ColumnIndex + " , " + e.RowIndex);
 
-                var form = new ParticipantsEdit(core.participants[e.RowIndex], core.comport_get_tag);
+                var form = new ParticipantsEditForm(core.participants[e.RowIndex], core.comport_get_tag);
                 
                 var result = form.ShowDialog();
 

@@ -1,6 +1,6 @@
 ﻿namespace TagProcess
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// 設計工具所需的變數。
@@ -57,7 +57,7 @@
             this.groupBox1.Size = new System.Drawing.Size(176, 85);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "前置作業";
+            this.groupBox1.Text = "資料作業";
             // 
             // button4
             // 

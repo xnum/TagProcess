@@ -13,12 +13,12 @@ using System.IO.Ports;
 
 namespace TagProcess
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private Core core = null;
-        private ParticipantsView pv = null;
+        private ParticipantsViewForm pv = null;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -70,7 +70,7 @@ namespace TagProcess
                 return;
             }
             logging(0, "下載選手資料完成");
-            pv = new ParticipantsView(this, core);
+            pv = new ParticipantsViewForm(this, core);
             this.Hide();
             pv.Show();
         }

@@ -1,6 +1,6 @@
 ﻿namespace TagProcess
 {
-    partial class ParticipantsView
+    partial class ParticipantsViewForm
     {
         /// <summary>
         /// Required designer variable.

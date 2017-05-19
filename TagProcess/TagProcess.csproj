@@ -60,26 +60,26 @@
     <Compile Include="Core.cs" />
     <Compile Include="Core.GenMailPDF.cs" />
     <Compile Include="Core.ParticipantsManage.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.Helper.cs">
+    <Compile Include="MainForm.Helper.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ParticipantsEdit.cs">
+    <Compile Include="ParticipantsEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ParticipantsEdit.Designer.cs">
-      <DependentUpon>ParticipantsEdit.cs</DependentUpon>
+    <Compile Include="ParticipantsEditForm.Designer.cs">
+      <DependentUpon>ParticipantsEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ParticipantsView.cs">
+    <Compile Include="ParticipantsViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ParticipantsView.Designer.cs">
-      <DependentUpon>ParticipantsView.cs</DependentUpon>
+    <Compile Include="ParticipantsViewForm.Designer.cs">
+      <DependentUpon>ParticipantsViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,14 +89,20 @@
     <Compile Include="ServerUrlInputForm.Designer.cs">
       <DependentUpon>ServerUrlInputForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="TagPairingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TagPairingForm.Designer.cs">
+      <DependentUpon>TagPairingForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ParticipantsEdit.resx">
-      <DependentUpon>ParticipantsEdit.cs</DependentUpon>
+    <EmbeddedResource Include="ParticipantsEditForm.resx">
+      <DependentUpon>ParticipantsEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ParticipantsView.resx">
-      <DependentUpon>ParticipantsView.cs</DependentUpon>
+    <EmbeddedResource Include="ParticipantsViewForm.resx">
+      <DependentUpon>ParticipantsViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

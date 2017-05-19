@@ -11,12 +11,12 @@ using System.Windows.Forms;
 
 namespace TagProcess
 {
-    public partial class ParticipantsEdit : Form
+    public partial class ParticipantsEditForm : Form
     {
         public Participant retParticipant;
         string currentReceivedTag = String.Empty;
         Func<string> get_tag_callback = null;
-        public ParticipantsEdit(Participant current, Func<string> get_tag_id)
+        public ParticipantsEditForm(Participant current, Func<string> get_tag_id)
         {
             InitializeComponent();
             comboBox_groups.Items.Clear();
