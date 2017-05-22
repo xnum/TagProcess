@@ -21,5 +21,10 @@ namespace TagProcess
         {
             return input_ServerUrl.Text;
         }
+
+        private void ServerUrlInputForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.Save();
+        }
     }
 }

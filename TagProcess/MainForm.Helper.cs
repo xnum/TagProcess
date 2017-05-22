@@ -35,6 +35,17 @@ namespace TagProcess
             output_StatusLabel.Text = msg;
 
             Debug.WriteLine(msg);
+
+            try
+            {
+                System.IO.StreamWriter file = new System.IO.StreamWriter("log.txt", true);
+                file.WriteLine(String.Format("{0} {1} - {2}", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString(), msg));
+                file.Close();
+            }
+            catch
+            {
+                // Ignore Exception
+            }
         }
 
     }

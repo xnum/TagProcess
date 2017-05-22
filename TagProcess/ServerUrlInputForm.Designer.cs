@@ -65,11 +65,11 @@
             // 
             // input_ServerUrl
             // 
+            this.input_ServerUrl.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TagProcess.Properties.Settings.Default, "ServerUrl", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.input_ServerUrl.Location = new System.Drawing.Point(13, 29);
             this.input_ServerUrl.Name = "input_ServerUrl";
             this.input_ServerUrl.Size = new System.Drawing.Size(259, 22);
             this.input_ServerUrl.TabIndex = 3;
-            this.input_ServerUrl.Text = "http://128.199.65.141";
             // 
             // ServerUrlInputForm
             // 
@@ -84,6 +84,7 @@
             this.Controls.Add(this.button1);
             this.Name = "ServerUrlInputForm";
             this.Text = "請輸入伺服器網址";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ServerUrlInputForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -63,7 +63,13 @@ namespace TagProcess
 
             if (textBox_zipcode.Text != retParticipant.zipcode)
                 retParticipant.zipcode = textBox_zipcode.Text;
-             
+
+            if (comboBox_male.Text != retParticipant.male_s)
+                retParticipant.male_s = comboBox_male.Text;
+
+            if (comboBox_groups.Text != retParticipant.group)
+                retParticipant.group = comboBox_groups.Text;
+
             this.Close();
         }
 

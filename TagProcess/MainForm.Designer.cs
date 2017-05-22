@@ -41,6 +41,7 @@
             this.COMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.重新整理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.伺服器ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.log檔ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -103,7 +104,6 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.output_StatusLabel,
             this.statusLabel_tag});
-            this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.statusStrip1.Location = new System.Drawing.Point(0, 122);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(206, 22);
@@ -113,7 +113,9 @@
             // output_StatusLabel
             // 
             this.output_StatusLabel.Name = "output_StatusLabel";
-            this.output_StatusLabel.Size = new System.Drawing.Size(0, 17);
+            this.output_StatusLabel.Size = new System.Drawing.Size(191, 17);
+            this.output_StatusLabel.Spring = true;
+            this.output_StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // statusLabel_tag
             // 
@@ -124,7 +126,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.設定ToolStripMenuItem});
+            this.設定ToolStripMenuItem,
+            this.log檔ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(206, 24);
@@ -145,7 +148,7 @@
             this.COMToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.重新整理ToolStripMenuItem});
             this.COMToolStripMenuItem.Name = "COMToolStripMenuItem";
-            this.COMToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.COMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.COMToolStripMenuItem.Text = "COM";
             // 
             // 重新整理ToolStripMenuItem
@@ -158,9 +161,16 @@
             // 伺服器ToolStripMenuItem
             // 
             this.伺服器ToolStripMenuItem.Name = "伺服器ToolStripMenuItem";
-            this.伺服器ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.伺服器ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.伺服器ToolStripMenuItem.Text = "伺服器";
             this.伺服器ToolStripMenuItem.Click += new System.EventHandler(this.伺服器ToolStripMenuItem_Click);
+            // 
+            // log檔ToolStripMenuItem
+            // 
+            this.log檔ToolStripMenuItem.Name = "log檔ToolStripMenuItem";
+            this.log檔ToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.log檔ToolStripMenuItem.Text = "Log檔";
+            this.log檔ToolStripMenuItem.Click += new System.EventHandler(this.log檔ToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -198,6 +208,7 @@
         private System.Windows.Forms.ToolStripStatusLabel output_StatusLabel;
         private System.Windows.Forms.ToolStripMenuItem 重新整理ToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel_tag;
+        private System.Windows.Forms.ToolStripMenuItem log檔ToolStripMenuItem;
     }
 }
 

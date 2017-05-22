@@ -278,7 +278,7 @@ namespace TagProcess
 
             if (res_for_parti.ErrorException != null || res_for_parti.ResponseStatus != ResponseStatus.Completed)
             {
-                MessageBox.Show("連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
+                msgCallback(0, "連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
                 return false;
             }
 
@@ -329,6 +329,7 @@ namespace TagProcess
         /// </summary>
         public bool updateParticipant(Participant p)
         {
+            msgCallback(0, "開始上傳修改後選手資料，ID = " + p.id);
             RestClient client = new RestClient(serverUrl);
             RestRequest req_for_parti = new RestRequest("participant", Method.PATCH);
             req_for_parti.AddParameter("id", p.id);
@@ -345,7 +346,7 @@ namespace TagProcess
 
             if (res_for_parti.ErrorException != null || res_for_parti.ResponseStatus != ResponseStatus.Completed)
             {
-                MessageBox.Show("連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
+                msgCallback(0, "連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
                 return false;
             }
 

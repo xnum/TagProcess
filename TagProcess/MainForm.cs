@@ -23,7 +23,10 @@ namespace TagProcess
             InitializeComponent();
 
             core = new Core(logging);
-            
+
+            string url = Properties.Settings.Default.ServerUrl;
+            logging(0, core.setServerUrl(url));
+
             refreshCOMPort();
         }
 
@@ -37,9 +40,7 @@ namespace TagProcess
             ServerUrlInputForm input = new ServerUrlInputForm();
             if (input.ShowDialog() == DialogResult.OK)
             {
-                core.setServerUrl(input.GetResult());
-                logging(0, "已設定伺服器網址");
-                
+                logging(0, core.setServerUrl(input.GetResult()));
             }
         }
 
@@ -57,6 +58,7 @@ namespace TagProcess
                 return;
             }
 
+            // TODO: 考慮移除這個檢測
             if(!core.is_comport_opened())
             {
                 MessageBox.Show("請先設定讀卡機COM Port");
@@ -148,6 +150,11 @@ namespace TagProcess
 
             TagPairingForm form = new TagPairingForm(core);
             form.ShowDialog();
+        }
+
+        private void log檔ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("log.txt");
         }
     }
 }

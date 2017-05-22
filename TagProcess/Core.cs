@@ -25,48 +25,47 @@ namespace TagProcess
         /// 選單設定伺服器網址
         /// </summary>
         /// <param name="url">網址</param>
-        public void setServerUrl(string url)
+        public string setServerUrl(string url)
         {
             this.serverUrl = url;
+            competition_id = -5;
             Debug.WriteLine(serverUrl);
+            msgCallback(0, "嘗試連線中");
             RestClient client = new RestClient(serverUrl);
             RestRequest request = new RestRequest("competitions/current", Method.GET);
-            client.GetAsync(request, (response, handler) => {
-                if(response.ErrorException != null || response.ResponseStatus != ResponseStatus.Completed)
-                {
-                    msgCallback(0, "連線伺服器失敗: " + response.ErrorMessage);
-                    return;
-                }
+            IRestResponse response = client.Execute(request);
+            
+            if(response.ErrorException != null || response.ResponseStatus != ResponseStatus.Completed)
+            {
+                return "連線伺服器失敗: " + url + " / " + response.ErrorMessage;
+            }
 
-                if(response.StatusCode != HttpStatusCode.OK || response.Content == "")
-                {
-                    msgCallback(0, "HTTP NOT OK: " + response.StatusCode);
-                    return;
-                }
+            if(response.StatusCode != HttpStatusCode.OK || response.Content == "")
+            {
+                return "HTTP NOT OK: " + response.StatusCode;
+            }
 
-                try
-                {
-                    JObject result = JsonConvert.DeserializeObject<JObject>(response.Content);
-                    int id = (int)result["id"];
-                    string name = (string)result["name"];
+            try
+            {
+                JObject result = JsonConvert.DeserializeObject<JObject>(response.Content);
+                int id = (int)result["id"];
+                string name = (string)result["name"];
 
-                    if(id < 0)
-                    {
-                        msgCallback(0, "警告： 目前無啟用中活動");
-                        return;
-                    }
-                    else
-                    {
-                        msgCallback(0, "成功： 目前進行中活動[" + name + "]");
-                        competition_id = id;
-                    }
-                }
-                catch (Exception e)
+                if(id < 0)
                 {
-                    msgCallback(0, "Json解析錯誤: " + e.Message);
-                    return;
+                    return "警告： 目前無啟用中活動";
                 }
-            });
+                else
+                {
+                    competition_id = id;
+                    return "成功： 目前進行中活動[" + name + "]";
+                }
+            }
+            catch (Exception e)
+            {
+                return "Json解析錯誤: " + e.Message;
+            }
+            
         }
 
         /// <summary>

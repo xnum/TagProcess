@@ -120,7 +120,7 @@ namespace TagProcess
                 {
                     if (false == ParticipantHelper.tryAddTag(tag))
                     {
-                        statusLabel.Text = "此晶片已經被配對過，無法再被配對";
+                        MessageBox.Show("此晶片已經被配對過，無法再被配對");
                         return;
                     }
 
@@ -143,6 +143,7 @@ namespace TagProcess
                             statusLabel_API.Text = "儲存變更失敗";
                             core.participants[row_index].tag_id = "";
                             pairDGV[0, cell.RowIndex].Value = "";
+                            return;
                         }
                         else
                         {
