@@ -32,7 +32,7 @@
             this.pair_form_button = new System.Windows.Forms.Button();
             this.print_mail_button = new System.Windows.Forms.Button();
             this.partcipants_view_button = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.import_button = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.output_StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabel_tag = new System.Windows.Forms.ToolStripStatusLabel();
@@ -42,6 +42,7 @@
             this.重新整理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.伺服器ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.log檔ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.excelWorker = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -52,7 +53,7 @@
             this.groupBox1.Controls.Add(this.pair_form_button);
             this.groupBox1.Controls.Add(this.print_mail_button);
             this.groupBox1.Controls.Add(this.partcipants_view_button);
-            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.import_button);
             this.groupBox1.Location = new System.Drawing.Point(13, 26);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(176, 85);
@@ -90,14 +91,15 @@
             this.partcipants_view_button.UseVisualStyleBackColor = true;
             this.partcipants_view_button.Click += new System.EventHandler(this.partcipants_view_button_Click);
             // 
-            // button1
+            // import_button
             // 
-            this.button1.Location = new System.Drawing.Point(7, 22);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "匯入資料";
-            this.button1.UseVisualStyleBackColor = true;
+            this.import_button.Location = new System.Drawing.Point(7, 22);
+            this.import_button.Name = "import_button";
+            this.import_button.Size = new System.Drawing.Size(75, 23);
+            this.import_button.TabIndex = 0;
+            this.import_button.Text = "匯入資料";
+            this.import_button.UseVisualStyleBackColor = true;
+            this.import_button.Click += new System.EventHandler(this.import_button_Click);
             // 
             // statusStrip1
             // 
@@ -148,7 +150,7 @@
             this.COMToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.重新整理ToolStripMenuItem});
             this.COMToolStripMenuItem.Name = "COMToolStripMenuItem";
-            this.COMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.COMToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.COMToolStripMenuItem.Text = "COM";
             // 
             // 重新整理ToolStripMenuItem
@@ -161,7 +163,7 @@
             // 伺服器ToolStripMenuItem
             // 
             this.伺服器ToolStripMenuItem.Name = "伺服器ToolStripMenuItem";
-            this.伺服器ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.伺服器ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.伺服器ToolStripMenuItem.Text = "伺服器";
             this.伺服器ToolStripMenuItem.Click += new System.EventHandler(this.伺服器ToolStripMenuItem_Click);
             // 
@@ -171,6 +173,13 @@
             this.log檔ToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.log檔ToolStripMenuItem.Text = "Log檔";
             this.log檔ToolStripMenuItem.Click += new System.EventHandler(this.log檔ToolStripMenuItem_Click);
+            // 
+            // excelWorker
+            // 
+            this.excelWorker.WorkerReportsProgress = true;
+            this.excelWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.excelWorker_DoWork);
+            this.excelWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.excelWorker_ProgressChanged);
+            this.excelWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.excelWorker_RunWorkerCompleted);
             // 
             // MainForm
             // 
@@ -199,7 +208,7 @@
         private System.Windows.Forms.Button pair_form_button;
         private System.Windows.Forms.Button print_mail_button;
         private System.Windows.Forms.Button partcipants_view_button;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button import_button;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 設定ToolStripMenuItem;
@@ -209,6 +218,7 @@
         private System.Windows.Forms.ToolStripMenuItem 重新整理ToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel_tag;
         private System.Windows.Forms.ToolStripMenuItem log檔ToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker excelWorker;
     }
 }
 

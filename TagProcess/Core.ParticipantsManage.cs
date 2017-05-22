@@ -380,5 +380,54 @@ namespace TagProcess
             MessageBox.Show("嚴重錯誤： 伺服器傳回了一個不存在的選手");
             return false;
         }
+
+        public bool importParticipant(string str, string groups)
+        {
+            RestClient client = new RestClient(serverUrl);
+            RestRequest req_for_group = new RestRequest("race_groups/import", Method.POST);
+            req_for_group.AddParameter("group", groups);
+            IRestResponse res_for_group = client.Execute(req_for_group);
+
+            if (res_for_group.ErrorException != null || res_for_group.ResponseStatus != ResponseStatus.Completed)
+            {
+                msgCallback(0, "連線伺服器失敗，請重試: " + res_for_group.ErrorMessage);
+                return false;
+            }
+
+            if (res_for_group.StatusCode != HttpStatusCode.OK || res_for_group.Content == "")
+            {
+                msgCallback(0, "HTTP NOT OK: " + res_for_group.StatusCode);
+                return false;
+            }
+
+            if (!res_for_group.Content.Equals("Ok"))
+            {
+                msgCallback(0, "上傳組別失敗" + res_for_group.Content);
+                return false;
+            }
+            
+            RestRequest req = new RestRequest("participants/import", Method.POST);
+            req.AddParameter("str", str);
+            IRestResponse res = client.Execute(req);
+
+            if (res.ErrorException != null || res.ResponseStatus != ResponseStatus.Completed)
+            {
+                msgCallback(0, "連線伺服器失敗，請重試: " + res.ErrorMessage);
+                return false;
+            }
+
+            if (res.StatusCode != HttpStatusCode.OK || res.Content == "")
+            {
+                msgCallback(0, "HTTP NOT OK: " + res.StatusCode);
+                return false;
+            }
+
+            if (!res.Content.Equals("Ok"))
+            {
+                msgCallback(0, "上傳選手失敗" + res.Content);
+                return false;
+            }
+            return true;
+        }
     }
 }

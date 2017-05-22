@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using Excel = Microsoft.Office.Interop.Excel;
 
 
 namespace TagProcess
@@ -155,6 +156,110 @@ namespace TagProcess
         private void log檔ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("log.txt");
+        }
+
+        private void import_button_Click(object sender, EventArgs e)
+        {
+            if (!core.checkServerStatus())
+            {
+                MessageBox.Show("請先設定伺服器網址");
+                伺服器ToolStripMenuItem_Click(null, null);
+                return;
+            }
+
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "Select File";
+            dialog.InitialDirectory = ".\\";
+            dialog.Filter = "xls files (*.*)|*.xls";
+            if (dialog.ShowDialog() != DialogResult.OK)
+                return;
+            string path = dialog.FileName;
+            Debug.WriteLine(path);
+
+            excelWorker.RunWorkerAsync(path);
+        }
+
+        private void excelWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            excelWorker.ReportProgress(0, "開啟中");
+            string path = (string)e.Argument;
+            Excel.Application excel = new Excel.Application();
+            Excel.Workbook book = null;
+            excel.Visible = false;
+            try
+            {
+                book = excel.Workbooks.Open(path);
+                var sheets = book.Sheets;
+                Excel.Worksheet sheet = sheets["報名資料-依團體順序"];
+                Excel.Range range = sheet.UsedRange;
+                var row = range.Rows.Count;
+                var col = range.Columns.Count;
+                Dictionary<int, string> db_map = new Dictionary<int, string>{
+                    { 7, "race_id" },
+                    { 8, "name" },
+                    { 11, "group" },
+                    { 10, "male" },
+                    { 15, "birth" },
+                    { 21, "address" },
+                    { 18, "phone" }
+                };
+
+                List<Dictionary<string, string>> data = new List<System.Collections.Generic.Dictionary<string, string>>();
+                HashSet<string> groups = new HashSet<string>();
+
+                for (int i = 2; i <= row; ++i)
+                {
+                    Dictionary<string, string> tmp = new Dictionary<string, string>();
+                    foreach (var item in db_map)
+                    {
+                        //Debug.WriteLine(i + " " + item.Key);
+                        tmp.Add(item.Value, (string)(range.Cells[i, item.Key] as Excel.Range).Text.ToString());
+                    }
+                    groups.Add((string)(range.Cells[i, 11] as Excel.Range).Text.ToString());
+                    data.Add(tmp);
+                    excelWorker.ReportProgress(i/row, String.Format("{0}/{1}", i-1, row-1));
+                }
+                excelWorker.ReportProgress(100, "上傳中");
+                string str = Newtonsoft.Json.JsonConvert.SerializeObject(data);
+                string str_group = Newtonsoft.Json.JsonConvert.SerializeObject(groups);
+                if (true == core.importParticipant(str, str_group))
+                    excelWorker.ReportProgress(100, "上傳成功");
+                else
+                    excelWorker.ReportProgress(100, "上傳失敗");
+                /*
+                foreach(Excel.Worksheet sheet in sheets)
+                {
+                    Excel.Range range = sheet.UsedRange;
+                    Debug.WriteLine((string)sheet.Name);
+                    var row = range.Rows.Count;
+                    var col = range.Columns.Count;
+                    for(int i = 1; i <= col; ++i)
+                    {
+                        Debug.Write((string)(range.Cells[1, i] as Excel.Range).Value2);
+                    }
+                }
+                */
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                book.Close(false);
+                excel.Quit();
+            }
+        }
+
+        private void excelWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+        private void excelWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            output_StatusLabel.Text = e.UserState as string;
         }
     }
 }
