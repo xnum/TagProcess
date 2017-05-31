@@ -261,5 +261,13 @@ namespace TagProcess
         {
             output_StatusLabel.Text = e.UserState as string;
         }
+
+        private void reader_button_Click(object sender, EventArgs e)
+        {
+            var form = new ReaderForm();
+            this.Hide();
+            form.ShowDialog();
+            this.Show();
+        }
     }
 }
