@@ -20,11 +20,11 @@ namespace TagProcess
             }
             catch
             {
-                msgCallback(0, port + "連線失敗");
+                msgCallback(port + "連線失敗");
                 return false;
             }
 
-            msgCallback(0, port + "連線成功");
+            msgCallback(port + "連線成功");
             return true;
         }
 

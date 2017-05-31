@@ -30,22 +30,11 @@ namespace TagProcess
             }
         }
 
-        public void logging(int level, string msg)
+        public void logging(string msg)
         {
             output_StatusLabel.Text = msg;
 
-            Debug.WriteLine(msg);
-
-            try
-            {
-                System.IO.StreamWriter file = new System.IO.StreamWriter("log.txt", true);
-                file.WriteLine(String.Format("{0} {1} - {2}", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString(), msg));
-                file.Close();
-            }
-            catch
-            {
-                // Ignore Exception
-            }
+            Trace.WriteLine(String.Format("{0} - {1}", DateTime.Now, msg));
         }
 
     }

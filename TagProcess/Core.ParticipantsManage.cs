@@ -278,13 +278,13 @@ namespace TagProcess
 
             if (res_for_parti.ErrorException != null || res_for_parti.ResponseStatus != ResponseStatus.Completed)
             {
-                msgCallback(0, "連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
+                msgCallback("連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
                 return false;
             }
 
             if (res_for_parti.StatusCode != HttpStatusCode.OK || res_for_parti.Content == "")
             {
-                msgCallback(0, "HTTP NOT OK: " + res_for_parti.StatusCode);
+                msgCallback("HTTP NOT OK: " + res_for_parti.StatusCode);
                 return false;
             }
 
@@ -307,7 +307,7 @@ namespace TagProcess
 
             if (res_for_groups.StatusCode != HttpStatusCode.OK || res_for_groups.Content == "")
             {
-                msgCallback(0, "HTTP NOT OK: " + res_for_groups.StatusCode);
+                msgCallback("HTTP NOT OK: " + res_for_groups.StatusCode);
                 return false;
             }
 
@@ -329,7 +329,7 @@ namespace TagProcess
         /// </summary>
         public bool updateParticipant(Participant p)
         {
-            msgCallback(0, "開始上傳修改後選手資料，ID = " + p.id);
+            msgCallback("開始上傳修改後選手資料，ID = " + p.id);
             RestClient client = new RestClient(serverUrl);
             RestRequest req_for_parti = new RestRequest("participant", Method.PATCH);
             req_for_parti.AddParameter("id", p.id);
@@ -346,13 +346,13 @@ namespace TagProcess
 
             if (res_for_parti.ErrorException != null || res_for_parti.ResponseStatus != ResponseStatus.Completed)
             {
-                msgCallback(0, "連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
+                msgCallback("連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
                 return false;
             }
 
             if (res_for_parti.StatusCode != HttpStatusCode.OK || res_for_parti.Content == "")
             {
-                msgCallback(0, "HTTP NOT OK: " + res_for_parti.StatusCode);
+                msgCallback("HTTP NOT OK: " + res_for_parti.StatusCode);
                 return false;
             }
 
@@ -390,19 +390,19 @@ namespace TagProcess
 
             if (res_for_group.ErrorException != null || res_for_group.ResponseStatus != ResponseStatus.Completed)
             {
-                msgCallback(0, "連線伺服器失敗，請重試: " + res_for_group.ErrorMessage);
+                msgCallback("連線伺服器失敗，請重試: " + res_for_group.ErrorMessage);
                 return false;
             }
 
             if (res_for_group.StatusCode != HttpStatusCode.OK || res_for_group.Content == "")
             {
-                msgCallback(0, "HTTP NOT OK: " + res_for_group.StatusCode);
+                msgCallback("HTTP NOT OK: " + res_for_group.StatusCode);
                 return false;
             }
 
             if (!res_for_group.Content.Equals("Ok"))
             {
-                msgCallback(0, "上傳組別失敗" + res_for_group.Content);
+                msgCallback("上傳組別失敗" + res_for_group.Content);
                 return false;
             }
             
@@ -412,19 +412,19 @@ namespace TagProcess
 
             if (res.ErrorException != null || res.ResponseStatus != ResponseStatus.Completed)
             {
-                msgCallback(0, "連線伺服器失敗，請重試: " + res.ErrorMessage);
+                msgCallback("連線伺服器失敗，請重試: " + res.ErrorMessage);
                 return false;
             }
 
             if (res.StatusCode != HttpStatusCode.OK || res.Content == "")
             {
-                msgCallback(0, "HTTP NOT OK: " + res.StatusCode);
+                msgCallback("HTTP NOT OK: " + res.StatusCode);
                 return false;
             }
 
             if (!res.Content.Equals("Ok"))
             {
-                msgCallback(0, "上傳選手失敗" + res.Content);
+                msgCallback("上傳選手失敗" + res.Content);
                 return false;
             }
             return true;

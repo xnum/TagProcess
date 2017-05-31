@@ -21,12 +21,16 @@ namespace TagProcess
 
         public MainForm()
         {
-            InitializeComponent();
+            TextWriterTraceListener mylog = new TextWriterTraceListener(System.IO.File.CreateText("log.txt"));
+            Debug.Listeners.Add(mylog);
+            Debug.AutoFlush = true;
+            logging("Process Start");
 
+            InitializeComponent();
             core = new Core(logging);
 
             string url = Properties.Settings.Default.ServerUrl;
-            logging(0, core.setServerUrl(url));
+            logging("Connect to: " + core.setServerUrl(url));
 
             refreshCOMPort();
         }
@@ -41,7 +45,7 @@ namespace TagProcess
             ServerUrlInputForm input = new ServerUrlInputForm();
             if (input.ShowDialog() == DialogResult.OK)
             {
-                logging(0, core.setServerUrl(input.GetResult()));
+                logging(core.setServerUrl(input.GetResult()));
             }
         }
 
@@ -66,13 +70,13 @@ namespace TagProcess
                 return;
             }
 
-            logging(0, "下載選手資料中，請稍後");
+            logging("下載選手資料中，請稍後");
             if(!core.loadParticipants())
             {
                 MessageBox.Show("下載選手資料失敗，請重試");
                 return;
             }
-            logging(0, "下載選手資料完成");
+            logging("下載選手資料完成");
             pv = new ParticipantsViewForm(this, core);
             this.Hide();
             pv.Show();
@@ -92,13 +96,13 @@ namespace TagProcess
                 return;
             }
 
-            logging(0, "下載選手資料中，請稍後");
+            logging("下載選手資料中，請稍後");
             if (!core.loadParticipants())
             {
                 MessageBox.Show("下載選手資料失敗，請重試");
                 return;
             }
-            logging(0, "下載選手資料完成");
+            logging("下載選手資料完成");
 
             core.gen_mail_pdf();
         }
@@ -141,13 +145,13 @@ namespace TagProcess
                 return;
             }
 
-            logging(0, "下載選手資料中，請稍後");
+            logging("下載選手資料中，請稍後");
             if (!core.loadParticipants())
             {
                 MessageBox.Show("下載選手資料失敗，請重試");
                 return;
             }
-            logging(0, "下載選手資料完成");
+            logging("下載選手資料完成");
 
             TagPairingForm form = new TagPairingForm(core);
             form.ShowDialog();

@@ -12,25 +12,24 @@ namespace TagProcess
     public partial class Core
     {
         private string serverUrl = null;
-        Action<int, string> msgCallback = null;
+        Action<string> msgCallback = null;
 
         private int competition_id = -5;
 
-        public Core(Action<int, string> callback)
+        public Core(Action<string> callback)
         {
             msgCallback = callback;
         }
 
         /// <summary>
-        /// 選單設定伺服器網址
+        /// 選單設定伺服器網址 return連線結果
         /// </summary>
         /// <param name="url">網址</param>
         public string setServerUrl(string url)
         {
             this.serverUrl = url;
             competition_id = -5;
-            Debug.WriteLine(serverUrl);
-            msgCallback(0, "嘗試連線中");
+            msgCallback("嘗試連線到 " + url);
             RestClient client = new RestClient(serverUrl);
             RestRequest request = new RestRequest("competitions/current", Method.GET);
             IRestResponse response = client.Execute(request);
