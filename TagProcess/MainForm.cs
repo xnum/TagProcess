@@ -24,13 +24,13 @@ namespace TagProcess
             TextWriterTraceListener mylog = new TextWriterTraceListener(System.IO.File.CreateText("log.txt"));
             Debug.Listeners.Add(mylog);
             Debug.AutoFlush = true;
-            logging("Process Start");
 
             InitializeComponent();
+            logging("Process Start");
             core = new Core(logging);
 
             string url = Properties.Settings.Default.ServerUrl;
-            logging("Connect to: " + core.setServerUrl(url));
+            logging(core.setServerUrl(url));
 
             refreshCOMPort();
         }

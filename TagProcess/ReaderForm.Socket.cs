@@ -22,20 +22,29 @@ namespace TagProcess
     }
     public partial class ReaderForm : Form
     {
-        ConcurrentQueue<Cmd> inQueue = new ConcurrentQueue<Cmd>();
+        ConcurrentQueue<Cmd> [] inQueue = new ConcurrentQueue<Cmd>[3];
         ConcurrentQueue<Cmd> outQueue = new ConcurrentQueue<Cmd>();
 
-        private bool checkLRC(string s, string lrc)
+        private string countLRC(string s)
         {
             int sum = 0;
-            for(int i = 0; i < s.Length; ++i)
+            for (int i = 0; i < s.Length; ++i)
             {
                 sum += s[i];
             }
 
             sum &= 0xff;
 
-            return lrc == sum.ToString("X2");
+            return sum.ToString("X2");
+        }
+        private bool checkLRC(string s, string lrc)
+        {
+            return lrc == countLRC(s);
+        }
+
+        public void logging(string msg)
+        {
+            Trace.WriteLine(String.Format("{0} - {1}", DateTime.Now, msg));
         }
 
         private DateTime stringToDateTime(string s)
@@ -54,14 +63,15 @@ namespace TagProcess
 
         private Cmd stringToCmd(string msg)
         {
+            logging("收到資料: " + msg);
             Cmd cmd = new Cmd();
             cmd.type = Cmd.Type.None;
-            Debug.WriteLine("processing: " + msg);
             if(msg.Substring(0, 2) == "aa")
             {
+                logging("判斷指令為aa開頭");
                 string tag = msg.Substring(2, 12);
                 if (tag.Substring(0, 3) != "058")
-                    Debug.WriteLine("Notice: prefix is not 058");
+                    logging("Notice: tag prefix is not 058");
                 cmd.type = Cmd.Type.GetTag;
                 cmd.data = tag;
                 cmd.time = DateTime.Now;
@@ -69,43 +79,50 @@ namespace TagProcess
 
             if(msg.Substring(0, 2) == "ab")
             {
+                logging("判斷指令為ab開頭");
                 string reader_id = msg.Substring(2, 2);
                 int length = Int32.Parse(msg.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+                logging("偵測長度為" + length);
                 string instruction = msg.Substring(6, 2);
+                logging("指令編號為" + instruction);
                 string data = length == 0 ? "" : msg.Substring(8, length);
-                char lrc = msg[8 + length];
+                //char lrc = msg[8 + length];
 
                 if (instruction == "01")
                 {
                     if(length == 0)
-                        Debug.WriteLine("SetDate ACK ... [Ignored]");
+                        logging("收到資料為 SetDate ACK [Ignored]");
                     else
                     {
+                        logging("嘗試轉換時間");
                         cmd.time = stringToDateTime(data);
+                        logging("收到時間為" + cmd.time);
                         cmd.type = Cmd.Type.SetDate;
                     }
                 }
 
                 if(instruction == "02")
                 {
+                    logging("收到GetDate回應 嘗試轉換");
                     cmd.time = stringToDateTime(data);
+                    logging("收到時間為" + cmd.time);
                     cmd.type = Cmd.Type.GetDate;
                 }
 
                 if (instruction[0] == 'f')
                     cmd.type = Cmd.Type.Error;
                 if (instruction == "f0")
-                    Debug.WriteLine("Error: Bad Length (>10)");
+                    logging("Error: Bad Length (>10)");
                 if (instruction == "f1")
-                    Debug.WriteLine("Error: Bad LRC");
+                    logging("Error: Bad LRC");
                 if (instruction == "f2")
-                    Debug.WriteLine("Error: Unknown Instruction");
+                    logging("Error: Unknown Instruction");
                 if (instruction == "f3")
-                    Debug.WriteLine("Error: Reserved");
+                    logging("Error: Reserved");
                 if (instruction == "f4")
-                    Debug.WriteLine("Error: Unsupported command");
+                    logging("Error: Unsupported command");
                 if (instruction == "f5")
-                    Debug.WriteLine("Error: Unsupported sub-command");
+                    logging("Error: Unsupported sub-command");
             }
 
             return cmd;
@@ -113,7 +130,23 @@ namespace TagProcess
 
         private string CmdToString(Cmd cmd)
         {
-            return "";
+            string str = "ab";
+            if (cmd.type == Cmd.Type.GetDate)
+                str += "00002222";
+
+            if(cmd.type == Cmd.Type.SetDate)
+            {
+                string data = "000701" + DateTime.Now.ToString("yyMMdd") + (int)DateTime.Now.DayOfWeek + DateTime.Now.ToString("HHmmss");
+                data += countLRC(data) + "\r\n";
+                logging("SetDate指令字串: " + data);
+            }
+
+            if(cmd.type == Cmd.Type.GetTag)
+            {
+                str += "00ff4bc2";
+            }
+
+            return str;
         }
 
         private string runTcpClient(int index, string ip)
@@ -122,8 +155,10 @@ namespace TagProcess
             NetworkStream stream = null;
             StreamReader reader = null;
             StreamWriter writer = null;
+
+            logging(ip + "連接中");
             try
-            {
+            {    
                 client = new TcpClient(ip, 10000);
                 stream = client.GetStream();
                 stream.ReadTimeout = 100;
@@ -133,9 +168,11 @@ namespace TagProcess
             }
             catch (Exception ex)
             {
-                return "網路連線失敗" + ex.Message;
+                logging(ip + "網路連線失敗" + ex.Message);
+                return ex.Message;
             }
 
+            logging(ip + "連接成功");
             /* connection opened */
             while(client.Connected)
             {
@@ -143,6 +180,7 @@ namespace TagProcess
                 {
                     string line = reader.ReadLine();
                     Cmd recv_cmd = stringToCmd(line);
+                    recv_cmd.index = index;
                     outQueue.Enqueue(recv_cmd);
                 }
                 catch (Exception ex)
@@ -151,8 +189,8 @@ namespace TagProcess
                 }
 
                 Cmd send_cmd = null;
-                if (false == inQueue.TryDequeue(out send_cmd)) continue;
-
+                if (false == inQueue[index].TryDequeue(out send_cmd)) continue;
+                
                 try
                 {
                     string send_str = CmdToString(send_cmd);
@@ -164,6 +202,7 @@ namespace TagProcess
                 }
             }
 
+            logging(ip + "連線中斷");
             return "網路連線已斷開";
         }
     }

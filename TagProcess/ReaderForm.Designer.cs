@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.start_button = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBox_checkpoint = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.checkedListBox_group = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBox_batch = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -43,7 +44,7 @@
             this.textBox_ip0 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox_time0 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox_localtime = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.textBox_status1 = new System.Windows.Forms.TextBox();
@@ -59,16 +60,17 @@
             this.textBox_ip2 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.textBox_time2 = new System.Windows.Forms.TextBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.touchedView = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.refresh_timer = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.touchedView)).BeginInit();
             this.SuspendLayout();
             // 
             // start_button
@@ -81,19 +83,20 @@
             this.start_button.Text = "開始";
             this.start_button.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // comboBox_checkpoint
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.comboBox_checkpoint.FormattingEnabled = true;
+            this.comboBox_checkpoint.Items.AddRange(new object[] {
             "起點",
             "1",
             "2",
             "3",
             "終點"});
-            this.comboBox1.Location = new System.Drawing.Point(8, 34);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 20);
-            this.comboBox1.TabIndex = 1;
+            this.comboBox_checkpoint.Location = new System.Drawing.Point(8, 34);
+            this.comboBox_checkpoint.Name = "comboBox_checkpoint";
+            this.comboBox_checkpoint.Size = new System.Drawing.Size(121, 20);
+            this.comboBox_checkpoint.TabIndex = 1;
+            this.comboBox_checkpoint.SelectedIndexChanged += new System.EventHandler(this.comboBox_checkpoint_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -104,10 +107,10 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "檢查點編號";
             // 
-            // checkedListBox1
+            // checkedListBox_group
             // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
+            this.checkedListBox_group.FormattingEnabled = true;
+            this.checkedListBox_group.Items.AddRange(new object[] {
             "男甲組",
             "男乙組",
             "男丙組",
@@ -116,10 +119,10 @@
             "女乙組",
             "女丙組",
             "女丁組"});
-            this.checkedListBox1.Location = new System.Drawing.Point(8, 120);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(120, 174);
-            this.checkedListBox1.TabIndex = 3;
+            this.checkedListBox_group.Location = new System.Drawing.Point(8, 120);
+            this.checkedListBox_group.Name = "checkedListBox_group";
+            this.checkedListBox_group.Size = new System.Drawing.Size(120, 174);
+            this.checkedListBox_group.TabIndex = 3;
             // 
             // label2
             // 
@@ -130,19 +133,19 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "起跑批次";
             // 
-            // comboBox2
+            // comboBox_batch
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
+            this.comboBox_batch.FormattingEnabled = true;
+            this.comboBox_batch.Items.AddRange(new object[] {
             "1",
             "2",
             "3",
             "4",
             "5"});
-            this.comboBox2.Location = new System.Drawing.Point(8, 77);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 20);
-            this.comboBox2.TabIndex = 5;
+            this.comboBox_batch.Location = new System.Drawing.Point(8, 77);
+            this.comboBox_batch.Name = "comboBox_batch";
+            this.comboBox_batch.Size = new System.Drawing.Size(121, 20);
+            this.comboBox_batch.TabIndex = 5;
             // 
             // label3
             // 
@@ -158,10 +161,10 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.start_button);
-            this.groupBox1.Controls.Add(this.comboBox2);
-            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.comboBox_batch);
+            this.groupBox1.Controls.Add(this.comboBox_checkpoint);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.checkedListBox1);
+            this.groupBox1.Controls.Add(this.checkedListBox_group);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(138, 353);
@@ -239,13 +242,13 @@
             this.textBox_time0.TabIndex = 11;
             this.textBox_time0.Tag = "0";
             // 
-            // textBox1
+            // textBox_localtime
             // 
-            this.textBox1.Location = new System.Drawing.Point(226, 18);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(140, 22);
-            this.textBox1.TabIndex = 9;
+            this.textBox_localtime.Location = new System.Drawing.Point(226, 18);
+            this.textBox_localtime.Name = "textBox_localtime";
+            this.textBox_localtime.ReadOnly = true;
+            this.textBox_localtime.Size = new System.Drawing.Size(140, 22);
+            this.textBox_localtime.TabIndex = 9;
             // 
             // label4
             // 
@@ -392,19 +395,19 @@
             this.textBox_time2.Size = new System.Drawing.Size(140, 22);
             this.textBox_time2.TabIndex = 11;
             // 
-            // dataGridView1
+            // touchedView
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.touchedView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.touchedView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
             this.Column2,
             this.Column3,
             this.Column4});
-            this.dataGridView1.Location = new System.Drawing.Point(385, 12);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(421, 349);
-            this.dataGridView1.TabIndex = 19;
+            this.touchedView.Location = new System.Drawing.Point(385, 12);
+            this.touchedView.Name = "touchedView";
+            this.touchedView.RowTemplate.Height = 24;
+            this.touchedView.Size = new System.Drawing.Size(421, 349);
+            this.touchedView.TabIndex = 19;
             // 
             // Column1
             // 
@@ -432,16 +435,21 @@
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
             // 
+            // refresh_timer
+            // 
+            this.refresh_timer.Enabled = true;
+            this.refresh_timer.Tick += new System.EventHandler(this.refresh_timer_Tick);
+            // 
             // ReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(818, 376);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.touchedView);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBox_localtime);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "ReaderForm";
@@ -454,7 +462,7 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.touchedView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -463,11 +471,11 @@
         #endregion
 
         private System.Windows.Forms.Button start_button;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBox_checkpoint;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.CheckedListBox checkedListBox_group;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox_batch;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -477,7 +485,7 @@
         private System.Windows.Forms.TextBox textBox_ip0;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox_time0;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox_localtime;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox textBox_status1;
@@ -493,10 +501,11 @@
         private System.Windows.Forms.TextBox textBox_ip2;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox_time2;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView touchedView;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.Timer refresh_timer;
     }
 }
