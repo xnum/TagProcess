@@ -223,6 +223,7 @@
             this.textBox_ip0.Size = new System.Drawing.Size(140, 22);
             this.textBox_ip0.TabIndex = 13;
             this.textBox_ip0.Tag = "0";
+            this.textBox_ip0.Text = "140.113.220.208";
             // 
             // label5
             // 

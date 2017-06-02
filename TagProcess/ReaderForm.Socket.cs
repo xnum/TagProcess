@@ -132,18 +132,19 @@ namespace TagProcess
         {
             string str = "ab";
             if (cmd.type == Cmd.Type.GetDate)
-                str += "00002222";
+                str += "00002222\r\n";
 
             if(cmd.type == Cmd.Type.SetDate)
             {
                 string data = "000701" + DateTime.Now.ToString("yyMMdd") + (int)DateTime.Now.DayOfWeek + DateTime.Now.ToString("HHmmss");
                 data += countLRC(data) + "\r\n";
                 logging("SetDate指令字串: " + data);
+                str += data;
             }
 
             if(cmd.type == Cmd.Type.GetTag)
             {
-                str += "00ff4bc2";
+                str += "00ff4bc2\r\n";
             }
 
             return str;
@@ -183,9 +184,21 @@ namespace TagProcess
                     recv_cmd.index = index;
                     outQueue.Enqueue(recv_cmd);
                 }
-                catch (Exception ex)
+                catch (IOException ex)
                 {
                     Debug.WriteLine("Recv Ignore exception: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                    if (ex is System.NullReferenceException)
+                        return "對方斷線";
+                    if (ex is System.Net.Sockets.SocketException)
+                    {
+                        SocketException sex = (SocketException)ex;
+                        return sex.Message;
+                    }
+                    return ex.Message;
                 }
 
                 Cmd send_cmd = null;
@@ -195,6 +208,7 @@ namespace TagProcess
                 {
                     string send_str = CmdToString(send_cmd);
                     writer.WriteLine(send_str);
+                    writer.Flush();
                 }
                 catch (Exception ex)
                 {

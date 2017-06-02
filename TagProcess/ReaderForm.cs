@@ -17,6 +17,7 @@ namespace TagProcess
         private TextBox[] textBox_status;
         private TextBox[] textBox_time;
         private int refresh_count = 0;
+        private string[] result = new string[] { "", "", ""};
 
         public ReaderForm()
         {
@@ -43,15 +44,16 @@ namespace TagProcess
         private void readerWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             int index = (int)e.Argument;
+            e.Result = index;
             string ip = textBox_ip[index].Text;
-            runTcpClient(index, ip); // block here
+            result[index] = runTcpClient(index, ip); // block here
         }
 
         private void readerWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             var worker = (BackgroundWorker)sender;
             int index = (int)e.Result;
-            textBox_status[index].Text = "DONE";
+            textBox_status[index].Text = result[index];
         }
 
         private void button_conn0_Click(object sender, EventArgs e)
