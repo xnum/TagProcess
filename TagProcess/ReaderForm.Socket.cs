@@ -35,7 +35,7 @@ namespace TagProcess
 
             sum &= 0xff;
 
-            return sum.ToString("X2");
+            return sum.ToString("x2");
         }
         private bool checkLRC(string s, string lrc)
         {
@@ -137,7 +137,7 @@ namespace TagProcess
 
             if(cmd.type == Cmd.Type.SetDate)
             {
-                string data = "000701" + DateTime.Now.ToString("yyMMdd") + (int)DateTime.Now.DayOfWeek + DateTime.Now.ToString("HHmmss");
+                string data = "000701" + DateTime.Now.ToString("yyMMdd") + "0" +(int)DateTime.Now.DayOfWeek + DateTime.Now.ToString("HHmmss");
                 data += countLRC(data) + "\r\n";
                 logging("SetDate指令字串: " + data);
                 str += data;
@@ -175,8 +175,12 @@ namespace TagProcess
             }
 
             logging(ip + "連接成功");
+
+            Cmd cmd = new Cmd();
+            cmd.type = Cmd.Type.SetDate;
+            inQueue[index].Enqueue(cmd);
             /* connection opened */
-            while(client.Connected)
+            while (client.Connected)
             {
                 try
                 {
