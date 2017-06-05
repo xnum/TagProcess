@@ -53,6 +53,7 @@ namespace TagProcess
             int month = (s[2] - '0') * 10 + (s[3] - '0');
             int day = (s[4] - '0') * 10 + (s[5] - '0');
             // s[6~7] indicates the day of week e.g. Monday
+            if (s.Length == 14) s = "xx" + s;
             int hour = (s[8] - '0') * 10 + (s[9] - '0');
             int min = (s[10] - '0') * 10 + (s[11] - '0');
             int sec = (s[12] - '0') * 10 + (s[13] - '0');
@@ -69,12 +70,12 @@ namespace TagProcess
             if(msg.Substring(0, 2) == "aa")
             {
                 logging("判斷指令為aa開頭");
-                string tag = msg.Substring(2, 12);
+                string tag = msg.Substring(4, 12);
                 if (tag.Substring(0, 3) != "058")
                     logging("Notice: tag prefix is not 058");
                 cmd.type = Cmd.Type.GetTag;
                 cmd.data = tag;
-                cmd.time = DateTime.Now;
+                cmd.time = stringToDateTime(msg.Substring(19, 14));
             }
 
             if(msg.Substring(0, 2) == "ab")
