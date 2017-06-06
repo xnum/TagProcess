@@ -18,10 +18,13 @@ namespace TagProcess
         private TextBox[] textBox_time;
         private int refresh_count = 0;
         private string[] result = new string[] { "", "", ""};
+        private Core core;
+        private int station_id = -1;
 
-        public ReaderForm()
+        public ReaderForm(Core c)
         {
             InitializeComponent();
+            core = c;
 
             textBox_ip = new TextBox[] { textBox_ip0, textBox_ip1, textBox_ip2 };
             textBox_status = new TextBox[] { textBox_status0, textBox_status1, textBox_status2 };
@@ -37,6 +40,10 @@ namespace TagProcess
                 inQueue[i] = new System.Collections.Concurrent.ConcurrentQueue<Cmd>();
             }
 
+            foreach(var item in ParticipantHelper.getGroups())
+            {
+                checkedListBox_group.Items.Add(item.name);
+            }
             
         }
 
@@ -75,7 +82,17 @@ namespace TagProcess
                 {
                     logging("Got tag " + got_cmd.data);
                     textBox_status[got_cmd.index].Text = got_cmd.data;
-                    touchedView.Rows.Add("","",got_cmd.data,got_cmd.time.ToShortTimeString());
+                    string race_id = "編號";
+                    string name = "姓名";
+                    string group = "組別";
+                    Participant p = core.findParticipantByTag(got_cmd.data);
+                    if(p != null)
+                    {
+                        race_id = p.race_id;
+                        name = p.name;
+                        group = p.group;
+                    }
+                    touchedView.Rows.Add(got_cmd.data, race_id,name,group,got_cmd.time.ToShortTimeString());
                 }
 
                 if (got_cmd.type == Cmd.Type.GetDate || got_cmd.type == Cmd.Type.SetDate)
@@ -91,16 +108,12 @@ namespace TagProcess
 
                 if (refresh_count % 100 == 1) // 每10秒設定一次時間
                 {
-                    Cmd cmd = new Cmd();
-                    cmd.type = Cmd.Type.SetDate;
-                    inQueue[i].Enqueue(cmd);
+                    inQueue[i].Enqueue(new Cmd(Cmd.Type.SetDate));
                 }
 
-                if (refresh_count % 10 == 1) // 每1秒送一次取Tag
+                if (refresh_count % 50 == 1) // 每5秒取得一次時間
                 {
-                    Cmd cmd = new Cmd();
-                    cmd.type = Cmd.Type.GetTag;
-                    inQueue[i].Enqueue(cmd);
+                    inQueue[i].Enqueue(new Cmd(Cmd.Type.GetDate));
                 }
             }
         }
@@ -118,6 +131,63 @@ namespace TagProcess
                 comboBox_batch.Enabled = false;
                 checkedListBox_group.Enabled = false;
             }
+        }
+
+        private void start_button_Click(object sender, EventArgs e)
+        {
+            if (start_button.Text == "開始")
+            {
+                if (!start()) return;
+
+                start_button.Text = "停止";
+                comboBox_checkpoint.Enabled = false;
+                comboBox_batch.Enabled = false;
+                checkedListBox_group.Enabled = false;
+            }
+            else
+            {
+                start_button.Text = "開始";
+                comboBox_checkpoint.Enabled = true;
+                comboBox_batch.Enabled = true;
+                checkedListBox_group.Enabled = true;
+            }
+
+        }
+
+        private bool start()
+        {
+            int station_n = comboBox_checkpoint.SelectedIndex;
+            if (station_n < 0)
+            {
+                MessageBox.Show("未選擇檢查點");
+                return false;
+            }
+
+            int batch_n = comboBox_batch.SelectedIndex;
+            if (batch_n < 0)
+            {
+                MessageBox.Show("未選擇起跑批次");
+                return false;
+            }
+
+            List<int> groups_n = new List<int>();
+            List<RaceGroups> g = ParticipantHelper.getGroups();
+            foreach (string i in checkedListBox_group.CheckedItems)
+            {
+                foreach (var j in g)
+                    if (j.name == i)
+                        groups_n.Add(j.id);
+            }
+
+            if (groups_n.Count < 0)
+            {
+                MessageBox.Show("未選擇起跑組別");
+                return false;
+            }
+
+            station_id = station_n;
+
+            return core.setStartCompetition(station_n, batch_n, groups_n);
         }
     }
 }

@@ -61,6 +61,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.textBox_time2 = new System.Windows.Forms.TextBox();
             this.touchedView = new System.Windows.Forms.DataGridView();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -82,6 +83,7 @@
             this.start_button.TabIndex = 0;
             this.start_button.Text = "開始";
             this.start_button.UseVisualStyleBackColor = true;
+            this.start_button.Click += new System.EventHandler(this.start_button_Click);
             // 
             // comboBox_checkpoint
             // 
@@ -110,15 +112,6 @@
             // checkedListBox_group
             // 
             this.checkedListBox_group.FormattingEnabled = true;
-            this.checkedListBox_group.Items.AddRange(new object[] {
-            "男甲組",
-            "男乙組",
-            "男丙組",
-            "男丁組",
-            "女甲組",
-            "女乙組",
-            "女丙組",
-            "女丁組"});
             this.checkedListBox_group.Location = new System.Drawing.Point(8, 120);
             this.checkedListBox_group.Name = "checkedListBox_group";
             this.checkedListBox_group.Size = new System.Drawing.Size(120, 174);
@@ -400,6 +393,7 @@
             // 
             this.touchedView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.touchedView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column5,
             this.Column1,
             this.Column2,
             this.Column3,
@@ -407,8 +401,13 @@
             this.touchedView.Location = new System.Drawing.Point(385, 12);
             this.touchedView.Name = "touchedView";
             this.touchedView.RowTemplate.Height = 24;
-            this.touchedView.Size = new System.Drawing.Size(421, 349);
+            this.touchedView.Size = new System.Drawing.Size(510, 349);
             this.touchedView.TabIndex = 19;
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "晶片tag";
+            this.Column5.Name = "Column5";
             // 
             // Column1
             // 
@@ -445,7 +444,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(818, 376);
+            this.ClientSize = new System.Drawing.Size(907, 376);
             this.Controls.Add(this.touchedView);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -503,10 +502,11 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox_time2;
         private System.Windows.Forms.DataGridView touchedView;
+        private System.Windows.Forms.Timer refresh_timer;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.Timer refresh_timer;
     }
 }

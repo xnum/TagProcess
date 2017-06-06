@@ -19,6 +19,8 @@ namespace TagProcess
         public string data;
         public int index;
         public DateTime time;
+        public Cmd() { }
+        public Cmd(Type t) { type = t; }
     }
     public partial class ReaderForm : Form
     {
@@ -49,7 +51,7 @@ namespace TagProcess
 
         private DateTime stringToDateTime(string s)
         {
-            int year = 1900 + (s[0] - '0') * 10 + (s[1] - '0');
+            int year = 2000 + (s[0] - '0') * 10 + (s[1] - '0');
             int month = (s[2] - '0') * 10 + (s[3] - '0');
             int day = (s[4] - '0') * 10 + (s[5] - '0');
             // s[6~7] indicates the day of week e.g. Monday
@@ -62,20 +64,20 @@ namespace TagProcess
             return new DateTime(year, month, day, hour, min, sec, ms * 10);
         }
 
-        private Cmd stringToCmd(string msg)
+        public Cmd stringToCmd(string msg)
         {
             logging("收到資料: " + msg);
             Cmd cmd = new Cmd();
             cmd.type = Cmd.Type.None;
             if(msg.Substring(0, 2) == "aa")
-            {
+            { // aa 00 058003 22d0ee 0100 170605 203041 5f 0b
                 logging("判斷指令為aa開頭");
                 string tag = msg.Substring(4, 12);
                 if (tag.Substring(0, 3) != "058")
                     logging("Notice: tag prefix is not 058");
                 cmd.type = Cmd.Type.GetTag;
                 cmd.data = tag;
-                cmd.time = stringToDateTime(msg.Substring(19, 14));
+                cmd.time = stringToDateTime(msg.Substring(20, 14));
             }
 
             if(msg.Substring(0, 2) == "ab")
@@ -190,8 +192,8 @@ namespace TagProcess
                     outQueue.Enqueue(recv_cmd);
                 }
                 catch (IOException ex)
-                {
-                    Debug.WriteLine("Recv Ignore exception: " + ex.Message);
+                { // TODO ignore timedout 
+                    //Debug.WriteLine("Recv Ignore exception: " + ex.Message);
                 }
                 catch (Exception ex)
                 {

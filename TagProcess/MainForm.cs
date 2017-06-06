@@ -268,7 +268,15 @@ namespace TagProcess
 
         private void reader_button_Click(object sender, EventArgs e)
         {
-            var form = new ReaderForm();
+            logging("下載選手資料中，請稍後");
+            if (!core.loadParticipants())
+            {
+                MessageBox.Show("下載選手資料失敗，請重試");
+                return;
+            }
+            logging("下載選手資料完成");
+
+            var form = new ReaderForm(core);
             this.Hide();
             form.ShowDialog();
             this.Show();

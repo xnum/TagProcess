@@ -88,6 +88,11 @@ namespace TagProcess
             return ret;
         }
 
+        public static List<RaceGroups> getGroups()
+        {
+            return groups;
+        }
+
         internal static void setGroups(List<RaceGroups> g)
         {
             groups = g;
@@ -428,6 +433,46 @@ namespace TagProcess
                 return false;
             }
             return true;
+        }
+
+        public bool setStartCompetition(int station, int batch, List<int> groups_id)
+        {
+            RestClient client = new RestClient(serverUrl);
+            RestRequest req_for_group = new RestRequest("competitions/batch_start", Method.POST);
+            req_for_group.AddParameter("station", station);
+            req_for_group.AddParameter("batch", batch);
+            req_for_group.AddParameter("groups", JsonConvert.SerializeObject(groups_id));
+            req_for_group.AddParameter("time", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+            IRestResponse res_for_group = client.Execute(req_for_group);
+
+            if (res_for_group.ErrorException != null || res_for_group.ResponseStatus != ResponseStatus.Completed)
+            {
+                msgCallback("連線伺服器失敗，請重試: " + res_for_group.ErrorMessage);
+                return false;
+            }
+
+            if (res_for_group.StatusCode != HttpStatusCode.OK || res_for_group.Content == "")
+            {
+                msgCallback("HTTP NOT OK: " + res_for_group.StatusCode);
+                return false;
+            }
+
+            if (!res_for_group.Content.Equals("Ok"))
+            {
+                msgCallback("上傳組別失敗" + res_for_group.Content);
+                return false;
+            }
+            return true;
+        }
+
+        public Participant findParticipantByTag(string tag)
+        {
+            for(int i = 0; i < participants.Count; ++i)
+            {
+                if (participants[i].tag_id == tag)
+                    return participants[i];
+            }
+            return null;
         }
     }
 }
