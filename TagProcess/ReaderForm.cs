@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,11 +21,17 @@ namespace TagProcess
         private string[] result = new string[] { "", "", ""};
         private Core core;
         private int station_id = -1;
+        private FileStream bakFile;
+        private StreamWriter bakWriter;
+        private HashSet<string> seenTag = new HashSet<string>();
+        private List<Cmd> tagBuff = new List<Cmd>();
 
         public ReaderForm(Core c)
         {
             InitializeComponent();
             core = c;
+            bakFile = new FileStream("tag.txt", FileMode.Append, FileAccess.Write, FileShare.Read, bufferSize: 4096);
+            bakWriter = new StreamWriter(bakFile, Encoding.ASCII);
 
             textBox_ip = new TextBox[] { textBox_ip0, textBox_ip1, textBox_ip2 };
             textBox_status = new TextBox[] { textBox_status0, textBox_status1, textBox_status2 };
@@ -47,12 +54,19 @@ namespace TagProcess
             
         }
 
+        ~ReaderForm()
+        {
+            bakWriter.Dispose();
+            bakFile.Dispose();
+        }
+
 
         private void readerWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             int index = (int)e.Argument;
             e.Result = index;
             string ip = textBox_ip[index].Text;
+            result[index] = "已連線";
             result[index] = runTcpClient(index, ip); // block here
         }
 
@@ -78,9 +92,17 @@ namespace TagProcess
             Cmd got_cmd = null;
             while(outQueue.TryDequeue(out got_cmd))
             {
+                if (station_id < 0) continue; /* 尚未開始 */
+
                 if (got_cmd.type == Cmd.Type.GetTag)
                 {
+                    if (!seenTag.Add(got_cmd.data)) continue;
+
                     logging("Got tag " + got_cmd.data);
+
+                    bakWriter.WriteLine(got_cmd.data);
+                    tagBuff.Add(got_cmd);
+
                     textBox_status[got_cmd.index].Text = got_cmd.data;
                     string race_id = "編號";
                     string name = "姓名";
@@ -116,6 +138,13 @@ namespace TagProcess
                     inQueue[i].Enqueue(new Cmd(Cmd.Type.GetDate));
                 }
             }
+
+            if (refresh_count % 30 == 1) // 每3秒上傳一次資料
+            {
+                if (tagBuff.Count == 0) return; 
+                if (core.uploadTagData(station_id, tagBuff))
+                    tagBuff.Clear();
+            }
         }
 
         private void comboBox_checkpoint_SelectedIndexChanged(object sender, EventArgs e)
@@ -139,6 +168,7 @@ namespace TagProcess
             {
                 if (!start()) return;
 
+                seenTag = new HashSet<string>();
                 start_button.Text = "停止";
                 comboBox_checkpoint.Enabled = false;
                 comboBox_batch.Enabled = false;

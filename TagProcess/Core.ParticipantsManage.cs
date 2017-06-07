@@ -474,5 +474,44 @@ namespace TagProcess
             }
             return null;
         }
+
+        public bool uploadTagData(int station, List<Cmd> data)
+        {
+            List<Dictionary<string, string>> payload = new List<Dictionary<string, string>>();
+            foreach(var d in data)
+            {
+                payload.Add(
+                    new Dictionary<string, string>() {
+                        { "tag_id", d.data },
+                        { "time", d.time.ToString("yyyy/MM/dd HH:mm:ss") },
+                        { "station_id", station.ToString() }
+                    });
+            }
+
+            RestClient client = new RestClient(serverUrl);
+            RestRequest req_for_group = new RestRequest("records", Method.POST);
+            //req_for_group.AddParameter("station", station);
+            req_for_group.AddParameter("tags", JsonConvert.SerializeObject(payload));
+            IRestResponse res_for_group = client.Execute(req_for_group);
+
+            if (res_for_group.ErrorException != null || res_for_group.ResponseStatus != ResponseStatus.Completed)
+            {
+                msgCallback("連線伺服器失敗，請重試: " + res_for_group.ErrorMessage);
+                return false;
+            }
+
+            if (res_for_group.StatusCode != HttpStatusCode.OK || res_for_group.Content == "")
+            {
+                msgCallback("HTTP NOT OK: " + res_for_group.StatusCode);
+                return false;
+            }
+
+            if (!res_for_group.Content.Equals("Ok"))
+            {
+                msgCallback("上傳組別失敗" + res_for_group.Content);
+                return false;
+            }
+            return true;
+        }
     }
 }

@@ -165,7 +165,7 @@ namespace TagProcess
             {    
                 client = new TcpClient(ip, 10000);
                 stream = client.GetStream();
-                stream.ReadTimeout = 100;
+                stream.ReadTimeout = 200;
                 reader = new StreamReader(stream, Encoding.ASCII);
                 writer = new StreamWriter(stream, Encoding.ASCII);
                 writer.NewLine = "\r\n";

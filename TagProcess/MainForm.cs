@@ -280,6 +280,7 @@ namespace TagProcess
             this.Hide();
             form.ShowDialog();
             this.Show();
+            form.Dispose();
         }
     }
 }
