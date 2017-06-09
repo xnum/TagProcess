@@ -14,16 +14,15 @@ namespace TagProcess
 {
     public partial class TagPairingForm : Form
     {
-        public Core core;
+        private ParticipantsRepository repo = ParticipantsRepository.Instance;
+        private TagUSBReader usbReader = TagUSBReader.Instance;
         private BlockingCollection<string> incomingTags = null; // ConcurrentQueue
         private string lastTag = String.Empty;
-        public TagPairingForm(Core c)
+        public TagPairingForm()
         {
             InitializeComponent();
 
-            core = c;
-
-            foreach (var p in c.participants)
+            foreach (var p in repo.participants)
             {
                 pairDGV.Rows.Add(p.tag_id, p.race_id, p.name, p.group);
             }
@@ -54,7 +53,7 @@ namespace TagProcess
                 string tag = String.Empty;
                 try
                 {
-                    tag = core.comport_get_tag();
+                    tag = usbReader.readTag();
                 }
                 catch (InvalidOperationException)
                 {
@@ -116,32 +115,32 @@ namespace TagProcess
             if (cell != null)
             {
                 var row_index = cell.RowIndex;
-                if (core.participants[row_index].tag_id == "") // 發現該員沒有配對晶片
+                if (repo.participants[row_index].tag_id == "") // 發現該員沒有配對晶片
                 {
-                    if (false == ParticipantHelper.tryAddTag(tag))
+                    if (false == repo.helper.tryAddTag(tag))
                     {
                         MessageBox.Show("此晶片已經被配對過，無法再被配對");
                         return;
                     }
 
                     // 配對成功
-                    core.participants[row_index].tag_id = tag;
+                    repo.participants[row_index].tag_id = tag;
                     pairDGV[0, cell.RowIndex].Value = tag;
                     statusLabel.Text = "新增成功";
 
-                    if (core.participants[row_index].needWriteBack())
+                    if (repo.participants[row_index].needWriteBack())
                     {
                         statusLabel_API.Text = "儲存變更中";
 
-                        if (false == core.updateParticipant(core.participants[row_index]))
+                        if (false == repo.uploadParticipant(repo.participants[row_index]))
                         {
                            /*
                             * 這邊只限定從無晶片變成有晶片
                             * 所以新增失敗時，移除新晶片就好
                             */
-                            ParticipantHelper.cancelTag(tag);
+                            repo.helper.cancelTag(tag);
                             statusLabel_API.Text = "儲存變更失敗";
-                            core.participants[row_index].tag_id = "";
+                            repo.participants[row_index].tag_id = "";
                             pairDGV[0, cell.RowIndex].Value = "";
                             return;
                         }

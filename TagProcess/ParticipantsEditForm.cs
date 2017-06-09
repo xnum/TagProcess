@@ -15,15 +15,13 @@ namespace TagProcess
     {
         public Participant retParticipant;
         string currentReceivedTag = String.Empty;
-        Func<string> get_tag_callback = null;
 
-        public ParticipantsEditForm(Participant current, Func<string> get_tag_id)
+        public ParticipantsEditForm(Participant current)
         {
             InitializeComponent();
             comboBox_groups.Items.Clear();
-            comboBox_groups.Items.AddRange(ParticipantHelper.getGroupNames().ToArray());
+            comboBox_groups.Items.AddRange(ParticipantsRepository.Instance.helper.getGroupNames().ToArray());
             retParticipant = current;
-            get_tag_callback = get_tag_id;
 
             textBox_id.Text = retParticipant.id.ToString();
             textBox_name.Text = retParticipant.name;
@@ -108,7 +106,7 @@ namespace TagProcess
                 string result = String.Empty;
                 try
                 {
-                    result = get_tag_callback(); // blocking up to 500ms
+                    result = TagUSBReader.Instance.readTag(); // blocking up to 500ms
                 }
                 catch (InvalidOperationException)
                 {
@@ -141,7 +139,7 @@ namespace TagProcess
 
             if (currentReceivedTag == String.Empty) return;
             
-            if (true == ParticipantHelper.isExistsTag(currentReceivedTag))
+            if (true == ParticipantsRepository.Instance.helper.isExistsTag(currentReceivedTag))
             {
                 statusLabel.Text = "這個晶片已經被其他選手使用";
             }

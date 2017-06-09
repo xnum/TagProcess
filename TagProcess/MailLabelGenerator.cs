@@ -13,9 +13,9 @@ namespace TagProcess
     /// <summary>
     /// 產生郵寄用標籤的相關程式
     /// </summary>
-    public partial class Core
+    public class MailLabelGenerator
     {
-        public void gen_mail_pdf()
+        public static void exportLabelToPDF(List<Participant> participants)
         {
             var doc = new Document(PageSize.A4, 1, 1, 3, 1);
             PdfWriter.GetInstance(doc, new FileStream("mail.pdf", FileMode.Create));

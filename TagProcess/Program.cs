@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace TagProcess
 {
+    
     static class Program
     {
         /// <summary>
@@ -16,6 +17,8 @@ namespace TagProcess
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            RaceServer.Instance.Log += FileLogger.Instance.log;
+            ParticipantsRepository.Instance.Log += FileLogger.Instance.log;
             Application.Run(new MainForm());
         }
     }

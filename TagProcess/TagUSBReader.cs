@@ -8,10 +8,23 @@ using System.Threading.Tasks;
 
 namespace TagProcess
 {
-    public partial class Core
+    public class TagUSBReader
     {
+        private static readonly TagUSBReader _instance = new TagUSBReader();
+        private TagUSBReader()
+        {
+
+        }
+
+        public static TagUSBReader Instance { get { return _instance; } }
+
         private SerialPort comport = null;
-        public bool connect_comport(string port)
+
+        public string[] getPortNames()
+        {
+            return SerialPort.GetPortNames();
+        }
+        public bool connect(string port)
         {
             try
             {
@@ -20,15 +33,13 @@ namespace TagProcess
             }
             catch
             {
-                msgCallback(port + "連線失敗");
                 return false;
             }
 
-            msgCallback(port + "連線成功");
             return true;
         }
 
-        public bool is_comport_opened()
+        public bool isConnected()
         {
             return comport != null && comport.IsOpen;
         }
@@ -37,7 +48,7 @@ namespace TagProcess
         /// 取得感應到的tag，如果沒有感應到會回傳String.Empty，500ms Timeout
         /// </summary>
         /// <returns></returns>
-        public string comport_get_tag()
+        public string readTag()
         {
             comport.ReadTimeout = 500;
             string lastValidTag = String.Empty;
@@ -55,10 +66,6 @@ namespace TagProcess
                         lastValidTag = tag_id;
                         comport.ReadTimeout = 100;
                     }
-                }
-                catch (InvalidOperationException e)
-                {
-                    throw e;
                 }
                 catch (TimeoutException)
                 {

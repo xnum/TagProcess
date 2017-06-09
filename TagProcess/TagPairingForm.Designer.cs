@@ -16,6 +16,7 @@
             if (disposing && (components != null))
             {
                 components.Dispose();
+                incomingTags.Dispose();
             }
             base.Dispose(disposing);
         }

@@ -156,7 +156,7 @@
             // 
             // search_by_tag_id_button
             // 
-            this.search_by_tag_id_button.Location = new System.Drawing.Point(355, 12);
+            this.search_by_tag_id_button.Location = new System.Drawing.Point(388, 12);
             this.search_by_tag_id_button.Name = "search_by_tag_id_button";
             this.search_by_tag_id_button.Size = new System.Drawing.Size(75, 23);
             this.search_by_tag_id_button.TabIndex = 3;
@@ -169,7 +169,7 @@
             this.textBox_tag_id.Location = new System.Drawing.Point(249, 13);
             this.textBox_tag_id.Name = "textBox_tag_id";
             this.textBox_tag_id.ReadOnly = true;
-            this.textBox_tag_id.Size = new System.Drawing.Size(100, 22);
+            this.textBox_tag_id.Size = new System.Drawing.Size(133, 22);
             this.textBox_tag_id.TabIndex = 4;
             // 
             // ParticipantsViewForm
@@ -184,7 +184,6 @@
             this.Controls.Add(this.mainDGV);
             this.Name = "ParticipantsViewForm";
             this.Text = "參賽選手檢視";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ParticipantsView_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.mainDGV)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

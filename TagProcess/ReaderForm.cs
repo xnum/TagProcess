@@ -19,17 +19,17 @@ namespace TagProcess
         private TextBox[] textBox_time;
         private int refresh_count = 0;
         private string[] result = new string[] { "", "", ""};
-        private Core core;
         private int station_id = -1;
         private FileStream bakFile;
         private StreamWriter bakWriter;
         private HashSet<string> seenTag = new HashSet<string>();
         private List<Cmd> tagBuff = new List<Cmd>();
+        private ParticipantsRepository repo = ParticipantsRepository.Instance;
+        private TimeKeeper keeper = TimeKeeper.Instance;
 
-        public ReaderForm(Core c)
+        public ReaderForm()
         {
             InitializeComponent();
-            core = c;
             bakFile = new FileStream("tag.txt", FileMode.Append, FileAccess.Write, FileShare.Read, bufferSize: 4096);
             bakWriter = new StreamWriter(bakFile, Encoding.ASCII);
 
@@ -47,19 +47,26 @@ namespace TagProcess
                 inQueue[i] = new System.Collections.Concurrent.ConcurrentQueue<Cmd>();
             }
 
-            foreach(var item in ParticipantHelper.getGroups())
+            foreach(var item in repo.helper.getGroups())
             {
                 checkedListBox_group.Items.Add(item.name);
             }
             
         }
-
-        ~ReaderForm()
+        protected override void Dispose(bool disposing)
         {
-            bakWriter.Dispose();
-            bakFile.Dispose();
-        }
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                    bakWriter.Dispose();
+                    bakFile.Dispose();
+                }
+            }
 
+            base.Dispose(disposing);
+        }
 
         private void readerWorker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -107,7 +114,7 @@ namespace TagProcess
                     string race_id = "編號";
                     string name = "姓名";
                     string group = "組別";
-                    Participant p = core.findParticipantByTag(got_cmd.data);
+                    Participant p = repo.findByTag(got_cmd.data);
                     if(p != null)
                     {
                         race_id = p.race_id;
@@ -142,7 +149,7 @@ namespace TagProcess
             if (refresh_count % 30 == 1) // 每3秒上傳一次資料
             {
                 if (tagBuff.Count == 0) return; 
-                if (core.uploadTagData(station_id, tagBuff))
+                if (keeper.uploadTagData(station_id, tagBuff))
                     tagBuff.Clear();
             }
         }
@@ -201,7 +208,7 @@ namespace TagProcess
             }
 
             List<int> groups_n = new List<int>();
-            List<RaceGroups> g = ParticipantHelper.getGroups();
+            List<RaceGroups> g = repo.helper.getGroups();
             foreach (string i in checkedListBox_group.CheckedItems)
             {
                 foreach (var j in g)
@@ -217,7 +224,7 @@ namespace TagProcess
 
             station_id = station_n;
 
-            return core.setStartCompetition(station_n, batch_n, groups_n);
+            return keeper.setStartCompetition(station_n, batch_n, groups_n);
         }
     }
 }

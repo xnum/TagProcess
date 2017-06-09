@@ -14,25 +14,25 @@ namespace TagProcess
 {
     public partial class ParticipantsViewForm : Form
     {
-        private Form parent = null;
-        private Core core = null;
+        private ParticipantsRepository repo = ParticipantsRepository.Instance;
+        private TagUSBReader usbReader = TagUSBReader.Instance;
 
         /* Helper Functions*/
-        private void updateDataGridView()
+        private void refreshDataGridView()
         {
             mainDGV.Rows.Clear();
-            foreach (var row in core.participants)
+            foreach (var row in repo.participants)
             {
                 mainDGV.Rows.Add(row.id, row.name, row.age, row.male_s, row.group, row.tag_id, row.race_id, "編輯");
             }
             mainDGV.Refresh();
         }
 
-        private void showEditForm(Participant p, Func<string> f)
+        private void showEditForm(Participant p)
         {
             var old_tag = p.tag_id;
 
-            var form = new ParticipantsEditForm(p, f);
+            var form = new ParticipantsEditForm(p);
 
             var result = form.ShowDialog();
 
@@ -51,10 +51,10 @@ namespace TagProcess
             {
                 // 先前變更時已經檢查過是否已被使用
                 // 現在新增一定會成功
-                ParticipantHelper.tryAddTag(val.tag_id);
+                repo.helper.tryAddTag(val.tag_id);
 
                 // 刪除舊的晶片ID
-                ParticipantHelper.cancelTag(old_tag);
+                repo.helper.cancelTag(old_tag);
             }
             if (val.needWriteBack())
             {
@@ -62,36 +62,39 @@ namespace TagProcess
                 // 假設更新成功，就會對新晶片做一次移除再新增，不影響結果
                 // 假設更新失敗，會跳出錯誤，且本地物件未被更新，則狀態不一致
                 // 因此在失敗時做回復修正
-                if(false == core.updateParticipant(val))
+                if (false == repo.uploadParticipant(val))
                 {
                     if (val.tag_id != old_tag)
                     {
-                        ParticipantHelper.cancelTag(val.tag_id); // 移除新的晶片
-                        ParticipantHelper.tryAddTag(old_tag); // 新增舊的晶片
+                        repo.helper.cancelTag(val.tag_id); // 移除新的晶片
+                        repo.helper.tryAddTag(old_tag); // 新增舊的晶片
                     }
                 }
-                updateDataGridView();
+                else
+                { // 上傳成功，更新該選手在DataGridView裡面的資料
+                    refreshDataGridView();
+                    int id = val.id;
+                    for(int i = 0; i < mainDGV.Rows.Count; ++i)
+                    {
+                        if ((int)mainDGV.Rows[i].Cells[0].Value == id)
+                        {
+                            mainDGV.Rows[i].Cells[1].Value = val.name;
+                            mainDGV.Rows[i].Cells[2].Value = val.age;
+                            mainDGV.Rows[i].Cells[3].Value = val.male_s;
+                            mainDGV.Rows[i].Cells[4].Value = val.group;
+                            mainDGV.Rows[i].Cells[5].Value = val.tag_id;
+                            mainDGV.Rows[i].Cells[6].Value = val.race_id;
+                        }
+                    }
+                }
             }
         }
 
-        public ParticipantsViewForm(Form parentForm, Core c)
+        public ParticipantsViewForm()
         {
-            parent = parentForm;
-            core = c;
-
             InitializeComponent();
 
-            updateDataGridView();
-        }
-
-        /// <summary>
-        /// 視窗關閉時跳回主選單，目前只有主選單視窗可以打開此視窗
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ParticipantsView_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            parent.Show();
+            refreshDataGridView();
         }
 
         /// <summary>
@@ -105,9 +108,7 @@ namespace TagProcess
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
-                Debug.WriteLine(e.ColumnIndex + " , " + e.RowIndex);
-
-                showEditForm(core.participants[e.RowIndex], core.comport_get_tag);
+                showEditForm(repo.participants[e.RowIndex]);
             }
         }
 
@@ -118,18 +119,15 @@ namespace TagProcess
         /// <param name="e"></param>
         private void search_by_race_id_button_Click(object sender, EventArgs e)
         {
-            string race_id = textBox_race_id.Text;
-            for(int i = 0; i < core.participants.Count; ++i)
-            {
-                if(core.participants[i].race_id == race_id)
-                {
-                    showEditForm(core.participants[i], core.comport_get_tag);
+            var result = repo.findByRaceID(textBox_race_id.Text);
 
-                    return;
-                }
+            if (result == null)
+            {
+                MessageBox.Show("找不到該編號");
+                return;
             }
 
-            MessageBox.Show("找不到該編號");
+            showEditForm(result);
         }
 
         /// <summary>
@@ -140,29 +138,15 @@ namespace TagProcess
         private void search_by_tag_id_button_Click(object sender, EventArgs e)
         {
             string tag = String.Empty;
-            textBox_tag_id.Text = "等候感應中";
+
             for (int i = 0; i < 30; ++i)
             {
                 try
                 {
-                    tag = core.comport_get_tag();
-                    if (tag == String.Empty)
-                        continue;
-                    textBox_tag_id.Text = tag;
-                    // 感應到晶片，進行搜尋
-                    for (int k = 0; k < core.participants.Count; ++k)
-                    {
-                        if (core.participants[k].tag_id == tag)
-                        {
-                            showEditForm(core.participants[k], core.comport_get_tag);
-
-                            return;
-                        }
-                    }
-
-                    MessageBox.Show("找不到該晶片所屬選手" + tag);
-
-                    return;
+                    textBox_tag_id.Text = "等候感應中，剩餘" + (30 - i) / 2 + "秒";
+                    tag = usbReader.readTag();
+                    if (tag != String.Empty)
+                        break;
                 }
                 catch (InvalidOperationException)
                 {
@@ -170,7 +154,22 @@ namespace TagProcess
                     return;
                 }
             }
-            textBox_tag_id.Text = "感應逾時，請重試";
+
+            if (tag == String.Empty)
+            {
+                textBox_tag_id.Text = "感應逾時，請重試";
+                return;
+            }
+
+            textBox_tag_id.Text = tag;
+            var result = repo.findByTag(tag);
+            if (tag == null)
+            {
+                MessageBox.Show("找不到該晶片所屬選手" + tag);
+                return;
+            }
+
+            showEditForm(result);
         }
     }
 }

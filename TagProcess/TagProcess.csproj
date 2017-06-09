@@ -56,18 +56,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core.COMPort.cs" />
-    <Compile Include="Core.cs" />
-    <Compile Include="Core.GenMailPDF.cs" />
-    <Compile Include="Core.ParticipantsManage.cs" />
+    <Compile Include="TagUSBReader.cs" />
+    <Compile Include="RaceServer.cs" />
+    <Compile Include="MailLabelGenerator.cs" />
+    <Compile Include="ParticipantsRepository.cs" />
+    <Compile Include="FileLogger.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainForm.Helper.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ParticipantsEditForm.cs">
       <SubType>Form</SubType>
@@ -102,6 +100,7 @@
     <Compile Include="TagPairingForm.Designer.cs">
       <DependentUpon>TagPairingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TimeKeeper.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

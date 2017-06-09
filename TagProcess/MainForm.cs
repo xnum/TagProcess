@@ -10,28 +10,26 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using Excel = Microsoft.Office.Interop.Excel;
-
+using System.Runtime.InteropServices;
 
 namespace TagProcess
 {
     public partial class MainForm : Form
     {
-        private Core core = null;
+        private RaceServer server = null;
+        private TagUSBReader usbReader = null;
+        private ParticipantsRepository repo = null;
         private ParticipantsViewForm pv = null;
 
         public MainForm()
         {
-            TextWriterTraceListener mylog = new TextWriterTraceListener(System.IO.File.CreateText("log.txt"));
-            Debug.Listeners.Add(mylog);
-            Debug.AutoFlush = true;
-
             InitializeComponent();
-            logging("Process Start");
-            core = new Core(logging);
-
+            server = RaceServer.Instance;
+            repo = ParticipantsRepository.Instance;
+            usbReader = TagUSBReader.Instance;
+            server.Log += printToStatusLabel;
             string url = Properties.Settings.Default.ServerUrl;
-            logging(core.setServerUrl(url));
-
+            server.setServerUrl(url);
             refreshCOMPort();
         }
 
@@ -45,7 +43,7 @@ namespace TagProcess
             ServerUrlInputForm input = new ServerUrlInputForm();
             if (input.ShowDialog() == DialogResult.OK)
             {
-                logging(core.setServerUrl(input.GetResult()));
+                server.setServerUrl(input.GetResult());
             }
         }
 
@@ -56,30 +54,31 @@ namespace TagProcess
         /// <param name="e"></param>
         private void partcipants_view_button_Click(object sender, EventArgs e)
         {
-            if(!core.checkServerStatus())
+            if(!server.isConnected())
             {
                 MessageBox.Show("請先設定伺服器網址");
                 伺服器ToolStripMenuItem_Click(null, null);
                 return;
             }
 
-            // TODO: 考慮移除這個檢測
-            if(!core.is_comport_opened())
+            if(!usbReader.isConnected())
             {
                 MessageBox.Show("請先設定讀卡機COM Port");
                 return;
             }
 
-            logging("下載選手資料中，請稍後");
-            if(!core.loadParticipants())
+            printToStatusLabel("下載選手資料中，請稍後");
+            if(!repo.fetchParticipants())
             {
                 MessageBox.Show("下載選手資料失敗，請重試");
                 return;
             }
-            logging("下載選手資料完成");
-            pv = new ParticipantsViewForm(this, core);
-            this.Hide();
-            pv.Show();
+            printToStatusLabel("下載選手資料完成");
+            pv = new ParticipantsViewForm();
+            Hide();
+            pv.ShowDialog();
+            pv.Dispose();
+            Show();
         }
 
         /// <summary>
@@ -89,22 +88,21 @@ namespace TagProcess
         /// <param name="e"></param>
         private void print_mail_button_Click(object sender, EventArgs e)
         {
-            if (!core.checkServerStatus())
+            if (!server.isConnected())
             {
                 MessageBox.Show("請先設定伺服器網址");
                 伺服器ToolStripMenuItem_Click(null, null);
                 return;
             }
 
-            logging("下載選手資料中，請稍後");
-            if (!core.loadParticipants())
+            printToStatusLabel("下載選手資料中，請稍後");
+            if (!repo.fetchParticipants())
             {
                 MessageBox.Show("下載選手資料失敗，請重試");
                 return;
             }
-            logging("下載選手資料完成");
-
-            core.gen_mail_pdf();
+            printToStatusLabel("下載選手資料完成");
+            MailLabelGenerator.exportLabelToPDF(repo.participants);
         }
 
         /// <summary>
@@ -130,7 +128,7 @@ namespace TagProcess
             }
 
             ToolStripMenuItem item = (ToolStripMenuItem)sender;
-            if(core.connect_comport(item.Text))
+            if(usbReader.connect(item.Text))
             {
                 item.Checked = true;
             }
@@ -138,23 +136,24 @@ namespace TagProcess
 
         private void pair_form_button_Click(object sender, EventArgs e)
         {
-            if (!core.checkServerStatus())
+            if (!server.isConnected())
             {
                 MessageBox.Show("請先設定伺服器網址");
                 伺服器ToolStripMenuItem_Click(null, null);
                 return;
             }
 
-            logging("下載選手資料中，請稍後");
-            if (!core.loadParticipants())
+            printToStatusLabel("下載選手資料中，請稍後");
+            if (!repo.fetchParticipants())
             {
                 MessageBox.Show("下載選手資料失敗，請重試");
                 return;
             }
-            logging("下載選手資料完成");
+            printToStatusLabel("下載選手資料完成");
 
-            TagPairingForm form = new TagPairingForm(core);
+            TagPairingForm form = new TagPairingForm();
             form.ShowDialog();
+            form.Dispose();
         }
 
         private void log檔ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -164,7 +163,7 @@ namespace TagProcess
 
         private void import_button_Click(object sender, EventArgs e)
         {
-            if (!core.checkServerStatus())
+            if (!server.isConnected())
             {
                 MessageBox.Show("請先設定伺服器網址");
                 伺服器ToolStripMenuItem_Click(null, null);
@@ -177,10 +176,7 @@ namespace TagProcess
             dialog.Filter = "xls files (*.*)|*.xls";
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
-            string path = dialog.FileName;
-            Debug.WriteLine(path);
-
-            excelWorker.RunWorkerAsync(path);
+            excelWorker.RunWorkerAsync(dialog.FileName);
         }
 
         private void excelWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -188,13 +184,17 @@ namespace TagProcess
             excelWorker.ReportProgress(0, "開啟中");
             string path = (string)e.Argument;
             Excel.Application excel = new Excel.Application();
-            Excel.Workbook book = null;
             excel.Visible = false;
+
+            Excel.Workbook book = null;
+            Excel.Sheets sheets = null;
+            Excel.Worksheet sheet = null;
+
             try
             {
                 book = excel.Workbooks.Open(path);
-                var sheets = book.Sheets;
-                Excel.Worksheet sheet = sheets["報名資料-依團體順序"];
+                sheets = book.Sheets;
+                sheet = sheets["報名資料-依團體順序"];
                 Excel.Range range = sheet.UsedRange;
                 var row = range.Rows.Count;
                 var col = range.Columns.Count;
@@ -226,24 +226,10 @@ namespace TagProcess
                 excelWorker.ReportProgress(100, "上傳中");
                 string str = Newtonsoft.Json.JsonConvert.SerializeObject(data);
                 string str_group = Newtonsoft.Json.JsonConvert.SerializeObject(groups);
-                if (true == core.importParticipant(str, str_group))
+                if (true == repo.storeParticipants(str, str_group))
                     excelWorker.ReportProgress(100, "上傳成功");
                 else
                     excelWorker.ReportProgress(100, "上傳失敗");
-                /*
-                foreach(Excel.Worksheet sheet in sheets)
-                {
-                    Excel.Range range = sheet.UsedRange;
-                    Debug.WriteLine((string)sheet.Name);
-                    var row = range.Rows.Count;
-                    var col = range.Columns.Count;
-                    for(int i = 1; i <= col; ++i)
-                    {
-                        Debug.Write((string)(range.Cells[1, i] as Excel.Range).Value2);
-                    }
-                }
-                */
-
             }
             catch (Exception ex)
             {
@@ -251,8 +237,12 @@ namespace TagProcess
             }
             finally
             {
-                book.Close(false);
+                book.Close(0);
                 excel.Quit();
+                Marshal.ReleaseComObject(sheet);
+                Marshal.ReleaseComObject(sheets);
+                Marshal.ReleaseComObject(book);
+                Marshal.ReleaseComObject(excel);
             }
         }
 
@@ -268,19 +258,42 @@ namespace TagProcess
 
         private void reader_button_Click(object sender, EventArgs e)
         {
-            logging("下載選手資料中，請稍後");
-            if (!core.loadParticipants())
+            printToStatusLabel("下載選手資料中，請稍後");
+            if (!repo.fetchParticipants())
             {
                 MessageBox.Show("下載選手資料失敗，請重試");
                 return;
             }
-            logging("下載選手資料完成");
+            printToStatusLabel("下載選手資料完成");
 
-            var form = new ReaderForm(core);
+            var form = new ReaderForm();
             this.Hide();
             form.ShowDialog();
             this.Show();
             form.Dispose();
+        }
+
+        private void refreshCOMPort()
+        {
+            this.COMToolStripMenuItem.DropDownItems.Clear();
+            this.COMToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.重新整理ToolStripMenuItem});
+
+            string[] ports = usbReader.getPortNames();
+            foreach (string port in ports)
+            {
+                var item = new ToolStripMenuItem();
+                item.Name = port + "ToolStripMenuItem";
+                item.Size = new Size(152, 22);
+                item.Text = port;
+                item.Click += new EventHandler(this.COMPortConnect_Click);
+                this.COMToolStripMenuItem.DropDownItems.Add(item);
+            }
+        }
+
+        public void printToStatusLabel(string msg)
+        {
+            output_StatusLabel.Text = msg;
         }
     }
 }

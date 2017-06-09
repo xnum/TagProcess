@@ -191,7 +191,7 @@ namespace TagProcess
                     recv_cmd.index = index;
                     outQueue.Enqueue(recv_cmd);
                 }
-                catch (IOException ex)
+                catch (IOException)
                 { // TODO ignore timedout 
                     //Debug.WriteLine("Recv Ignore exception: " + ex.Message);
                 }

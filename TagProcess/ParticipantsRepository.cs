@@ -16,7 +16,7 @@ namespace TagProcess
         public string name;
     }
 
-    public static class ParticipantHelper
+    public class ParticipantHelper
     {
         private static List<RaceGroups> groups = new List<RaceGroups>();
         private static HashSet<string> tags = new HashSet<string>();
@@ -26,37 +26,37 @@ namespace TagProcess
         /// </summary>
         /// <param name="tag"></param>
         /// <returns></returns>
-        public static bool tryAddTag(string tag) 
+        public bool tryAddTag(string tag) 
         {
             if (tag == "") return true;
             return tags.Add(tag);
         }
 
-        public static bool isExistsTag(string tag)
+        public bool isExistsTag(string tag)
         {
             if (tag == "") return false;
             return tags.Contains(tag);
         }
 
-        public static void cancelTag(string tag)
+        public void cancelTag(string tag)
         {
             tags.Remove(tag);
         }
 
-        public static string maleIntToString(int male)
+        public string maleIntToString(int male)
         {
             string[] table = { "男", "女", "無"};
             return table[male];
         }
 
-        public static int maleStringToInt(string male_s)
+        public int maleStringToInt(string male_s)
         {
             if (male_s == "男") return 0;
             if (male_s == "女") return 1;
             return 2;
         }
 
-        public static string groupIntToString(int group_id)
+        public string groupIntToString(int group_id)
         {
             foreach(RaceGroups g in groups)
             {
@@ -66,7 +66,7 @@ namespace TagProcess
             throw new Exception("Unknown Group ID: " + group_id);
         }
 
-        public static int groupStringToInt(string group)
+        public int groupStringToInt(string group)
         {
             foreach (RaceGroups g in groups)
             {
@@ -76,7 +76,7 @@ namespace TagProcess
             throw new Exception("Unknown Group Name: " + group);
         }
 
-        public static List<string> getGroupNames()
+        public List<string> getGroupNames()
         {
             List<string> ret = new List<string>();
 
@@ -88,17 +88,17 @@ namespace TagProcess
             return ret;
         }
 
-        public static List<RaceGroups> getGroups()
+        public List<RaceGroups> getGroups()
         {
             return groups;
         }
 
-        internal static void setGroups(List<RaceGroups> g)
+        public void setGroups(List<RaceGroups> g)
         {
             groups = g;
         }
 
-        internal static void Clear()
+        public void Clear()
         {
             tags.Clear();
             groups.Clear();
@@ -204,10 +204,10 @@ namespace TagProcess
         [JsonIgnore]
         public string male_s
         {
-            get { return ParticipantHelper.maleIntToString(male); }
+            get { return ParticipantsRepository.Instance.helper.maleIntToString(male); }
             set
             {
-                int tmp = ParticipantHelper.maleStringToInt(value);
+                int tmp = ParticipantsRepository.Instance.helper.maleStringToInt(value);
                 if (tmp != male) is_dirty = true;
                 male = tmp;
             }
@@ -234,10 +234,10 @@ namespace TagProcess
         public string group
         {
             get
-            { return ParticipantHelper.groupIntToString(group_id); }
+            { return ParticipantsRepository.Instance.helper.groupIntToString(group_id); }
             set
             {
-                int tmp = ParticipantHelper.groupStringToInt(value);
+                int tmp = ParticipantsRepository.Instance.helper.groupStringToInt(value);
                 if (tmp != group_id) is_dirty = true;
                 group_id = tmp;
             }
@@ -267,57 +267,64 @@ namespace TagProcess
     /// <summary>
     /// 與參賽選手相關資料的處理
     /// </summary>
-    public partial class Core
+    public class ParticipantsRepository
     {
-        public List<Participant> participants;
+        private static readonly ParticipantsRepository _instance = new ParticipantsRepository();
+
+        private ParticipantsRepository()
+        {
+            server = RaceServer.Instance;
+            participants = null;
+
+        }
+
+        public static ParticipantsRepository Instance { get { return _instance; } }
+
+        private RaceServer server = null;
+        public List<Participant> participants { get; private set; }
+        public ParticipantHelper helper = new ParticipantHelper();
+
+        public delegate void LogHandler(string msg);
+        public event LogHandler Log;
+
+        protected void OnLog(string msg)
+        {
+            Log?.Invoke(msg);
+        }
+
+        public void Clear()
+        {
+            helper.Clear();
+            participants?.Clear();
+        }
+
         /// <summary>
         /// 從伺服器撈取目前進行中活動的選手清單，blocking IO
         /// JSON格式
         /// </summary>
         /// <returns></returns>
-        public bool loadParticipants()
+        public bool fetchParticipants()
         {
-            RestClient client = new RestClient(serverUrl);
-            RestRequest req_for_participants = new RestRequest("participants/current", Method.GET);
-            IRestResponse res_for_parti = client.Execute(req_for_participants);
+            Clear();
+            var res_for_parti = server.executeHttpRequest(new RestRequest("participants/current", Method.GET));
+            if (res_for_parti == null) return false;
 
-            if (res_for_parti.ErrorException != null || res_for_parti.ResponseStatus != ResponseStatus.Completed)
-            {
-                msgCallback("連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
-                return false;
-            }
-
-            if (res_for_parti.StatusCode != HttpStatusCode.OK || res_for_parti.Content == "")
-            {
-                msgCallback("HTTP NOT OK: " + res_for_parti.StatusCode);
-                return false;
-            }
-
-            ParticipantHelper.Clear();
+            OnLog("Json decoding (participants)");
             participants = JsonConvert.DeserializeObject<List<Participant>>(res_for_parti.Content);
 
             foreach(var p in participants)
             {
-                ParticipantHelper.tryAddTag(p.tag_id);
+                helper.tryAddTag(p.tag_id);
             }
 
-            RestRequest req_for_groups = new RestRequest("race_groups/current", Method.GET);
-            IRestResponse res_for_groups = client.Execute(req_for_groups);
+            var res_for_groups = server.executeHttpRequest(new RestRequest("race_groups/current", Method.GET));
 
-            if (res_for_groups.ErrorException != null || res_for_groups.ResponseStatus != ResponseStatus.Completed)
-            {
-                MessageBox.Show("連線伺服器失敗，請重試: " + res_for_groups.ErrorMessage);
-                return false;
-            }
+            if (res_for_groups == null) return false;
 
-            if (res_for_groups.StatusCode != HttpStatusCode.OK || res_for_groups.Content == "")
-            {
-                msgCallback("HTTP NOT OK: " + res_for_groups.StatusCode);
-                return false;
-            }
-
+            OnLog("Json decoding (groups)");
             var groups = JsonConvert.DeserializeObject<List<RaceGroups>>(res_for_groups.Content);
-            ParticipantHelper.setGroups(groups);
+
+            helper.setGroups(groups);
 
             return true;
         }
@@ -332,10 +339,9 @@ namespace TagProcess
         /// <summary>
         /// 將參賽選手資料傳回伺服器進行更新，blocking IO
         /// </summary>
-        public bool updateParticipant(Participant p)
+        public bool uploadParticipant(Participant p)
         {
-            msgCallback("開始上傳修改後選手資料，ID = " + p.id);
-            RestClient client = new RestClient(serverUrl);
+            OnLog("開始上傳修改後選手資料，ID = " + p.id);
             RestRequest req_for_parti = new RestRequest("participant", Method.PATCH);
             req_for_parti.AddParameter("id", p.id);
             req_for_parti.AddParameter("group_id", p.group_id);
@@ -347,24 +353,14 @@ namespace TagProcess
             req_for_parti.AddParameter("address", p.address);
             req_for_parti.AddParameter("zipcode", p.zipcode);
             req_for_parti.AddParameter("phone", p.phone);
-            IRestResponse res_for_parti = client.Execute(req_for_parti);
+            var res_for_parti = server.executeHttpRequest(req_for_parti);
 
-            if (res_for_parti.ErrorException != null || res_for_parti.ResponseStatus != ResponseStatus.Completed)
-            {
-                msgCallback("連線伺服器失敗，請重試: " + res_for_parti.ErrorMessage);
-                return false;
-            }
-
-            if (res_for_parti.StatusCode != HttpStatusCode.OK || res_for_parti.Content == "")
-            {
-                msgCallback("HTTP NOT OK: " + res_for_parti.StatusCode);
-                return false;
-            }
+            if (res_for_parti == null) return false;
 
             updateResult res = JsonConvert.DeserializeObject<updateResult>(res_for_parti.Content);
             if (res.code != "200")
             {
-                MessageBox.Show(res.msg);
+                OnLog("更新選手資料發生錯誤: " + res.msg);
                 return false;
             }
 
@@ -374,98 +370,54 @@ namespace TagProcess
             {
                 if(participants[i].id == result_body.id)
                 {
-                    ParticipantHelper.cancelTag(participants[i].tag_id);
-                    ParticipantHelper.tryAddTag(result_body.tag_id);
+                    helper.cancelTag(participants[i].tag_id);
+                    helper.tryAddTag(result_body.tag_id);
                     participants[i] = result_body;
                     participants[i].beenWriteBack();
                     return true;
                 }
             }
 
-            MessageBox.Show("嚴重錯誤： 伺服器傳回了一個不存在的選手");
+            OnLog("嚴重錯誤： 伺服器傳回了一個不存在的選手");
             return false;
         }
 
-        public bool importParticipant(string str, string groups)
+        /// <summary>
+        /// 使用於Excel匯入時，將參賽選手資料以及整理好的組別資料上傳到伺服器進行建立
+        /// </summary>
+        /// <param name="str">Json encode participants data</param>
+        /// <param name="groups">Json encode groups data</param>
+        /// <returns></returns>
+        public bool storeParticipants(string str, string groups)
         {
-            RestClient client = new RestClient(serverUrl);
             RestRequest req_for_group = new RestRequest("race_groups/import", Method.POST);
             req_for_group.AddParameter("group", groups);
-            IRestResponse res_for_group = client.Execute(req_for_group);
+            var res_for_group = server.executeHttpRequest(req_for_group);
 
-            if (res_for_group.ErrorException != null || res_for_group.ResponseStatus != ResponseStatus.Completed)
-            {
-                msgCallback("連線伺服器失敗，請重試: " + res_for_group.ErrorMessage);
-                return false;
-            }
-
-            if (res_for_group.StatusCode != HttpStatusCode.OK || res_for_group.Content == "")
-            {
-                msgCallback("HTTP NOT OK: " + res_for_group.StatusCode);
-                return false;
-            }
+            if (res_for_group == null) return false;
 
             if (!res_for_group.Content.Equals("Ok"))
             {
-                msgCallback("上傳組別失敗" + res_for_group.Content);
+                OnLog("上傳組別失敗: " + res_for_group.Content);
                 return false;
             }
             
             RestRequest req = new RestRequest("participants/import", Method.POST);
             req.AddParameter("str", str);
-            IRestResponse res = client.Execute(req);
+            IRestResponse res = server.executeHttpRequest(req);
 
-            if (res.ErrorException != null || res.ResponseStatus != ResponseStatus.Completed)
-            {
-                msgCallback("連線伺服器失敗，請重試: " + res.ErrorMessage);
-                return false;
-            }
-
-            if (res.StatusCode != HttpStatusCode.OK || res.Content == "")
-            {
-                msgCallback("HTTP NOT OK: " + res.StatusCode);
-                return false;
-            }
+            if (res == null) return false;
 
             if (!res.Content.Equals("Ok"))
             {
-                msgCallback("上傳選手失敗" + res.Content);
+                OnLog("上傳選手失敗: " + res.Content);
                 return false;
             }
+
             return true;
         }
 
-        public bool setStartCompetition(int station, int batch, List<int> groups_id)
-        {
-            RestClient client = new RestClient(serverUrl);
-            RestRequest req_for_group = new RestRequest("competitions/batch_start", Method.POST);
-            req_for_group.AddParameter("station", station);
-            req_for_group.AddParameter("batch", batch);
-            req_for_group.AddParameter("groups", JsonConvert.SerializeObject(groups_id));
-            req_for_group.AddParameter("time", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
-            IRestResponse res_for_group = client.Execute(req_for_group);
-
-            if (res_for_group.ErrorException != null || res_for_group.ResponseStatus != ResponseStatus.Completed)
-            {
-                msgCallback("連線伺服器失敗，請重試: " + res_for_group.ErrorMessage);
-                return false;
-            }
-
-            if (res_for_group.StatusCode != HttpStatusCode.OK || res_for_group.Content == "")
-            {
-                msgCallback("HTTP NOT OK: " + res_for_group.StatusCode);
-                return false;
-            }
-
-            if (!res_for_group.Content.Equals("Ok"))
-            {
-                msgCallback("上傳組別失敗" + res_for_group.Content);
-                return false;
-            }
-            return true;
-        }
-
-        public Participant findParticipantByTag(string tag)
+        public Participant findByTag(string tag)
         {
             for(int i = 0; i < participants.Count; ++i)
             {
@@ -475,43 +427,17 @@ namespace TagProcess
             return null;
         }
 
-        public bool uploadTagData(int station, List<Cmd> data)
+        public Participant findByRaceID(string race_id)
         {
-            List<Dictionary<string, string>> payload = new List<Dictionary<string, string>>();
-            foreach(var d in data)
+            for (int i = 0; i < participants.Count; ++i)
             {
-                payload.Add(
-                    new Dictionary<string, string>() {
-                        { "tag_id", d.data },
-                        { "time", d.time.ToString("yyyy/MM/dd HH:mm:ss") },
-                        { "station_id", station.ToString() }
-                    });
+                if (participants[i].race_id == race_id)
+                {
+                    return participants[i];
+                }
             }
 
-            RestClient client = new RestClient(serverUrl);
-            RestRequest req_for_group = new RestRequest("records", Method.POST);
-            //req_for_group.AddParameter("station", station);
-            req_for_group.AddParameter("tags", JsonConvert.SerializeObject(payload));
-            IRestResponse res_for_group = client.Execute(req_for_group);
-
-            if (res_for_group.ErrorException != null || res_for_group.ResponseStatus != ResponseStatus.Completed)
-            {
-                msgCallback("連線伺服器失敗，請重試: " + res_for_group.ErrorMessage);
-                return false;
-            }
-
-            if (res_for_group.StatusCode != HttpStatusCode.OK || res_for_group.Content == "")
-            {
-                msgCallback("HTTP NOT OK: " + res_for_group.StatusCode);
-                return false;
-            }
-
-            if (!res_for_group.Content.Equals("Ok"))
-            {
-                msgCallback("上傳組別失敗" + res_for_group.Content);
-                return false;
-            }
-            return true;
+            return null;
         }
     }
 }
