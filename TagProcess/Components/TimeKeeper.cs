@@ -57,7 +57,7 @@ namespace TagProcess
         /// <param name="station"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public bool uploadTagData(int station, List<Cmd> data)
+        public bool uploadTagData(int station, List<IPXCmd> data)
         {
             List<Dictionary<string, string>> payload = new List<Dictionary<string, string>>();
             foreach (var d in data)
@@ -82,6 +82,11 @@ namespace TagProcess
                 return false;
             }
             return true;
+        }
+
+        public void addData(IPXCmd data)
+        {
+
         }
     }
 }

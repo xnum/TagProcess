@@ -13,6 +13,8 @@ namespace TagProcess
 {
     public partial class ReaderForm : Form
     {
+        delegate void SetTextCallback(string text, int index);
+
         private System.ComponentModel.BackgroundWorker[] readerWorker;
         private TextBox[] textBox_ip;
         private TextBox[] textBox_status;
@@ -20,18 +22,16 @@ namespace TagProcess
         private int refresh_count = 0;
         private string[] result = new string[] { "", "", ""};
         private int station_id = -1;
-        private FileStream bakFile;
-        private StreamWriter bakWriter;
+
         private HashSet<string> seenTag = new HashSet<string>();
-        private List<Cmd> tagBuff = new List<Cmd>();
         private ParticipantsRepository repo = ParticipantsRepository.Instance;
         private TimeKeeper keeper = TimeKeeper.Instance;
+
+        private IpicoClient[] clients = new IpicoClient[3];
 
         public ReaderForm()
         {
             InitializeComponent();
-            bakFile = new FileStream("tag.txt", FileMode.Append, FileAccess.Write, FileShare.Read, bufferSize: 4096);
-            bakWriter = new StreamWriter(bakFile, Encoding.ASCII);
 
             textBox_ip = new TextBox[] { textBox_ip0, textBox_ip1, textBox_ip2 };
             textBox_status = new TextBox[] { textBox_status0, textBox_status1, textBox_status2 };
@@ -43,8 +43,6 @@ namespace TagProcess
                 readerWorker[i] = new BackgroundWorker();
                 readerWorker[i].DoWork += new DoWorkEventHandler(readerWorker_DoWork);
                 readerWorker[i].RunWorkerCompleted += new RunWorkerCompletedEventHandler(readerWorker_RunWorkerCompleted);
-
-                inQueue[i] = new System.Collections.Concurrent.ConcurrentQueue<Cmd>();
             }
 
             foreach(var item in repo.helper.getGroups())
@@ -53,19 +51,18 @@ namespace TagProcess
             }
             
         }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (components != null)
-                {
-                    components.Dispose();
-                    bakWriter.Dispose();
-                    bakFile.Dispose();
-                }
-            }
 
-            base.Dispose(disposing);
+        private void SetText(string text, int index)
+        {
+            if (textBox_status[index].InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetText);
+                Invoke(d, new object[] { text , index });
+            }
+            else
+            {
+                textBox_status[index].Text = text;
+            }
         }
 
         private void readerWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -73,15 +70,19 @@ namespace TagProcess
             int index = (int)e.Argument;
             e.Result = index;
             string ip = textBox_ip[index].Text;
-            result[index] = "已連線";
-            result[index] = runTcpClient(index, ip); // block here
+            clients[index] = new IpicoClient(ip);
+            clients[index].Log += (string msg) => { SetText(msg, index); };
+            if (!clients[index].connect())
+            {
+                return;
+            }
+
+            clients[index].run();
         }
 
         private void readerWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            var worker = (BackgroundWorker)sender;
-            int index = (int)e.Result;
-            textBox_status[index].Text = result[index];
+
         }
 
         private void button_conn0_Click(object sender, EventArgs e)
@@ -96,62 +97,52 @@ namespace TagProcess
             refresh_count++;
             textBox_localtime.Text = DateTime.Now.ToString();
 
-            Cmd got_cmd = null;
-            while(outQueue.TryDequeue(out got_cmd))
+            for(int i = 0; i < 3; ++i)
             {
-                if (station_id < 0) continue; /* 尚未開始 */
+                if (clients[i] == null || !clients[i].isConnected()) continue;
 
-                if (got_cmd.type == Cmd.Type.GetTag)
+                IPXCmd got_cmd = null;
+                while(clients[i].TryGet(out got_cmd))
                 {
-                    if (!seenTag.Add(got_cmd.data)) continue;
-
-                    logging("Got tag " + got_cmd.data);
-
-                    bakWriter.WriteLine(got_cmd.data);
-                    tagBuff.Add(got_cmd);
-
-                    textBox_status[got_cmd.index].Text = got_cmd.data;
-                    string race_id = "編號";
-                    string name = "姓名";
-                    string group = "組別";
-                    Participant p = repo.findByTag(got_cmd.data);
-                    if(p != null)
+                    if (got_cmd.type == IPXCmd.Type.GetTag)
                     {
-                        race_id = p.race_id;
-                        name = p.name;
-                        group = p.group;
+                        if (!seenTag.Add(got_cmd.data)) continue;
+
+                        keeper.addData(got_cmd);
+                        textBox_status[i].Text = got_cmd.data;
+                        string race_id = "";
+                        string name = "";
+                        string group = "";
+                        Participant p = repo.findByTag(got_cmd.data);
+                        if (p != null)
+                        {
+                            race_id = p.race_id;
+                            name = p.name;
+                            group = p.group;
+                        }
+                        touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString());
                     }
-                    touchedView.Rows.Add(got_cmd.data, race_id,name,group,got_cmd.time.ToShortTimeString());
-                }
 
-                if (got_cmd.type == Cmd.Type.GetDate || got_cmd.type == Cmd.Type.SetDate)
-                {
-                    logging("Got time " + got_cmd.time);
-                    textBox_time[got_cmd.index].Text = got_cmd.time.ToString();
+                    if (got_cmd.type == IPXCmd.Type.GetDate || got_cmd.type == IPXCmd.Type.SetDate)
+                    {
+                        textBox_time[i].Text = got_cmd.time.ToString();
+                    }
                 }
-            }
-
-            for (int i = 0; i < 3; ++i) 
-            {
-                if (!readerWorker[i].IsBusy) continue;
 
                 if (refresh_count % 100 == 1) // 每10秒設定一次時間
                 {
-                    inQueue[i].Enqueue(new Cmd(Cmd.Type.SetDate));
+                    clients[i].Put(new IPXCmd(IPXCmd.Type.SetDate));
                 }
 
                 if (refresh_count % 50 == 1) // 每5秒取得一次時間
                 {
-                    inQueue[i].Enqueue(new Cmd(Cmd.Type.GetDate));
+                    clients[i].Put(new IPXCmd(IPXCmd.Type.GetDate));
                 }
             }
 
-            if (refresh_count % 30 == 1) // 每3秒上傳一次資料
-            {
-                if (tagBuff.Count == 0) return; 
-                if (keeper.uploadTagData(station_id, tagBuff))
-                    tagBuff.Clear();
-            }
+            while(touchedView.Rows.Count >= 15)
+                touchedView.Rows.RemoveAt(0);
+            touchedView.Refresh();
         }
 
         private void comboBox_checkpoint_SelectedIndexChanged(object sender, EventArgs e)
@@ -201,7 +192,7 @@ namespace TagProcess
             }
 
             int batch_n = comboBox_batch.SelectedIndex;
-            if (batch_n < 0)
+            if (station_n == 0 && batch_n < 0)
             {
                 MessageBox.Show("未選擇起跑批次");
                 return false;
@@ -216,7 +207,7 @@ namespace TagProcess
                         groups_n.Add(j.id);
             }
 
-            if (groups_n.Count < 0)
+            if (station_n == 0 && groups_n.Count < 0)
             {
                 MessageBox.Show("未選擇起跑組別");
                 return false;

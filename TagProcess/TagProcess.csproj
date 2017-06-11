@@ -56,58 +56,59 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TagUSBReader.cs" />
-    <Compile Include="RaceServer.cs" />
-    <Compile Include="MailLabelGenerator.cs" />
-    <Compile Include="ParticipantsRepository.cs" />
-    <Compile Include="FileLogger.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Components\TagUSBReader.cs" />
+    <Compile Include="Components\RaceServer.cs" />
+    <Compile Include="Components\MailLabelGenerator.cs" />
+    <Compile Include="Components\ParticipantsRepository.cs" />
+    <Compile Include="Components\FileLogger.cs" />
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ParticipantsEditForm.cs">
+    <Compile Include="Forms\ParticipantsEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ParticipantsEditForm.Designer.cs">
+    <Compile Include="Forms\ParticipantsEditForm.Designer.cs">
       <DependentUpon>ParticipantsEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ParticipantsViewForm.cs">
+    <Compile Include="Forms\ParticipantsViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ParticipantsViewForm.Designer.cs">
+    <Compile Include="Forms\ParticipantsViewForm.Designer.cs">
       <DependentUpon>ParticipantsViewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="IpicoClient.cs" />
+    <Compile Include="IPXCmd.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReaderForm.cs">
+    <Compile Include="Forms\ReaderForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ReaderForm.Designer.cs">
+    <Compile Include="Forms\ReaderForm.Designer.cs">
       <DependentUpon>ReaderForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ReaderForm.Socket.cs" />
-    <Compile Include="ServerUrlInputForm.cs">
+    <Compile Include="Forms\ServerUrlInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ServerUrlInputForm.Designer.cs">
+    <Compile Include="Forms\ServerUrlInputForm.Designer.cs">
       <DependentUpon>ServerUrlInputForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TagPairingForm.cs">
+    <Compile Include="Forms\TagPairingForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TagPairingForm.Designer.cs">
+    <Compile Include="Forms\TagPairingForm.Designer.cs">
       <DependentUpon>TagPairingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TimeKeeper.cs" />
-    <EmbeddedResource Include="MainForm.resx">
+    <Compile Include="Components\TimeKeeper.cs" />
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ParticipantsEditForm.resx">
+    <EmbeddedResource Include="Forms\ParticipantsEditForm.resx">
       <DependentUpon>ParticipantsEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ParticipantsViewForm.resx">
+    <EmbeddedResource Include="Forms\ParticipantsViewForm.resx">
       <DependentUpon>ParticipantsViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -119,16 +120,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ReaderForm.resx">
+    <EmbeddedResource Include="Forms\ReaderForm.resx">
       <DependentUpon>ReaderForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ServerUrlInputForm.resx">
+    <EmbeddedResource Include="Forms\ServerUrlInputForm.resx">
       <DependentUpon>ServerUrlInputForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TagPairingForm.resx">
+    <EmbeddedResource Include="Forms\TagPairingForm.resx">
       <DependentUpon>TagPairingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
