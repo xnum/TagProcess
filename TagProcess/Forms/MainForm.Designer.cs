@@ -44,9 +44,9 @@
             this.log檔ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.excelWorker = new System.ComponentModel.BackgroundWorker();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.reader_button = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.printScore = new System.Windows.Forms.Button();
+            this.reader_button = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -189,7 +189,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.button3);
-            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Controls.Add(this.printScore);
             this.groupBox2.Controls.Add(this.reader_button);
             this.groupBox2.Location = new System.Drawing.Point(196, 28);
             this.groupBox2.Name = "groupBox2";
@@ -197,6 +197,25 @@
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "現場作業";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(89, 19);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 2;
+            this.button3.Text = "成績統整";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // printScore
+            // 
+            this.printScore.Location = new System.Drawing.Point(7, 49);
+            this.printScore.Name = "printScore";
+            this.printScore.Size = new System.Drawing.Size(75, 23);
+            this.printScore.TabIndex = 1;
+            this.printScore.Text = "成績列印";
+            this.printScore.UseVisualStyleBackColor = true;
+            this.printScore.Click += new System.EventHandler(this.printScore_Click);
             // 
             // reader_button
             // 
@@ -207,24 +226,6 @@
             this.reader_button.Text = "晶片計時";
             this.reader_button.UseVisualStyleBackColor = true;
             this.reader_button.Click += new System.EventHandler(this.reader_button_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(7, 49);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "成績列印";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(89, 19);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "成績統整";
-            this.button3.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -268,7 +269,7 @@
         private System.ComponentModel.BackgroundWorker excelWorker;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button printScore;
         private System.Windows.Forms.Button reader_button;
     }
 }

@@ -295,5 +295,10 @@ namespace TagProcess
         {
             output_StatusLabel.Text = msg;
         }
+
+        private void printScore_Click(object sender, EventArgs e)
+        {
+            Components.ScoreGenerator.exportScoreToPDF();
+        }
     }
 }
