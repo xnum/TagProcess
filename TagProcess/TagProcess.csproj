@@ -80,6 +80,12 @@
     <Compile Include="Forms\ParticipantsViewForm.Designer.cs">
       <DependentUpon>ParticipantsViewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ScoreReviewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ScoreReviewForm.Designer.cs">
+      <DependentUpon>ScoreReviewForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="IpicoClient.cs" />
     <Compile Include="IPXCmd.cs" />
     <Compile Include="Program.cs" />
@@ -111,6 +117,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ParticipantsViewForm.resx">
       <DependentUpon>ParticipantsViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ScoreReviewForm.resx">
+      <DependentUpon>ScoreReviewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

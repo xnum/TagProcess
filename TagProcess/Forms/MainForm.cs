@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
+using TagProcess.Forms;
 
 namespace TagProcess
 {
@@ -298,7 +299,9 @@ namespace TagProcess
 
         private void printScore_Click(object sender, EventArgs e)
         {
-            Components.ScoreGenerator.exportScoreToPDF();
+            //Components.ScoreGenerator.exportScoreToPDF();
+            var f = new ScoreReviewForm();
+            f.ShowDialog();
         }
     }
 }

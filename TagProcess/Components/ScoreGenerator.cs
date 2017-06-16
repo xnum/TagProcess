@@ -12,6 +12,22 @@ namespace TagProcess.Components
 {
     public class ScoreGenerator
     {
+        public class ScoreArguments
+        {
+            public string date;
+            public string name;
+            public string group;
+            public string subject;
+            public string total_rank;
+            public string subject_rank;
+            public string batch_start_time;
+            public string tag_start_time;
+            public string check1_time;
+            public string check2_time;
+            public string check3_time;
+            public string tag_end_time;
+        }
+
         public static void exportScoreToPDF()
         {
             var doc = new Document(PageSize.A4, 3, 3, 3, 3);
