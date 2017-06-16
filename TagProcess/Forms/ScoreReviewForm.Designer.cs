@@ -60,6 +60,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.textBox_date = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.print_button = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -358,11 +359,23 @@
             this.label9.Text = "日期";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // print_button
+            // 
+            this.print_button.Font = new System.Drawing.Font("新細明體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.print_button.Location = new System.Drawing.Point(334, 12);
+            this.print_button.Name = "print_button";
+            this.print_button.Size = new System.Drawing.Size(94, 52);
+            this.print_button.TabIndex = 10;
+            this.print_button.Text = "列印";
+            this.print_button.UseVisualStyleBackColor = true;
+            this.print_button.Click += new System.EventHandler(this.print_button_Click);
+            // 
             // ScoreReviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(440, 288);
+            this.Controls.Add(this.print_button);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button_search_race);
@@ -416,5 +429,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox_date;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button print_button;
     }
 }

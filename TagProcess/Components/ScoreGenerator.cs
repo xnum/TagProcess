@@ -20,15 +20,11 @@ namespace TagProcess.Components
             public string subject;
             public string total_rank;
             public string subject_rank;
-            public string batch_start_time;
-            public string tag_start_time;
-            public string check1_time;
-            public string check2_time;
-            public string check3_time;
-            public string tag_end_time;
+            public string batch_run_time;
+            public string tag_run_time;
         }
 
-        public static void exportScoreToPDF()
+        public static void exportScoreToPDF(ScoreArguments args)
         {
             var doc = new Document(PageSize.A4, 3, 3, 3, 3);
             var writer = PdfWriter.GetInstance(doc, new FileStream("score.pdf", FileMode.Create));
@@ -45,15 +41,15 @@ namespace TagProcess.Components
             doc.Add(bg);
 
             ColumnText ct = new ColumnText(writer.DirectContent);
-            Phrase myText = new Phrase("姓名", textFont);
+            Phrase myText = new Phrase(args.name, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 685, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase("日期", textFont);
+            myText = new Phrase(args.date, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 635, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase("分組", textFont);
+            myText = new Phrase(args.group, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 585, 15, Element.ALIGN_LEFT);
             ct.Go();
 
@@ -61,11 +57,11 @@ namespace TagProcess.Components
             ct.SetSimpleColumn(myText, 300, 300, 780, 535, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase("大會時間", textFont);
+            myText = new Phrase(args.batch_run_time, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 475, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase("個人時間", textFont);
+            myText = new Phrase(args.tag_run_time, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 425, 15, Element.ALIGN_LEFT);
             ct.Go();
 

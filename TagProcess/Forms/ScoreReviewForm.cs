@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TagProcess.Components;
 
 namespace TagProcess.Forms
 {
@@ -100,6 +101,26 @@ namespace TagProcess.Forms
             }
 
             showResult(result);
+        }
+
+        private void print_button_Click(object sender, EventArgs e)
+        {
+            ScoreGenerator.ScoreArguments args = new ScoreGenerator.ScoreArguments();
+
+            args.date = textBox_date.Text;
+            args.name = textBox_name.Text;
+            args.group = textBox_group.Text;
+            args.subject = textBox_subject.Text;
+            args.total_rank = textBox_total_rank.Text;
+            args.subject_rank = textBox_group_rank.Text;
+            DateTime end_time = DateTime.Parse(textBox_tag_end.Text);
+            DateTime tag_start_time = DateTime.Parse(textBox_tag_start.Text);
+            DateTime batch_start_time = DateTime.Parse(textBox_batch_start.Text);
+
+            args.batch_run_time = end_time.Subtract(batch_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+            args.tag_run_time = end_time.Subtract(tag_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+
+            ScoreGenerator.exportScoreToPDF(args);
         }
     }
 }
