@@ -108,7 +108,7 @@ namespace TagProcess
                     {
                         if (!seenTag.Add(got_cmd.data)) continue;
 
-                        keeper.addData(got_cmd);
+                        keeper.addData(comboBox_checkpoint.SelectedIndex, got_cmd);
                         textBox_status[i].Text = got_cmd.data;
                         string race_id = "";
                         string name = "";

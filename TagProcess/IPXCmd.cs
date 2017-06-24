@@ -52,7 +52,7 @@ namespace TagProcess
                 if (instruction == "02")
                 {
                     logging("收到GetDate回應 嘗試轉換");
-                    time = stringToDateTime(data);
+                    time = stringToDateTime(msg.Substring(8, 16));
                     logging("收到時間為" + time);
                     type = Type.GetDate;
                 }
@@ -78,7 +78,7 @@ namespace TagProcess
         {
             string str = "ab";
             if (type == Type.GetDate)
-                str += "00002222\r\n";
+                str += "00000222\r\n";
 
             if (type == Type.SetDate)
             {

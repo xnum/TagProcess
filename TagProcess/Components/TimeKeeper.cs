@@ -84,9 +84,11 @@ namespace TagProcess
             return true;
         }
 
-        public void addData(IPXCmd data)
+        public void addData(int station, IPXCmd data)
         {
-
+            List<IPXCmd> arr = new List<IPXCmd>();
+            arr.Add(data);
+            uploadTagData(station, arr);
         }
 
         public class Record

@@ -32,7 +32,7 @@ namespace TagProcess.Components
             BaseFont chBaseFont = BaseFont.CreateFont(chFontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             Font textFont = new Font(chBaseFont, 16);
 
-            Image bg = Image.GetInstance("template.png");
+            Image bg = Image.GetInstance("a.jpg");
             bg.Alignment = Image.UNDERLYING;
             bg.ScaleToFit(doc.PageSize.Width - 6, doc.PageSize.Height - 6);
             bg.SetAbsolutePosition(3, 3);
