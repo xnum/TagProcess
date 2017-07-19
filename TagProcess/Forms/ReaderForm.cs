@@ -104,7 +104,7 @@ namespace TagProcess
                 IPXCmd got_cmd = null;
                 while(clients[i].TryGet(out got_cmd))
                 {
-                    if (got_cmd.type == IPXCmd.Type.GetTag)
+                    if (got_cmd.type == IPXCmd.Type.GetTag && start_button.Text != "開始" && seenTag != null)
                     {
                         if (!seenTag.Add(got_cmd.data)) continue;
 
@@ -150,12 +150,10 @@ namespace TagProcess
             ComboBox cb = (ComboBox)sender;
             if(cb.SelectedIndex == 0)
             {
-                comboBox_batch.Enabled = true;
                 checkedListBox_group.Enabled = true;
             }
             else
             {
-                comboBox_batch.Enabled = false;
                 checkedListBox_group.Enabled = false;
             }
         }
@@ -169,14 +167,12 @@ namespace TagProcess
                 seenTag = new HashSet<string>();
                 start_button.Text = "停止";
                 comboBox_checkpoint.Enabled = false;
-                comboBox_batch.Enabled = false;
                 checkedListBox_group.Enabled = false;
             }
             else
             {
                 start_button.Text = "開始";
                 comboBox_checkpoint.Enabled = true;
-                comboBox_batch.Enabled = true;
                 checkedListBox_group.Enabled = true;
             }
 
@@ -188,13 +184,6 @@ namespace TagProcess
             if (station_n < 0)
             {
                 MessageBox.Show("未選擇檢查點");
-                return false;
-            }
-
-            int batch_n = comboBox_batch.SelectedIndex;
-            if (station_n == 0 && batch_n < 0)
-            {
-                MessageBox.Show("未選擇起跑批次");
                 return false;
             }
 
@@ -215,7 +204,8 @@ namespace TagProcess
 
             station_id = station_n;
 
-            return keeper.setStartCompetition(station_n, batch_n, groups_n);
+            return keeper.setStartCompetition(station_n, 0, groups_n);
         }
+
     }
 }

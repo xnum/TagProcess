@@ -20,8 +20,6 @@
             this.comboBox_checkpoint = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.checkedListBox_group = new System.Windows.Forms.CheckedListBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.comboBox_batch = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -99,51 +97,26 @@
             // checkedListBox_group
             // 
             this.checkedListBox_group.FormattingEnabled = true;
-            this.checkedListBox_group.Location = new System.Drawing.Point(8, 120);
+            this.checkedListBox_group.Location = new System.Drawing.Point(8, 86);
             this.checkedListBox_group.Name = "checkedListBox_group";
-            this.checkedListBox_group.Size = new System.Drawing.Size(120, 174);
+            this.checkedListBox_group.Size = new System.Drawing.Size(120, 208);
             this.checkedListBox_group.TabIndex = 3;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 61);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 12);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "起跑批次";
-            // 
-            // comboBox_batch
-            // 
-            this.comboBox_batch.FormattingEnabled = true;
-            this.comboBox_batch.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"});
-            this.comboBox_batch.Location = new System.Drawing.Point(8, 77);
-            this.comboBox_batch.Name = "comboBox_batch";
-            this.comboBox_batch.Size = new System.Drawing.Size(121, 20);
-            this.comboBox_batch.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 103);
+            this.label3.Location = new System.Drawing.Point(8, 70);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.Size = new System.Drawing.Size(29, 12);
             this.label3.TabIndex = 6;
-            this.label3.Text = "起跑組別";
+            this.label3.Text = "組別";
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.start_button);
-            this.groupBox1.Controls.Add(this.comboBox_batch);
             this.groupBox1.Controls.Add(this.comboBox_checkpoint);
-            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.checkedListBox_group);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
@@ -461,8 +434,6 @@
         private System.Windows.Forms.ComboBox comboBox_checkpoint;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckedListBox checkedListBox_group;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox comboBox_batch;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
