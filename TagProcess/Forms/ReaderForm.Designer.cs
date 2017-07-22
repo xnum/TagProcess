@@ -74,6 +74,7 @@
             // 
             this.comboBox_checkpoint.FormattingEnabled = true;
             this.comboBox_checkpoint.Items.AddRange(new object[] {
+            "單點模式",
             "起點",
             "1",
             "2",

@@ -18,6 +18,10 @@ namespace TagProcess
         public delegate void LogHandler(string msg);
         public event LogHandler Log;
 
+        private Dictionary<string, DateTime> filter = null;
+        private Dictionary<string, int> roundCounter = null;
+        private List<IPXCmd> uploadList = new List<IPXCmd>();
+
         protected void OnLog(string msg)
         {
             Log?.Invoke(msg);
@@ -48,25 +52,31 @@ namespace TagProcess
                 OnLog("上傳組別失敗" + res.Content);
                 return false;
             }
+
+            filter = new Dictionary<string, DateTime>();
+            roundCounter = new Dictionary<string, int>();
+            uploadList = new List<IPXCmd>();
             return true;
         }
 
         /// <summary>
         /// 比賽進行時，上傳Tag資料
         /// </summary>
-        /// <param name="station"></param>
-        /// <param name="data"></param>
+        /// <param name="force">設為True，表示要強制上傳資料，否則讓程式決定是否上傳</param>
         /// <returns></returns>
-        public bool uploadTagData(int station, List<IPXCmd> data)
+        public bool uploadTagData(bool force) 
         {
+            if (force == false && uploadList.Count <= 10) // 小於10筆不主動上傳
+                return true;
+
             List<Dictionary<string, string>> payload = new List<Dictionary<string, string>>();
-            foreach (var d in data)
+            foreach (var d in uploadList)
             {
                 payload.Add(
                     new Dictionary<string, string>() {
                         { "tag_id", d.data },
                         { "time", d.time.ToString(MySqlDateTimeFormat) },
-                        { "station_id", station.ToString() }
+                        { "station_id", d.station_id.ToString() }
                     });
             }
 
@@ -81,14 +91,43 @@ namespace TagProcess
                 OnLog("上傳組別失敗" + res_for_group.Content);
                 return false;
             }
+
+            uploadList.Clear();
             return true;
         }
 
         public void addData(int station, IPXCmd data)
         {
-            List<IPXCmd> arr = new List<IPXCmd>();
-            arr.Add(data);
-            uploadTagData(station, arr);
+            // 檢測是否在五秒內已新增過
+            if(filter.ContainsKey(data.data))
+            {
+                var lastSeenTime = filter[data.data];
+                TimeSpan diff = DateTime.Now - lastSeenTime;
+                if (diff.TotalSeconds <= 5) return; // 小於五秒內的資料 即忽略
+            }
+
+            filter[data.data] = DateTime.Now;
+
+            int res_station = 1;
+            if(station == 0) // 單點模式，用內建的Counter紀錄圈數
+            {
+                if(roundCounter.ContainsKey(data.data)) // 存在的情況下 將其+1後取出使用
+                {
+                    res_station = ++roundCounter[data.data];
+                }
+                else // 不存在的情況下 設為1(=起點)
+                {
+                    roundCounter[data.data] = 1;
+                }
+            }
+            data.station_id = res_station;
+            uploadList.Add(data);
+            uploadTagData(false);
+        }
+
+        public void notifyTimeout()
+        {
+            uploadTagData(true);
         }
 
         public class Record

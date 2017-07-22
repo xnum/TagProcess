@@ -14,6 +14,8 @@ namespace TagProcess
     {
         public int id;
         public string name;
+        public string reg;
+        public string type;
     }
 
     public class ParticipantHelper

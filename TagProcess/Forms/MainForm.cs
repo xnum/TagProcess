@@ -62,11 +62,11 @@ namespace TagProcess
                 return;
             }
 
-            if(!usbReader.isConnected())
-            {
-                MessageBox.Show("請先設定讀卡機COM Port");
-                return;
-            }
+            //if(!usbReader.isConnected())
+            //{
+            //    MessageBox.Show("請先設定讀卡機COM Port");
+            //    return;
+            //}
 
             printToStatusLabel("下載選手資料中，請稍後");
             if(!repo.fetchParticipants())

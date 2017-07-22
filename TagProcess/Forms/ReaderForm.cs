@@ -45,9 +45,11 @@ namespace TagProcess
                 readerWorker[i].RunWorkerCompleted += new RunWorkerCompletedEventHandler(readerWorker_RunWorkerCompleted);
             }
 
+            HashSet<string> seenGroup = new HashSet<string>();
             foreach(var item in repo.helper.getGroups())
             {
-                checkedListBox_group.Items.Add(item.name);
+                if(seenGroup.Add(item.reg))
+                    checkedListBox_group.Items.Add(item.reg);
             }
             
         }
@@ -140,6 +142,9 @@ namespace TagProcess
                 }
             }
 
+            if (refresh_count % 100 == 1) // 每10秒提醒一次 該發送資料了
+                keeper.notifyTimeout();
+
             while(touchedView.Rows.Count >= 15)
                 touchedView.Rows.RemoveAt(0);
             touchedView.Refresh();
@@ -148,7 +153,7 @@ namespace TagProcess
         private void comboBox_checkpoint_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox cb = (ComboBox)sender;
-            if(cb.SelectedIndex == 0)
+            if(cb.SelectedIndex <= 1) // 起點或單點模式
             {
                 checkedListBox_group.Enabled = true;
             }
@@ -196,7 +201,7 @@ namespace TagProcess
                         groups_n.Add(j.id);
             }
 
-            if (station_n == 0 && groups_n.Count < 0)
+            if (station_n <= 1 && groups_n.Count < 0) // 起點與單點模式
             {
                 MessageBox.Show("未選擇起跑組別");
                 return false;

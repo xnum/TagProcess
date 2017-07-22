@@ -12,6 +12,7 @@ namespace TagProcess
         public Type type = Type.None;
         public string data;
         public DateTime time;
+        public int station_id;
         public IPXCmd() { }
         public IPXCmd(Type t) { type = t; }
         public IPXCmd(string msg)
