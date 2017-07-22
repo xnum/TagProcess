@@ -96,14 +96,14 @@ namespace TagProcess
             return true;
         }
 
-        public void addData(int station, IPXCmd data)
+        public bool addData(int station, IPXCmd data)
         {
             // 檢測是否在五秒內已新增過
             if(filter.ContainsKey(data.data))
             {
                 var lastSeenTime = filter[data.data];
                 TimeSpan diff = DateTime.Now - lastSeenTime;
-                if (diff.TotalSeconds <= 5) return; // 小於五秒內的資料 即忽略
+                if (diff.TotalSeconds <= 5) return false; // 小於五秒內的資料 即忽略
             }
 
             filter[data.data] = DateTime.Now;
@@ -123,6 +123,8 @@ namespace TagProcess
             data.station_id = res_station;
             uploadList.Add(data);
             uploadTagData(false);
+
+            return true;
         }
 
         public void notifyTimeout()

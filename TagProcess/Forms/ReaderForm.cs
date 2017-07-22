@@ -110,7 +110,8 @@ namespace TagProcess
                     {
                         if (!seenTag.Add(got_cmd.data)) continue;
 
-                        keeper.addData(comboBox_checkpoint.SelectedIndex, got_cmd);
+                        if (!keeper.addData(comboBox_checkpoint.SelectedIndex, got_cmd)) // 新增失敗就不做以下動作
+                            continue;
                         textBox_status[i].Text = got_cmd.data;
                         string race_id = "";
                         string name = "";
@@ -123,6 +124,7 @@ namespace TagProcess
                             group = p.group;
                         }
                         touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString());
+                        System.Media.SystemSounds.Beep.Play(); // 播放音效
                     }
 
                     if (got_cmd.type == IPXCmd.Type.GetDate || got_cmd.type == IPXCmd.Type.SetDate)
