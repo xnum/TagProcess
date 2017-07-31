@@ -163,6 +163,11 @@ namespace TagProcess
             {
                 checkedListBox_group.Enabled = false;
             }
+
+            if (cb.SelectedIndex == 0) // 單點模式才能設定圈數
+                textBox_maxRound.Enabled = true;
+            else
+                textBox_maxRound.Enabled = false;
         }
 
         private void start_button_Click(object sender, EventArgs e)
@@ -211,7 +216,7 @@ namespace TagProcess
 
             station_id = station_n;
 
-            return keeper.setStartCompetition(station_n, 0, groups_n);
+            return keeper.setStartCompetition(station_n, Int32.Parse(textBox_maxRound.Text), groups_n);
         }
 
     }

@@ -20,6 +20,7 @@ namespace TagProcess
 
         private Dictionary<string, DateTime> filter = null;
         private Dictionary<string, int> roundCounter = null;
+        private int maxRoundCount = 0;
         private List<IPXCmd> uploadList = new List<IPXCmd>();
 
         protected void OnLog(string msg)
@@ -33,14 +34,14 @@ namespace TagProcess
         /// 通知伺服器有哪些組別起跑，作為大會起跑時間
         /// </summary>
         /// <param name="station"></param>
-        /// <param name="batch"></param>
+        /// <param name="max_round"></param>
         /// <param name="groups_id"></param>
         /// <returns></returns>
-        public bool setStartCompetition(int station, int batch, List<int> groups_id)
+        public bool setStartCompetition(int station, int max_round, List<int> groups_id)
         {
             RestRequest req = new RestRequest("competitions/batch_start", Method.POST);
             req.AddParameter("station", station);
-            req.AddParameter("batch", batch);
+            req.AddParameter("batch", 0);
             req.AddParameter("groups", JsonConvert.SerializeObject(groups_id));
             req.AddParameter("time", DateTime.Now.ToString(MySqlDateTimeFormat));
             IRestResponse res = server.executeHttpRequest(req);
@@ -56,6 +57,7 @@ namespace TagProcess
             filter = new Dictionary<string, DateTime>();
             roundCounter = new Dictionary<string, int>();
             uploadList = new List<IPXCmd>();
+            maxRoundCount = max_round;
             return true;
         }
 
@@ -119,6 +121,9 @@ namespace TagProcess
                 {
                     roundCounter[data.data] = 1;
                 }
+
+                /* 如果只跑圈數1圈 第一次是1 第二次是2 3以上才排除 */
+                if (res_station > maxRoundCount + 1) return false;
             }
             data.station_id = res_station;
             uploadList.Add(data);

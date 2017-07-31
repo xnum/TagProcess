@@ -52,6 +52,8 @@
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.refresh_timer = new System.Windows.Forms.Timer(this.components);
+            this.textBox_maxRound = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -98,15 +100,15 @@
             // checkedListBox_group
             // 
             this.checkedListBox_group.FormattingEnabled = true;
-            this.checkedListBox_group.Location = new System.Drawing.Point(8, 86);
+            this.checkedListBox_group.Location = new System.Drawing.Point(8, 103);
             this.checkedListBox_group.Name = "checkedListBox_group";
-            this.checkedListBox_group.Size = new System.Drawing.Size(120, 208);
+            this.checkedListBox_group.Size = new System.Drawing.Size(120, 191);
             this.checkedListBox_group.TabIndex = 3;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 70);
+            this.label3.Location = new System.Drawing.Point(8, 88);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(29, 12);
             this.label3.TabIndex = 6;
@@ -114,6 +116,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.textBox_maxRound);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.start_button);
@@ -401,6 +405,23 @@
             this.refresh_timer.Enabled = true;
             this.refresh_timer.Tick += new System.EventHandler(this.refresh_timer_Tick);
             // 
+            // textBox_maxRound
+            // 
+            this.textBox_maxRound.Enabled = false;
+            this.textBox_maxRound.Location = new System.Drawing.Point(39, 60);
+            this.textBox_maxRound.Name = "textBox_maxRound";
+            this.textBox_maxRound.Size = new System.Drawing.Size(89, 22);
+            this.textBox_maxRound.TabIndex = 7;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 64);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 12);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "圈數";
+            // 
             // ReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -467,5 +488,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox_maxRound;
     }
 }
