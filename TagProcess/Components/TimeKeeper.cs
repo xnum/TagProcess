@@ -105,7 +105,7 @@ namespace TagProcess
             {
                 var lastSeenTime = filter[data.data];
                 TimeSpan diff = DateTime.Now - lastSeenTime;
-                if (diff.TotalSeconds <= 5) return false; // 小於五秒內的資料 即忽略
+                if (diff.TotalSeconds <= 30) return false; // 小於30秒內的資料 即忽略
             }
 
             filter[data.data] = DateTime.Now;
