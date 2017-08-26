@@ -164,10 +164,16 @@ namespace TagProcess
                 checkedListBox_group.Enabled = false;
             }
 
-            if (cb.SelectedIndex == 0) // 單點模式才能設定圈數
+            if (cb.SelectedIndex == 0)
+            {// 單點模式才能設定圈數
                 textBox_maxRound.Enabled = true;
+                textBox_limitSecond.Enabled = true;
+            }
             else
+            {
                 textBox_maxRound.Enabled = false;
+                textBox_limitSecond.Enabled = false;
+            }
         }
 
         private void start_button_Click(object sender, EventArgs e)
@@ -216,7 +222,29 @@ namespace TagProcess
 
             station_id = station_n;
 
-            return keeper.setStartCompetition(station_n, Int32.Parse(textBox_maxRound.Text), groups_n);
+            int max_round = -1;
+            try
+            {
+                max_round = Int32.Parse(textBox_maxRound.Text);
+            }
+            catch
+            {
+                MessageBox.Show("最大圈數輸入錯誤");
+                return false;
+            }
+
+            int limit_sec = -1;
+            try
+            {
+                limit_sec = Int32.Parse(textBox_limitSecond.Text);
+            }
+            catch
+            {
+                MessageBox.Show("限制感應秒數輸入錯誤");
+                return false;
+            }
+
+            return keeper.setStartCompetition(station_n, max_round, groups_n, limit_sec);
         }
 
     }

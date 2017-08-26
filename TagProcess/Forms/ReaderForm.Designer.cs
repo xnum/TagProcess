@@ -22,6 +22,8 @@
             this.checkedListBox_group = new System.Windows.Forms.CheckedListBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox_maxRound = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox_status0 = new System.Windows.Forms.TextBox();
             this.button_conn0 = new System.Windows.Forms.Button();
@@ -52,8 +54,8 @@
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.refresh_timer = new System.Windows.Forms.Timer(this.components);
-            this.textBox_maxRound = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.textBox_limitSecond = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -100,15 +102,15 @@
             // checkedListBox_group
             // 
             this.checkedListBox_group.FormattingEnabled = true;
-            this.checkedListBox_group.Location = new System.Drawing.Point(8, 103);
+            this.checkedListBox_group.Location = new System.Drawing.Point(8, 137);
             this.checkedListBox_group.Name = "checkedListBox_group";
-            this.checkedListBox_group.Size = new System.Drawing.Size(120, 191);
+            this.checkedListBox_group.Size = new System.Drawing.Size(120, 157);
             this.checkedListBox_group.TabIndex = 3;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 88);
+            this.label3.Location = new System.Drawing.Point(8, 122);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(29, 12);
             this.label3.TabIndex = 6;
@@ -116,6 +118,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label11);
+            this.groupBox1.Controls.Add(this.textBox_limitSecond);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.textBox_maxRound);
             this.groupBox1.Controls.Add(this.label1);
@@ -129,6 +133,23 @@
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "檢查點設定";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 64);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 12);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "圈數";
+            // 
+            // textBox_maxRound
+            // 
+            this.textBox_maxRound.Enabled = false;
+            this.textBox_maxRound.Location = new System.Drawing.Point(39, 60);
+            this.textBox_maxRound.Name = "textBox_maxRound";
+            this.textBox_maxRound.Size = new System.Drawing.Size(89, 22);
+            this.textBox_maxRound.TabIndex = 7;
             // 
             // groupBox2
             // 
@@ -405,28 +426,28 @@
             this.refresh_timer.Enabled = true;
             this.refresh_timer.Tick += new System.EventHandler(this.refresh_timer_Tick);
             // 
-            // textBox_maxRound
+            // textBox_limitSecond
             // 
-            this.textBox_maxRound.Enabled = false;
-            this.textBox_maxRound.Location = new System.Drawing.Point(39, 60);
-            this.textBox_maxRound.Name = "textBox_maxRound";
-            this.textBox_maxRound.Size = new System.Drawing.Size(89, 22);
-            this.textBox_maxRound.TabIndex = 7;
+            this.textBox_limitSecond.Enabled = false;
+            this.textBox_limitSecond.Location = new System.Drawing.Point(64, 88);
+            this.textBox_limitSecond.Name = "textBox_limitSecond";
+            this.textBox_limitSecond.Size = new System.Drawing.Size(63, 22);
+            this.textBox_limitSecond.TabIndex = 9;
             // 
-            // label2
+            // label11
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 64);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 12);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "圈數";
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(8, 94);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(53, 12);
+            this.label11.TabIndex = 10;
+            this.label11.Text = "限制感應";
             // 
             // ReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(907, 376);
+            this.ClientSize = new System.Drawing.Size(907, 482);
             this.Controls.Add(this.touchedView);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -490,5 +511,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox_maxRound;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox textBox_limitSecond;
     }
 }

@@ -23,6 +23,11 @@ namespace TagProcess
         private int maxRoundCount = 0;
         private List<IPXCmd> uploadList = new List<IPXCmd>();
 
+        /// <summary>
+        /// 限制起跑時間必須在start_time內，否則算第二圈
+        /// </summary>
+        private DateTime start_time;
+
         protected void OnLog(string msg)
         {
             Log?.Invoke(msg);
@@ -37,7 +42,7 @@ namespace TagProcess
         /// <param name="max_round"></param>
         /// <param name="groups_id"></param>
         /// <returns></returns>
-        public bool setStartCompetition(int station, int max_round, List<int> groups_id)
+        public bool setStartCompetition(int station, int max_round, List<int> groups_id, int limit_sec)
         {
             RestRequest req = new RestRequest("competitions/batch_start", Method.POST);
             req.AddParameter("station", station);
@@ -58,6 +63,8 @@ namespace TagProcess
             roundCounter = new Dictionary<string, int>();
             uploadList = new List<IPXCmd>();
             maxRoundCount = max_round;
+            start_time = DateTime.Now;
+            start_time.AddSeconds(limit_sec);
             return true;
         }
 
@@ -100,7 +107,7 @@ namespace TagProcess
 
         public bool addData(int station, IPXCmd data)
         {
-            // 檢測是否在五秒內已新增過
+            // 檢測是否在時間內已新增過
             if(filter.ContainsKey(data.data))
             {
                 var lastSeenTime = filter[data.data];
@@ -119,7 +126,11 @@ namespace TagProcess
                 }
                 else // 不存在的情況下 設為1(=起點)
                 {
-                    roundCounter[data.data] = 1;
+                    /* 如果限制起跑時間小於現在 代表還是第一圈*/
+                    if(start_time > DateTime.Now)
+                        roundCounter[data.data] = res_station = 1;
+                    else
+                        roundCounter[data.data] = res_station = 2;
                 }
 
                 /* 如果只跑圈數1圈 第一次是1 第二次是2 3以上才排除 */
