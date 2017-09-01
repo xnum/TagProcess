@@ -75,7 +75,7 @@ namespace TagProcess.Forms
                 try
                 {
                     textBox_tag_id.Text = "等候感應中，剩餘" + (30 - i) / 2 + "秒";
-                    tag = usbReader.readTag();
+                    tag = usbReader.ReadTag();
                     if (tag != String.Empty)
                         break;
                 }

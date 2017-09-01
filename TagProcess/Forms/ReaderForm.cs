@@ -23,7 +23,6 @@ namespace TagProcess
         private string[] result = new string[] { "", "", ""};
         private int station_id = -1;
 
-        private HashSet<string> seenTag = new HashSet<string>();
         private ParticipantsRepository repo = ParticipantsRepository.Instance;
         private TimeKeeper keeper = TimeKeeper.Instance;
 
@@ -106,10 +105,8 @@ namespace TagProcess
                 IPXCmd got_cmd = null;
                 while(clients[i].TryGet(out got_cmd))
                 {
-                    if (got_cmd.type == IPXCmd.Type.GetTag && start_button.Text != "開始" && seenTag != null)
+                    if (got_cmd.type == IPXCmd.Type.GetTag && start_button.Text != "開始")
                     {
-                        if (!seenTag.Add(got_cmd.data)) continue;
-
                         if (!keeper.addData(comboBox_checkpoint.SelectedIndex, got_cmd)) // 新增失敗就不做以下動作
                             continue;
                         textBox_status[i].Text = got_cmd.data;
@@ -182,7 +179,6 @@ namespace TagProcess
             {
                 if (!start()) return;
 
-                seenTag = new HashSet<string>();
                 start_button.Text = "停止";
                 comboBox_checkpoint.Enabled = false;
                 checkedListBox_group.Enabled = false;

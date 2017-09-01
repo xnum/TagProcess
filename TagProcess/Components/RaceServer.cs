@@ -40,7 +40,7 @@ namespace TagProcess
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public IRestResponse executeHttpRequest(RestRequest request)
+        public IRestResponse ExecuteHttpRequest(RestRequest request)
         {
             OnLog("嘗試連線到: " + serverUrl + "/" + request.Resource);
             RestClient client = new RestClient(serverUrl);
@@ -66,11 +66,11 @@ namespace TagProcess
         /// 選單設定伺服器網址 return連線結果
         /// </summary>
         /// <param name="url">網址</param>
-        public bool setServerUrl(string url)
+        public bool SetServerUrl(string url)
         {
             serverUrl = url;
             competition_id = -5;
-            var response = executeHttpRequest(new RestRequest("competitions/current", Method.GET));
+            var response = ExecuteHttpRequest(new RestRequest("competitions/current", Method.GET));
             if (response == null)
             {
                 OnLog("連線失敗");
@@ -106,7 +106,7 @@ namespace TagProcess
         /// 簡單檢查是否已經設定完成
         /// </summary>
         /// <returns></returns>
-        public bool isConnected()
+        public bool IsConnected()
         {
             return competition_id >= 0;
         }

@@ -162,7 +162,7 @@
             this.search_by_tag_id_button.TabIndex = 3;
             this.search_by_tag_id_button.Text = "以晶片搜尋";
             this.search_by_tag_id_button.UseVisualStyleBackColor = true;
-            this.search_by_tag_id_button.Click += new System.EventHandler(this.search_by_tag_id_button_Click);
+            this.search_by_tag_id_button.Click += new System.EventHandler(this.SearchByTagIdButtonClick);
             // 
             // textBox_tag_id
             // 

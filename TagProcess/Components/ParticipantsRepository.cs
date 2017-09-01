@@ -308,7 +308,7 @@ namespace TagProcess
         public bool fetchParticipants()
         {
             Clear();
-            var res_for_parti = server.executeHttpRequest(new RestRequest("participants/current", Method.GET));
+            var res_for_parti = server.ExecuteHttpRequest(new RestRequest("participants/current", Method.GET));
             if (res_for_parti == null) return false;
 
             OnLog("Json decoding (participants)");
@@ -319,7 +319,7 @@ namespace TagProcess
                 helper.tryAddTag(p.tag_id);
             }
 
-            var res_for_groups = server.executeHttpRequest(new RestRequest("race_groups/current", Method.GET));
+            var res_for_groups = server.ExecuteHttpRequest(new RestRequest("race_groups/current", Method.GET));
 
             if (res_for_groups == null) return false;
 
@@ -355,7 +355,7 @@ namespace TagProcess
             req_for_parti.AddParameter("address", p.address);
             req_for_parti.AddParameter("zipcode", p.zipcode);
             req_for_parti.AddParameter("phone", p.phone);
-            var res_for_parti = server.executeHttpRequest(req_for_parti);
+            var res_for_parti = server.ExecuteHttpRequest(req_for_parti);
 
             if (res_for_parti == null) return false;
 
@@ -394,7 +394,7 @@ namespace TagProcess
         {
             RestRequest req_for_group = new RestRequest("race_groups/import", Method.POST);
             req_for_group.AddParameter("group", groups);
-            var res_for_group = server.executeHttpRequest(req_for_group);
+            var res_for_group = server.ExecuteHttpRequest(req_for_group);
 
             if (res_for_group == null) return false;
 
@@ -406,7 +406,7 @@ namespace TagProcess
             
             RestRequest req = new RestRequest("participants/import", Method.POST);
             req.AddParameter("str", str);
-            IRestResponse res = server.executeHttpRequest(req);
+            IRestResponse res = server.ExecuteHttpRequest(req);
 
             if (res == null) return false;
 

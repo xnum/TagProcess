@@ -135,16 +135,22 @@ namespace TagProcess
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void search_by_tag_id_button_Click(object sender, EventArgs e)
+        private void SearchByTagIdButtonClick(object sender, EventArgs e)
         {
             string tag = String.Empty;
+
+            if(!usbReader.IsConnected())
+            {
+                MessageBox.Show("讀卡機尚未連接");
+                return;
+            }
 
             for (int i = 0; i < 30; ++i)
             {
                 try
                 {
                     textBox_tag_id.Text = "等候感應中，剩餘" + (30 - i) / 2 + "秒";
-                    tag = usbReader.readTag();
+                    tag = usbReader.ReadTag();
                     if (tag != String.Empty)
                         break;
                 }

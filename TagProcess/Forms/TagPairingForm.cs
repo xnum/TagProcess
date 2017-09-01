@@ -32,6 +32,11 @@ namespace TagProcess
 
         private void start_pair_button_Click(object sender, EventArgs e)
         {
+            if(!usbReader.IsConnected())
+            {
+                MessageBox.Show("讀卡機尚未設定PORT");
+                return;
+            }
             incomingTags = new BlockingCollection<string>(50);
             consumer_timer.Enabled = true;
             getTagWorker.RunWorkerAsync();
@@ -53,7 +58,7 @@ namespace TagProcess
                 string tag = String.Empty;
                 try
                 {
-                    tag = usbReader.readTag();
+                    tag = usbReader.ReadTag();
                 }
                 catch (InvalidOperationException)
                 {

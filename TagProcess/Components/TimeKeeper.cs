@@ -20,6 +20,7 @@ namespace TagProcess
 
         private Dictionary<string, DateTime> filter = null;
         private Dictionary<string, int> roundCounter = null;
+        private Dictionary<int, HashSet<string>> seenTag = null;
         private int maxRoundCount = 0;
         private List<IPXCmd> uploadList = new List<IPXCmd>();
 
@@ -49,7 +50,7 @@ namespace TagProcess
             req.AddParameter("batch", 0);
             req.AddParameter("groups", JsonConvert.SerializeObject(groups_id));
             req.AddParameter("time", DateTime.Now.ToString(MySqlDateTimeFormat));
-            IRestResponse res = server.executeHttpRequest(req);
+            IRestResponse res = server.ExecuteHttpRequest(req);
 
             if (res == null) return false;
 
@@ -65,6 +66,7 @@ namespace TagProcess
             maxRoundCount = max_round;
             start_time = DateTime.Now;
             start_time.AddSeconds(limit_sec);
+            seenTag = new Dictionary<int, HashSet<string>>();
             return true;
         }
 
@@ -91,7 +93,7 @@ namespace TagProcess
 
             RestRequest req_for_group = new RestRequest("records", Method.POST);
             req_for_group.AddParameter("tags", JsonConvert.SerializeObject(payload));
-            IRestResponse res_for_group = server.executeHttpRequest(req_for_group);
+            IRestResponse res_for_group = server.ExecuteHttpRequest(req_for_group);
 
             if (res_for_group == null) return false;
 
@@ -107,6 +109,13 @@ namespace TagProcess
 
         public bool addData(int station, IPXCmd data)
         {
+            if( !seenTag.ContainsKey(station) ) 
+            {
+                seenTag.Add(station, new HashSet<string>());
+            }
+    
+
+
             // 檢測是否在時間內已新增過
             if(filter.ContainsKey(data.data))
             {
@@ -178,7 +187,7 @@ namespace TagProcess
             RestRequest req = new RestRequest("record", Method.GET);
             if (tag != null) req.AddParameter("tag_id", tag);
             else if (race != null) req.AddParameter("race_id", race);
-            var res = server.executeHttpRequest(req);
+            var res = server.ExecuteHttpRequest(req);
             var obj = JsonConvert.DeserializeObject<RecordResult>(res.Content);
             if (obj.code == 200)
                 return obj;

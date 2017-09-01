@@ -106,7 +106,7 @@ namespace TagProcess
                 string result = String.Empty;
                 try
                 {
-                    result = TagUSBReader.Instance.readTag(); // blocking up to 500ms
+                    result = TagUSBReader.Instance.ReadTag(); // blocking up to 500ms
                 }
                 catch (InvalidOperationException)
                 {

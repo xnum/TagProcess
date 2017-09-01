@@ -20,11 +20,12 @@ namespace TagProcess
 
         private SerialPort comport = null;
 
-        public string[] getPortNames()
+        public string[] GetPortNames()
         {
             return SerialPort.GetPortNames();
         }
-        public bool connect(string port)
+
+        public bool Connect(string port)
         {
             try
             {
@@ -39,7 +40,7 @@ namespace TagProcess
             return true;
         }
 
-        public bool isConnected()
+        public bool IsConnected()
         {
             return comport != null && comport.IsOpen;
         }
@@ -48,7 +49,7 @@ namespace TagProcess
         /// 取得感應到的tag，如果沒有感應到會回傳String.Empty，500ms Timeout
         /// </summary>
         /// <returns></returns>
-        public string readTag()
+        public string ReadTag()
         {
             comport.ReadTimeout = 500;
             string lastValidTag = String.Empty;

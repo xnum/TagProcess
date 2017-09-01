@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO.Ports;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using TagProcess.Forms;
@@ -30,21 +25,21 @@ namespace TagProcess
             usbReader = TagUSBReader.Instance;
             server.Log += printToStatusLabel;
             string url = Properties.Settings.Default.ServerUrl;
-            server.setServerUrl(url);
+            server.SetServerUrl(url);
             refreshCOMPort();
         }
 
         /// <summary>
-        /// 顯示輸入伺服器網址視窗
+        /// 跳出輸入伺服器網址視窗
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void 伺服器ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tsmiServerUrl_Click(object sender, EventArgs e)
         {
             ServerUrlInputForm input = new ServerUrlInputForm();
             if (input.ShowDialog() == DialogResult.OK)
             {
-                server.setServerUrl(input.GetResult());
+                server.SetServerUrl(input.GetResult());
             }
         }
 
@@ -53,20 +48,14 @@ namespace TagProcess
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void partcipants_view_button_Click(object sender, EventArgs e)
+        private void btnShowPartcipantsViewForm_Click(object sender, EventArgs e)
         {
-            if(!server.isConnected())
+            if(!server.IsConnected())
             {
                 MessageBox.Show("請先設定伺服器網址");
-                伺服器ToolStripMenuItem_Click(null, null);
+                tsmiServerUrl_Click(null, null);
                 return;
             }
-
-            //if(!usbReader.isConnected())
-            //{
-            //    MessageBox.Show("請先設定讀卡機COM Port");
-            //    return;
-            //}
 
             printToStatusLabel("下載選手資料中，請稍後");
             if(!repo.fetchParticipants())
@@ -87,12 +76,12 @@ namespace TagProcess
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void print_mail_button_Click(object sender, EventArgs e)
+        private void btnPrintMailLabel_Click(object sender, EventArgs e)
         {
-            if (!server.isConnected())
+            if (!server.IsConnected())
             {
                 MessageBox.Show("請先設定伺服器網址");
-                伺服器ToolStripMenuItem_Click(null, null);
+                tsmiServerUrl_Click(null, null);
                 return;
             }
 
@@ -111,7 +100,7 @@ namespace TagProcess
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void 重新整理ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tsmiRefresh_Click(object sender, EventArgs e)
         {
             refreshCOMPort();
         }
@@ -123,24 +112,30 @@ namespace TagProcess
         /// <param name="e"></param>
         private void COMPortConnect_Click(object sender, EventArgs e)
         {
-            foreach (ToolStripMenuItem t in COMToolStripMenuItem.DropDownItems)
+            foreach (ToolStripMenuItem t in tsmiComPort.DropDownItems)
             {
                 t.Checked = false;
             }
 
             ToolStripMenuItem item = (ToolStripMenuItem)sender;
-            if(usbReader.connect(item.Text))
+            if(usbReader.Connect(item.Text))
             {
                 item.Checked = true;
             }
         }
 
-        private void pair_form_button_Click(object sender, EventArgs e)
+        private void btnShowTagPairingForm_Click(object sender, EventArgs e)
         {
-            if (!server.isConnected())
+            if (!server.IsConnected())
             {
                 MessageBox.Show("請先設定伺服器網址");
-                伺服器ToolStripMenuItem_Click(null, null);
+                tsmiServerUrl_Click(null, null);
+                return;
+            }
+
+            if (!usbReader.IsConnected())
+            {
+                MessageBox.Show("讀卡機尚未設定PORT");
                 return;
             }
 
@@ -157,17 +152,14 @@ namespace TagProcess
             form.Dispose();
         }
 
-        private void log檔ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("log.txt");
-        }
+        private void tsmiLogFile_Click(object sender, EventArgs e) => Process.Start("log.txt");
 
-        private void import_button_Click(object sender, EventArgs e)
+        private void btnImportData_Click(object sender, EventArgs e)
         {
-            if (!server.isConnected())
+            if (!server.IsConnected())
             {
                 MessageBox.Show("請先設定伺服器網址");
-                伺服器ToolStripMenuItem_Click(null, null);
+                tsmiServerUrl_Click(null, null);
                 return;
             }
 
@@ -254,10 +246,10 @@ namespace TagProcess
 
         private void excelWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            output_StatusLabel.Text = e.UserState as string;
+            slblStatus.Text = e.UserState as string;
         }
 
-        private void reader_button_Click(object sender, EventArgs e)
+        private void btnShowReaderForm_Click(object sender, EventArgs e)
         {
             printToStatusLabel("下載選手資料中，請稍後");
             if (!repo.fetchParticipants())
@@ -276,11 +268,11 @@ namespace TagProcess
 
         private void refreshCOMPort()
         {
-            this.COMToolStripMenuItem.DropDownItems.Clear();
-            this.COMToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.重新整理ToolStripMenuItem});
+            this.tsmiComPort.DropDownItems.Clear();
+            this.tsmiComPort.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiRefresh});
 
-            string[] ports = usbReader.getPortNames();
+            string[] ports = usbReader.GetPortNames();
             foreach (string port in ports)
             {
                 var item = new ToolStripMenuItem();
@@ -288,13 +280,13 @@ namespace TagProcess
                 item.Size = new Size(152, 22);
                 item.Text = port;
                 item.Click += new EventHandler(this.COMPortConnect_Click);
-                this.COMToolStripMenuItem.DropDownItems.Add(item);
+                this.tsmiComPort.DropDownItems.Add(item);
             }
         }
 
         public void printToStatusLabel(string msg)
         {
-            output_StatusLabel.Text = msg;
+            slblStatus.Text = msg;
         }
 
         private void printScore_Click(object sender, EventArgs e)
