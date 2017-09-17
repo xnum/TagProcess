@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using TagProcess.Forms;
+using System.IO;
+using ExcelDataReader;
 
 namespace TagProcess
 {
@@ -169,7 +171,103 @@ namespace TagProcess
             dialog.Filter = "xls files (*.*)|*.xls";
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
-            excelWorker.RunWorkerAsync(dialog.FileName);
+
+            using (var stream = File.Open(dialog.FileName, FileMode.Open, FileAccess.Read))
+            {
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    do // 尋找資料表
+                    {
+                        if(reader.Name != "報名資料")
+                            continue;
+
+                        // 擷取第一行分析欄位
+                        if(!reader.Read())
+                        {
+                            MessageBox.Show("錯誤：讀取第一行失敗");
+                            return;
+                        }
+
+                        // 找到欄位名稱 -> 欄位index的對應
+                        // mapTable紀錄 欄位index -> 資料名稱
+                        // e.g. 姓名 -> 3 -> name
+                        Dictionary<string, string> chi2engTable = new Dictionary<string, string> {
+                            { "姓名", "name" },
+                            { "團體名稱", "team_name" },
+                            { "跑者編號", "race_id" },
+                            { "出生日期", "birth" },
+                            { "報名項目", "reg" },
+                            { "組別", "type" },
+                            { "手機", "phone" },
+                            { "地址", "address" },
+                            { "性別", "male" }
+                        };
+                        Dictionary<int, string> mapTable = new Dictionary<int, string>();
+                        for(int i = 0; i < reader.FieldCount; ++i)
+                        {
+                            string headerStr = reader.GetString(i);
+                            if(headerStr == null || headerStr.Length < 2)
+                            {
+                                continue;
+                            }
+
+                            // 以下針對各欄位名稱填表
+                            if(chi2engTable.ContainsKey(headerStr))
+                            {
+                                mapTable[i] = chi2engTable[headerStr];
+                            }
+                        }
+
+                        // 檢驗資料是否正確
+                        if(chi2engTable.Count != mapTable.Count)
+                        {
+                            string missingCol = "";
+                            foreach (var key in chi2engTable.Keys)
+                                if (mapTable.ContainsValue(chi2engTable[key]))
+                                    missingCol += chi2engTable[key] + "\n";
+                            MessageBox.Show("錯誤：缺少欄位" + missingCol);
+                            return;
+                        }
+
+                        // 開始轉換資料
+                        List<Dictionary<string, string>> data = new List<System.Collections.Generic.Dictionary<string, string>>();
+                        HashSet<string> groups = new HashSet<string>();
+
+                        while (reader.Read())
+                        {
+                            Dictionary<string, string> row = new Dictionary<string, string>();
+                            string groupName = "###";
+                            foreach(var index in mapTable.Keys)
+                            {
+                                string val = reader.GetString(index);
+                                if (val == null) val = "";
+                                if (mapTable[index] == "reg")
+                                    groupName = val + groupName;
+                                else if (mapTable[index] == "type")
+                                    groupName += val;
+                                else
+                                    row.Add(mapTable[index], val);
+                            }
+                            row.Add("group", groupName);
+                            groups.Add(groupName);
+                            data.Add(row);
+                        }
+
+                        string str = Newtonsoft.Json.JsonConvert.SerializeObject(data);
+                        string str_group = Newtonsoft.Json.JsonConvert.SerializeObject(groups);
+                        Debug.WriteLine(str);
+                        Debug.WriteLine(str_group);
+                        if (true == repo.storeParticipants(str, str_group))
+                            MessageBox.Show("上傳成功");
+                        else
+                            MessageBox.Show("上傳失敗");
+                        return;
+                    } while (reader.NextResult());
+
+                    MessageBox.Show("錯誤：找不到資料表 [報名資料]");
+                }
+            }
+            //excelWorker.RunWorkerAsync(dialog.FileName);
         }
 
         private void excelWorker_DoWork(object sender, DoWorkEventArgs e)

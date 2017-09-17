@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ServerUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://128.199.65.141</Value>
+      <Value Profile="(Default)">http://127.0.0.1:8082</Value>
     </Setting>
   </Settings>
 </SettingsFile>
