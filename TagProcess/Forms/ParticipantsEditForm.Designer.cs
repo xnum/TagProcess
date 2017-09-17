@@ -40,7 +40,7 @@
             this.textBox_age = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox_zipcode = new System.Windows.Forms.TextBox();
+            this.textBox_team_name = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox_addr = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -97,7 +97,7 @@
             this.groupBox1.Controls.Add(this.textBox_age);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.textBox_zipcode);
+            this.groupBox1.Controls.Add(this.textBox_team_name);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.textBox_addr);
             this.groupBox1.Controls.Add(this.label5);
@@ -184,12 +184,12 @@
             this.label7.TabIndex = 10;
             this.label7.Text = "生日";
             // 
-            // textBox_zipcode
+            // textBox_team_name
             // 
-            this.textBox_zipcode.Location = new System.Drawing.Point(126, 38);
-            this.textBox_zipcode.Name = "textBox_zipcode";
-            this.textBox_zipcode.Size = new System.Drawing.Size(76, 22);
-            this.textBox_zipcode.TabIndex = 9;
+            this.textBox_team_name.Location = new System.Drawing.Point(126, 38);
+            this.textBox_team_name.Name = "textBox_team_name";
+            this.textBox_team_name.Size = new System.Drawing.Size(76, 22);
+            this.textBox_team_name.TabIndex = 9;
             // 
             // label6
             // 
@@ -198,7 +198,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 12);
             this.label6.TabIndex = 8;
-            this.label6.Text = "郵遞區號";
+            this.label6.Text = "報名團體";
             // 
             // textBox_addr
             // 
@@ -354,7 +354,7 @@
         private System.Windows.Forms.TextBox textBox_age;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox_zipcode;
+        private System.Windows.Forms.TextBox textBox_team_name;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox_addr;
         private System.Windows.Forms.Label label5;

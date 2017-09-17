@@ -176,15 +176,15 @@ namespace TagProcess
             }
         }
 
-        private string _zipcode = String.Empty;
-        public string zipcode
+        private string _team_name = String.Empty;
+        public string team_name
         {
-            get { return _zipcode; }
+            get { return _team_name; }
             set
             {
-                if (_zipcode == value) return;
-                if (_zipcode != String.Empty)is_dirty = true;;
-                _zipcode = value;
+                if (_team_name == value) return;
+                if (_team_name != String.Empty)is_dirty = true;;
+                _team_name = value;
             }
         }
 
@@ -353,7 +353,7 @@ namespace TagProcess
             req_for_parti.AddParameter("name", p.name);
             req_for_parti.AddParameter("birth", p.birth);
             req_for_parti.AddParameter("address", p.address);
-            req_for_parti.AddParameter("zipcode", p.zipcode);
+            req_for_parti.AddParameter("team_name", p.team_name);
             req_for_parti.AddParameter("phone", p.phone);
             var res_for_parti = server.ExecuteHttpRequest(req_for_parti);
 

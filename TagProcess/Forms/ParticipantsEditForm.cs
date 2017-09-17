@@ -30,7 +30,7 @@ namespace TagProcess
             textBox_race_id.Text = retParticipant.race_id;
             textBox_birth.Text = retParticipant.birth;
             textBox_addr.Text = retParticipant.address;
-            textBox_zipcode.Text = retParticipant.zipcode;
+            textBox_team_name.Text = retParticipant.team_name;
             textBox_age.Text = retParticipant.age;
 
             comboBox_male.Text = retParticipant.male_s;
@@ -59,8 +59,8 @@ namespace TagProcess
             if (textBox_addr.Text != retParticipant.address)
                 retParticipant.address = textBox_addr.Text;
 
-            if (textBox_zipcode.Text != retParticipant.zipcode)
-                retParticipant.zipcode = textBox_zipcode.Text;
+            if (textBox_team_name.Text != retParticipant.team_name)
+                retParticipant.team_name = textBox_team_name.Text;
 
             if (comboBox_male.Text != retParticipant.male_s)
                 retParticipant.male_s = comboBox_male.Text;

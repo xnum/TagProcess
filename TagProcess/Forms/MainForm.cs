@@ -230,7 +230,7 @@ namespace TagProcess
                         }
 
                         // 開始轉換資料
-                        List<Dictionary<string, string>> data = new List<System.Collections.Generic.Dictionary<string, string>>();
+                        List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
                         HashSet<string> groups = new HashSet<string>();
 
                         while (reader.Read())
