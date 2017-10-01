@@ -180,6 +180,8 @@ namespace TagProcess
             public Record[] recs;
             public Group group;
             public Dictionary<string, string> p;
+            public int overall;
+            public int team;
         }
 
         public RecordResult fetchResultByTagOrRace(string tag, string race)
@@ -189,6 +191,7 @@ namespace TagProcess
             else if (race != null) req.AddParameter("race_id", race);
             var res = server.ExecuteHttpRequest(req);
             var obj = JsonConvert.DeserializeObject<RecordResult>(res.Content);
+
             if (obj.code == 200)
                 return obj;
             return null;

@@ -32,13 +32,18 @@ namespace TagProcess.Components
             BaseFont chBaseFont = BaseFont.CreateFont(chFontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             Font textFont = new Font(chBaseFont, 16);
 
-            Image bg = Image.GetInstance("a.jpg");
-            bg.Alignment = Image.UNDERLYING;
-            bg.ScaleToFit(doc.PageSize.Width - 6, doc.PageSize.Height - 6);
-            bg.SetAbsolutePosition(3, 3);
-
             doc.Open();
-            doc.Add(bg);
+
+            try
+            {
+                Image bg = Image.GetInstance("a.jpg");
+                bg.Alignment = Image.UNDERLYING;
+                bg.ScaleToFit(doc.PageSize.Width - 6, doc.PageSize.Height - 6);
+                bg.SetAbsolutePosition(3, 3);
+                doc.Add(bg);
+            }
+            catch { }
+
 
             ColumnText ct = new ColumnText(writer.DirectContent);
             Phrase myText = new Phrase(args.name, textFont);
@@ -53,7 +58,7 @@ namespace TagProcess.Components
             ct.SetSimpleColumn(myText, 300, 300, 780, 585, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase("項目", textFont);
+            myText = new Phrase(args.subject, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 535, 15, Element.ALIGN_LEFT);
             ct.Go();
 
@@ -65,13 +70,16 @@ namespace TagProcess.Components
             ct.SetSimpleColumn(myText, 300, 300, 780, 425, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase("總名次", textFont);
+            myText = new Phrase(args.total_rank, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 375, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase("分組名次", textFont);
-            ct.SetSimpleColumn(myText, 300, 300, 780, 325, 15, Element.ALIGN_LEFT);
-            ct.Go();
+            if (args.subject_rank != "0")
+            { 
+                myText = new Phrase(args.subject_rank, textFont);
+                ct.SetSimpleColumn(myText, 300, 300, 780, 325, 15, Element.ALIGN_LEFT);
+                ct.Go();
+            }
 
             doc.Close();
 

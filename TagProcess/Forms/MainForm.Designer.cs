@@ -44,8 +44,8 @@
             this.tsmiLogFile = new System.Windows.Forms.ToolStripMenuItem();
             this.excelWorker = new System.ComponentModel.BackgroundWorker();
             this.grpbUnused2 = new System.Windows.Forms.GroupBox();
-            this.btnShowReaderForm = new System.Windows.Forms.Button();
             this.btnPrintScore = new System.Windows.Forms.Button();
+            this.btnShowReaderForm = new System.Windows.Forms.Button();
             this.grpbUnused1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -196,6 +196,16 @@
             this.grpbUnused2.TabStop = false;
             this.grpbUnused2.Text = "現場作業";
             // 
+            // btnPrintScore
+            // 
+            this.btnPrintScore.Location = new System.Drawing.Point(6, 50);
+            this.btnPrintScore.Name = "btnPrintScore";
+            this.btnPrintScore.Size = new System.Drawing.Size(75, 23);
+            this.btnPrintScore.TabIndex = 5;
+            this.btnPrintScore.Text = "列印成績";
+            this.btnPrintScore.UseVisualStyleBackColor = true;
+            this.btnPrintScore.Click += new System.EventHandler(this.printScore_Click);
+            // 
             // btnShowReaderForm
             // 
             this.btnShowReaderForm.Location = new System.Drawing.Point(7, 21);
@@ -205,15 +215,6 @@
             this.btnShowReaderForm.Text = "晶片計時";
             this.btnShowReaderForm.UseVisualStyleBackColor = true;
             this.btnShowReaderForm.Click += new System.EventHandler(this.btnShowReaderForm_Click);
-            // 
-            // btnPrintScore
-            // 
-            this.btnPrintScore.Location = new System.Drawing.Point(6, 50);
-            this.btnPrintScore.Name = "btnPrintScore";
-            this.btnPrintScore.Size = new System.Drawing.Size(75, 23);
-            this.btnPrintScore.TabIndex = 5;
-            this.btnPrintScore.Text = "列印成績";
-            this.btnPrintScore.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 

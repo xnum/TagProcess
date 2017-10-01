@@ -26,25 +26,28 @@ namespace TagProcess.Forms
             textBox_date.Text = DateTime.Now.ToShortDateString();
             textBox_name.Text = res.p["name"];
             textBox_group.Text = res.group.name;
-            textBox_subject.Text = "";
+            textBox_team_name.Text = "";
             textBox_batch_start.Text = res.group.batch_start_time.ToLongTimeString();
+            textBox_overall_rank.Text = res.overall.ToString();
+            textBox_team_rank.Text = res.team.ToString();
+            textBox_team_name.Text = res.p["team_name"];
             foreach (var r in res.recs)
             {
                 switch(r.station_id)
                 {
-                    case "0":
+                    case "1":
                         textBox_tag_start.Text = r.time.ToLongTimeString();
                         break;
-                    case "1":
+                    case "2":
                         textBox_check1.Text = r.time.ToLongTimeString();
                         break;
-                    case "2":
+                    case "3":
                         textBox_check2.Text = r.time.ToLongTimeString();
                         break;
-                    case "3":
+                    case "4":
                         textBox_check3.Text = r.time.ToLongTimeString();
                         break;
-                    case "4":
+                    default:
                         textBox_tag_end.Text = r.time.ToLongTimeString();
                         break;
                 }
@@ -110,9 +113,9 @@ namespace TagProcess.Forms
             args.date = textBox_date.Text;
             args.name = textBox_name.Text;
             args.group = textBox_group.Text;
-            args.subject = textBox_subject.Text;
-            args.total_rank = textBox_total_rank.Text;
-            args.subject_rank = textBox_group_rank.Text;
+            args.subject = textBox_team_name.Text;
+            args.total_rank = textBox_overall_rank.Text;
+            args.subject_rank = textBox_team_rank.Text;
             DateTime end_time = DateTime.Parse(textBox_tag_end.Text);
             DateTime tag_start_time = DateTime.Parse(textBox_tag_start.Text);
             DateTime batch_start_time = DateTime.Parse(textBox_batch_start.Text);
@@ -121,6 +124,12 @@ namespace TagProcess.Forms
             args.tag_run_time = end_time.Subtract(tag_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
 
             ScoreGenerator.exportScoreToPDF(args);
+        }
+
+        private void textBox_race_id_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                button_search_race_Click(null, null);
         }
     }
 }

@@ -48,11 +48,11 @@
             this.textBox_tag_start = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textBox_group_rank = new System.Windows.Forms.TextBox();
+            this.textBox_team_rank = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.textBox_total_rank = new System.Windows.Forms.TextBox();
+            this.textBox_overall_rank = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.textBox_subject = new System.Windows.Forms.TextBox();
+            this.textBox_team_name = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.textBox_group = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -80,6 +80,7 @@
             this.textBox_race_id.Size = new System.Drawing.Size(181, 22);
             this.textBox_race_id.TabIndex = 1;
             this.textBox_race_id.Text = "2001";
+            this.textBox_race_id.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_race_id_KeyDown);
             // 
             // label1
             // 
@@ -238,11 +239,11 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.textBox_group_rank);
+            this.groupBox2.Controls.Add(this.textBox_team_rank);
             this.groupBox2.Controls.Add(this.label14);
-            this.groupBox2.Controls.Add(this.textBox_total_rank);
+            this.groupBox2.Controls.Add(this.textBox_overall_rank);
             this.groupBox2.Controls.Add(this.label13);
-            this.groupBox2.Controls.Add(this.textBox_subject);
+            this.groupBox2.Controls.Add(this.textBox_team_name);
             this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Controls.Add(this.textBox_group);
             this.groupBox2.Controls.Add(this.label11);
@@ -257,12 +258,12 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "選手資料";
             // 
-            // textBox_group_rank
+            // textBox_team_rank
             // 
-            this.textBox_group_rank.Location = new System.Drawing.Point(93, 161);
-            this.textBox_group_rank.Name = "textBox_group_rank";
-            this.textBox_group_rank.Size = new System.Drawing.Size(100, 22);
-            this.textBox_group_rank.TabIndex = 29;
+            this.textBox_team_rank.Location = new System.Drawing.Point(93, 161);
+            this.textBox_team_rank.Name = "textBox_team_rank";
+            this.textBox_team_rank.Size = new System.Drawing.Size(100, 22);
+            this.textBox_team_rank.TabIndex = 29;
             // 
             // label14
             // 
@@ -274,12 +275,12 @@
             this.label14.Text = "分組名次";
             this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBox_total_rank
+            // textBox_overall_rank
             // 
-            this.textBox_total_rank.Location = new System.Drawing.Point(93, 133);
-            this.textBox_total_rank.Name = "textBox_total_rank";
-            this.textBox_total_rank.Size = new System.Drawing.Size(100, 22);
-            this.textBox_total_rank.TabIndex = 27;
+            this.textBox_overall_rank.Location = new System.Drawing.Point(93, 133);
+            this.textBox_overall_rank.Name = "textBox_overall_rank";
+            this.textBox_overall_rank.Size = new System.Drawing.Size(100, 22);
+            this.textBox_overall_rank.TabIndex = 27;
             // 
             // label13
             // 
@@ -291,21 +292,21 @@
             this.label13.Text = "總名次";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBox_subject
+            // textBox_team_name
             // 
-            this.textBox_subject.Location = new System.Drawing.Point(93, 105);
-            this.textBox_subject.Name = "textBox_subject";
-            this.textBox_subject.Size = new System.Drawing.Size(100, 22);
-            this.textBox_subject.TabIndex = 25;
+            this.textBox_team_name.Location = new System.Drawing.Point(93, 105);
+            this.textBox_team_name.Name = "textBox_team_name";
+            this.textBox_team_name.Size = new System.Drawing.Size(100, 22);
+            this.textBox_team_name.TabIndex = 25;
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(58, 110);
+            this.label12.Location = new System.Drawing.Point(36, 110);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(29, 12);
+            this.label12.Size = new System.Drawing.Size(53, 12);
             this.label12.TabIndex = 24;
-            this.label12.Text = "項目";
+            this.label12.Text = "團體名稱";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBox_group
@@ -417,11 +418,11 @@
         private System.Windows.Forms.TextBox textBox_tag_start;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TextBox textBox_group_rank;
+        private System.Windows.Forms.TextBox textBox_team_rank;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox_total_rank;
+        private System.Windows.Forms.TextBox textBox_overall_rank;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox textBox_subject;
+        private System.Windows.Forms.TextBox textBox_team_name;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBox_group;
         private System.Windows.Forms.Label label11;

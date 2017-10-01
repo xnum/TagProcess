@@ -270,6 +270,7 @@ namespace TagProcess
             //excelWorker.RunWorkerAsync(dialog.FileName);
         }
 
+        
         private void excelWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             excelWorker.ReportProgress(0, "開啟中");
