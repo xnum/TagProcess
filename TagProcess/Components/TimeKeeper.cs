@@ -196,5 +196,12 @@ namespace TagProcess
                 return obj;
             return null;
         }
+
+        public Dictionary<string, string> fetchStartRecords()
+        {
+            RestRequest req = new RestRequest("recstart", Method.GET);
+            var res = server.ExecuteHttpRequest(req);
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(res.Content);
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace TagProcess
         private TimeKeeper keeper = TimeKeeper.Instance;
 
         private IpicoClient[] clients = new IpicoClient[3];
+        private Dictionary<string, string> start_time = null;
 
         public ReaderForm()
         {
@@ -120,7 +121,10 @@ namespace TagProcess
                             name = p.name;
                             group = p.group;
                         }
-                        touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString());
+                        string stime = start_time.ContainsKey(got_cmd.data) ? start_time[got_cmd.data] : "查無資料";
+                        if (station_id == 1) stime = "";
+                        touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
+                        
                         System.Media.SystemSounds.Beep.Play(); // 播放音效
                     }
 
@@ -143,6 +147,11 @@ namespace TagProcess
 
             if (refresh_count % 100 == 1) // 每10秒提醒一次 該發送資料了
                 keeper.notifyTimeout();
+
+            if (refresh_count % 300 == 1)
+            {
+                start_time = keeper.fetchStartRecords();
+            }
 
             while(touchedView.Rows.Count >= 15)
                 touchedView.Rows.RemoveAt(0);

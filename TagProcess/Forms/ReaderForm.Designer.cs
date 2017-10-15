@@ -22,6 +22,8 @@
             this.checkedListBox_group = new System.Windows.Forms.CheckedListBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBox_limitSecond = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox_maxRound = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -48,14 +50,13 @@
             this.label10 = new System.Windows.Forms.Label();
             this.textBox_time2 = new System.Windows.Forms.TextBox();
             this.touchedView = new System.Windows.Forms.DataGridView();
+            this.refresh_timer = new System.Windows.Forms.Timer(this.components);
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.refresh_timer = new System.Windows.Forms.Timer(this.components);
-            this.textBox_limitSecond = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -133,6 +134,23 @@
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "檢查點設定";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(8, 94);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(53, 12);
+            this.label11.TabIndex = 10;
+            this.label11.Text = "限制感應";
+            // 
+            // textBox_limitSecond
+            // 
+            this.textBox_limitSecond.Enabled = false;
+            this.textBox_limitSecond.Location = new System.Drawing.Point(64, 88);
+            this.textBox_limitSecond.Name = "textBox_limitSecond";
+            this.textBox_limitSecond.Size = new System.Drawing.Size(63, 22);
+            this.textBox_limitSecond.TabIndex = 9;
             // 
             // label2
             // 
@@ -383,12 +401,18 @@
             this.Column1,
             this.Column2,
             this.Column3,
-            this.Column4});
+            this.Column4,
+            this.Column6});
             this.touchedView.Location = new System.Drawing.Point(385, 12);
             this.touchedView.Name = "touchedView";
             this.touchedView.RowTemplate.Height = 24;
-            this.touchedView.Size = new System.Drawing.Size(510, 349);
+            this.touchedView.Size = new System.Drawing.Size(603, 349);
             this.touchedView.TabIndex = 19;
+            // 
+            // refresh_timer
+            // 
+            this.refresh_timer.Enabled = true;
+            this.refresh_timer.Tick += new System.EventHandler(this.refresh_timer_Tick);
             // 
             // Column5
             // 
@@ -421,33 +445,16 @@
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
             // 
-            // refresh_timer
+            // Column6
             // 
-            this.refresh_timer.Enabled = true;
-            this.refresh_timer.Tick += new System.EventHandler(this.refresh_timer_Tick);
-            // 
-            // textBox_limitSecond
-            // 
-            this.textBox_limitSecond.Enabled = false;
-            this.textBox_limitSecond.Location = new System.Drawing.Point(64, 88);
-            this.textBox_limitSecond.Name = "textBox_limitSecond";
-            this.textBox_limitSecond.Size = new System.Drawing.Size(63, 22);
-            this.textBox_limitSecond.TabIndex = 9;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(8, 94);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(53, 12);
-            this.label11.TabIndex = 10;
-            this.label11.Text = "限制感應";
+            this.Column6.HeaderText = "起點時間";
+            this.Column6.Name = "Column6";
             // 
             // ReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(907, 482);
+            this.ClientSize = new System.Drawing.Size(1000, 377);
             this.Controls.Add(this.touchedView);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -504,14 +511,15 @@
         private System.Windows.Forms.TextBox textBox_time2;
         private System.Windows.Forms.DataGridView touchedView;
         private System.Windows.Forms.Timer refresh_timer;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox_maxRound;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox textBox_limitSecond;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox_maxRound;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox_limitSecond;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
     }
 }
