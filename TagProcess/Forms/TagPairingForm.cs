@@ -37,12 +37,12 @@ namespace TagProcess
                 MessageBox.Show("讀卡機尚未設定PORT");
                 return;
             }
+            start_pair_button.Enabled = false;
+            stop_pair_button.Enabled = true;
             incomingTags = new BlockingCollection<string>(50);
             consumer_timer.Enabled = true;
             getTagWorker.RunWorkerAsync();
             statusLabel.Text = "已開始接收讀卡機資料";
-            start_pair_button.Enabled = false;
-            stop_pair_button.Enabled = true;
         }
 
         /// <summary>

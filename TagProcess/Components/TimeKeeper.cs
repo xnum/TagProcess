@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace TagProcess
 {
@@ -194,6 +195,8 @@ namespace TagProcess
 
             if (obj.code == 200)
                 return obj;
+            else
+                MessageBox.Show(obj.msg);
             return null;
         }
 
