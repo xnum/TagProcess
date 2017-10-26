@@ -421,6 +421,7 @@ namespace TagProcess
 
         public Participant findByTag(string tag)
         {
+            if(participants == null)
             for(int i = 0; i < participants.Count; ++i)
             {
                 if (participants[i].tag_id == tag)

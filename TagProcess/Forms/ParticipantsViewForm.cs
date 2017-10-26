@@ -169,7 +169,7 @@ namespace TagProcess
 
             textBox_tag_id.Text = tag;
             var result = repo.findByTag(tag);
-            if (tag == null)
+            if (result == null)
             {
                 MessageBox.Show("找不到該晶片所屬選手" + tag);
                 return;
