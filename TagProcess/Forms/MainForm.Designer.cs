@@ -42,7 +42,6 @@
             this.tsmiRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiServerUrl = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiLogFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.excelWorker = new System.ComponentModel.BackgroundWorker();
             this.grpbUnused2 = new System.Windows.Forms.GroupBox();
             this.btnPrintScore = new System.Windows.Forms.Button();
             this.btnShowReaderForm = new System.Windows.Forms.Button();
@@ -178,13 +177,6 @@
             this.tsmiLogFile.Text = "Log檔";
             this.tsmiLogFile.Click += new System.EventHandler(this.tsmiLogFile_Click);
             // 
-            // excelWorker
-            // 
-            this.excelWorker.WorkerReportsProgress = true;
-            this.excelWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.excelWorker_DoWork);
-            this.excelWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.excelWorker_ProgressChanged);
-            this.excelWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.excelWorker_RunWorkerCompleted);
-            // 
             // grpbUnused2
             // 
             this.grpbUnused2.Controls.Add(this.btnPrintScore);
@@ -261,8 +253,6 @@
 
         private System.Windows.Forms.ToolStripStatusLabel slblStatus;
         private System.Windows.Forms.ToolStripStatusLabel slblTag;
-
-        private System.ComponentModel.BackgroundWorker excelWorker;
         private System.Windows.Forms.Button btnPrintScore;
     }
 }
