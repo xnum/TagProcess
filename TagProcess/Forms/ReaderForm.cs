@@ -228,25 +228,28 @@ namespace TagProcess
             station_id = station_n;
 
             int max_round = -1;
-            try
-            {
-                max_round = Int32.Parse(textBox_maxRound.Text);
-            }
-            catch
-            {
-                MessageBox.Show("最大圈數輸入錯誤");
-                return false;
-            }
-
             int limit_sec = -1;
-            try
+            if (station_n == 0)
             {
-                limit_sec = Int32.Parse(textBox_limitSecond.Text);
-            }
-            catch
-            {
-                MessageBox.Show("限制感應秒數輸入錯誤");
-                return false;
+                try
+                {
+                    max_round = Int32.Parse(textBox_maxRound.Text);
+                }
+                catch
+                {
+                    MessageBox.Show("最大圈數輸入錯誤");
+                    return false;
+                }
+
+                try
+                {
+                    limit_sec = Int32.Parse(textBox_limitSecond.Text);
+                }
+                catch
+                {
+                    MessageBox.Show("限制感應秒數輸入錯誤");
+                    return false;
+                }
             }
 
             return keeper.setStartCompetition(station_n, max_round, groups_n, limit_sec);
