@@ -19,7 +19,7 @@ namespace TagProcess.Components
             public string group;
             public string team_name;
             public string overall_rank;
-            public string team_tank;
+            public string team_rank;
             public DateTime tag_start_time;
             public DateTime tag_end_time;
             public DateTime batch_start_time;
@@ -43,8 +43,8 @@ namespace TagProcess.Components
                 group = res.group.name;
                 team_name = res.p["team_name"];
                 overall_rank = res.overall.ToString();
-                team_tank = res.team.ToString();
-                tag_end_time = new DateTime(1999, 12, 31);
+                team_rank = res.team.ToString();
+                tag_end_time = new DateTime(2055, 12, 31);
                 tag_start_time = new DateTime(1999, 12, 31);
                 batch_start_time = res.group.batch_start_time;
 
@@ -121,9 +121,9 @@ namespace TagProcess.Components
             ct.SetSimpleColumn(myText, 300, 300, 780, 375, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            if (args.team_tank != "0")
+            if (args.team_rank != "0")
             { 
-                myText = new Phrase(args.team_tank, textFont);
+                myText = new Phrase(args.team_rank, textFont);
                 ct.SetSimpleColumn(myText, 300, 300, 780, 325, 15, Element.ALIGN_LEFT);
                 ct.Go();
             }
@@ -133,7 +133,7 @@ namespace TagProcess.Components
             //Process.Start("score.pdf");
             Thread t = new Thread(Print);
             t.IsBackground = true;
-            t.Start(args.name + "score.pdf");
+            //t.Start(args.name + "score.pdf");
             //Print(args.name + "score.pdf");
         }
 

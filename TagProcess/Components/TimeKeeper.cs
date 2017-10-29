@@ -170,7 +170,9 @@ namespace TagProcess
         {
             public int id;
             public string name;
-            public int start_batch;
+            public string reg;
+            public string type;
+
             public DateTime batch_start_time;
         }
 

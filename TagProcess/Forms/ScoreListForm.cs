@@ -37,23 +37,39 @@ namespace TagProcess.Forms
             if (result == null)
                 return false;
 
-            dgv.Rows.Insert(0, textBox_race_id.Text, result.p["name"], result.group.name, result.overall.ToString(), result.team.ToString(), "0", result.p["team_name"], "未檢查");
+            ScoreArguments args = new ScoreArguments(result);
+
+            dgv.Rows.Insert(0,
+                "未檢查",
+                textBox_race_id.Text, 
+                args.name,
+                args.team_name,
+                result.group.reg,
+                result.group.type,
+                args.overall_rank,
+                args.team_rank,
+                args.batch_run_time, 
+                args.tag_run_time,
+                args.batch_start_time,
+                args.tag_start_time,
+                args.tag_end_time
+            );
 
             if (!result.checkData())
             {
-                dgv.Rows[0].Cells[7].Value = "異常";
+                dgv.Rows[0].Cells[0].Value = "異常";
                 return false;
             }
 
-            dgv.Rows[0].Cells[7].Value = "正常";
+            dgv.Rows[0].Cells[0].Value = "正常";
 
-            ScoreArguments args = new ScoreArguments(result);
+            
 
-            dgv.Rows[0].Cells[7].Value = "送印中";
+            dgv.Rows[0].Cells[0].Value = "送印中";
 
             ScoreGenerator.exportScoreToPDF(args);
 
-            dgv.Rows[0].Cells[7].Value = "已列印";
+            dgv.Rows[0].Cells[0].Value = "已列印";
 
             return true;
         }

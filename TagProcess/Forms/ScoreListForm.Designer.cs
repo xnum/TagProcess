@@ -32,17 +32,22 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox_race_id = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox_tag_id = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -51,18 +56,23 @@
             // 
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column9,
             this.Column1,
             this.Column2,
+            this.Column7,
             this.Column3,
+            this.Column8,
             this.Column4,
             this.Column5,
+            this.Column10,
             this.Column6,
-            this.Column7,
-            this.Column9});
+            this.Column11,
+            this.Column12,
+            this.Column13});
             this.dgv.Location = new System.Drawing.Point(12, 115);
             this.dgv.Name = "dgv";
             this.dgv.RowTemplate.Height = 24;
-            this.dgv.Size = new System.Drawing.Size(955, 339);
+            this.dgv.Size = new System.Drawing.Size(1134, 339);
             this.dgv.TabIndex = 0;
             this.dgv.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -98,46 +108,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "參賽編號";
             // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "參賽編號";
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "姓名";
-            this.Column2.Name = "Column2";
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "組別";
-            this.Column3.Name = "Column3";
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "總名次";
-            this.Column4.Name = "Column4";
-            // 
-            // Column5
-            // 
-            this.Column5.HeaderText = "組別名次";
-            this.Column5.Name = "Column5";
-            // 
-            // Column6
-            // 
-            this.Column6.HeaderText = "個人成績";
-            this.Column6.Name = "Column6";
-            // 
-            // Column7
-            // 
-            this.Column7.HeaderText = "報名團體";
-            this.Column7.Name = "Column7";
-            // 
-            // Column9
-            // 
-            this.Column9.HeaderText = "狀態";
-            this.Column9.Name = "Column9";
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(274, 48);
@@ -164,11 +134,95 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "晶片感應";
             // 
+            // Column9
+            // 
+            this.Column9.HeaderText = "狀態";
+            this.Column9.Name = "Column9";
+            // 
+            // Column1
+            // 
+            this.Column1.FillWeight = 80F;
+            this.Column1.HeaderText = "參賽編號";
+            this.Column1.MaxInputLength = 5;
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 80;
+            // 
+            // Column2
+            // 
+            this.Column2.FillWeight = 80F;
+            this.Column2.HeaderText = "姓名";
+            this.Column2.Name = "Column2";
+            this.Column2.Width = 80;
+            // 
+            // Column7
+            // 
+            this.Column7.HeaderText = "團隊名稱";
+            this.Column7.Name = "Column7";
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "參賽組別";
+            this.Column3.Name = "Column3";
+            // 
+            // Column8
+            // 
+            this.Column8.HeaderText = "組別種類";
+            this.Column8.Name = "Column8";
+            // 
+            // Column4
+            // 
+            this.Column4.FillWeight = 70F;
+            this.Column4.HeaderText = "總名次";
+            this.Column4.Name = "Column4";
+            this.Column4.Width = 70;
+            // 
+            // Column5
+            // 
+            this.Column5.FillWeight = 80F;
+            this.Column5.HeaderText = "組別名次";
+            this.Column5.Name = "Column5";
+            this.Column5.Width = 80;
+            // 
+            // Column10
+            // 
+            this.Column10.FillWeight = 120F;
+            this.Column10.HeaderText = "大會成績";
+            this.Column10.Name = "Column10";
+            this.Column10.Width = 120;
+            // 
+            // Column6
+            // 
+            this.Column6.FillWeight = 120F;
+            this.Column6.HeaderText = "個人成績";
+            this.Column6.Name = "Column6";
+            this.Column6.Width = 120;
+            // 
+            // Column11
+            // 
+            this.Column11.FillWeight = 170F;
+            this.Column11.HeaderText = "大會起跑時間";
+            this.Column11.Name = "Column11";
+            this.Column11.Width = 170;
+            // 
+            // Column12
+            // 
+            this.Column12.FillWeight = 170F;
+            this.Column12.HeaderText = "個人起跑時間";
+            this.Column12.Name = "Column12";
+            this.Column12.Width = 170;
+            // 
+            // Column13
+            // 
+            this.Column13.FillWeight = 170F;
+            this.Column13.HeaderText = "終點時間";
+            this.Column13.Name = "Column13";
+            this.Column13.Width = 170;
+            // 
             // ScoreListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(979, 466);
+            this.ClientSize = new System.Drawing.Size(1158, 466);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgv);
             this.Name = "ScoreListForm";
@@ -186,16 +240,21 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBox_race_id;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
         private System.Windows.Forms.TextBox textBox_tag_id;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column11;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column12;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column13;
     }
 }
