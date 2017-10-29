@@ -6,6 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Management;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace TagProcess.Components
 {
@@ -130,11 +131,15 @@ namespace TagProcess.Components
             doc.Close();
 
             //Process.Start("score.pdf");
-            Print(args.name + "score.pdf");
+            Thread t = new Thread(Print);
+            t.IsBackground = true;
+            t.Start(args.name + "score.pdf");
+            //Print(args.name + "score.pdf");
         }
 
-        public static void Print(string filePath)
+        public static void Print(object param)
         {
+            string filePath = (string)param;
             //var Status = PrintJobStatus.Printing;
             var Message = string.Empty;
             try
