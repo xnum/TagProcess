@@ -45,7 +45,7 @@ namespace TagProcess.Components
                 team_tank = res.team.ToString();
                 tag_end_time = new DateTime(1999, 12, 31);
                 tag_start_time = new DateTime(1999, 12, 31);
-                DateTime batch_start_time = res.group.batch_start_time;
+                batch_start_time = res.group.batch_start_time;
 
                 foreach (var r in res.recs)
                 {
