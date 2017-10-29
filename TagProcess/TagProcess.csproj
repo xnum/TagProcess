@@ -89,6 +89,12 @@
     <Compile Include="Components\MailLabelGenerator.cs" />
     <Compile Include="Components\ParticipantsRepository.cs" />
     <Compile Include="Components\FileLogger.cs" />
+    <Compile Include="Forms\ScoreListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ScoreListForm.Designer.cs">
+      <DependentUpon>ScoreListForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,6 +150,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ParticipantsViewForm.resx">
       <DependentUpon>ParticipantsViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ScoreListForm.resx">
+      <DependentUpon>ScoreListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ScoreReviewForm.resx">
       <DependentUpon>ScoreReviewForm.cs</DependentUpon>

@@ -13,14 +13,61 @@ namespace TagProcess.Components
     {
         public class ScoreArguments
         {
-            public string date;
+            public string today;
             public string name;
             public string group;
-            public string subject;
-            public string total_rank;
-            public string subject_rank;
+            public string team_name;
+            public string overall_rank;
+            public string team_tank;
+            public DateTime tag_start_time;
+            public DateTime tag_end_time;
+            public DateTime batch_start_time;
+
             public string batch_run_time;
             public string tag_run_time;
+
+            public ScoreArguments()
+            {
+
+            }
+
+            /// <summary>
+            /// 傳入參數前應該檢查是否資料正確
+            /// </summary>
+            /// <param name="res"></param>
+            public ScoreArguments(TimeKeeper.RecordResult res)
+            {
+                today = DateTime.Now.ToShortDateString();
+                name = res.p["name"];
+                group = res.group.name;
+                team_name = res.p["team_name"];
+                overall_rank = res.overall.ToString();
+                team_tank = res.team.ToString();
+                tag_end_time = new DateTime(1999, 12, 31);
+                tag_start_time = new DateTime(1999, 12, 31);
+                DateTime batch_start_time = res.group.batch_start_time;
+
+                foreach (var r in res.recs)
+                {
+                    switch (r.station_id)
+                    {
+                        case "1":
+                            tag_start_time = r.time;
+                            break;
+                        case "5":
+                            tag_end_time = r.time;
+                            break;
+                    }
+                }
+
+                CountRunTime();
+            }
+
+            public void CountRunTime()
+            {
+                batch_run_time = tag_end_time.Subtract(batch_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+                tag_run_time = tag_end_time.Subtract(tag_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+            }
         }
 
         public static void exportScoreToPDF(ScoreArguments args)
@@ -49,7 +96,7 @@ namespace TagProcess.Components
             ct.SetSimpleColumn(myText, 300, 300, 780, 685, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase(args.date, textFont);
+            myText = new Phrase(args.today, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 635, 15, Element.ALIGN_LEFT);
             ct.Go();
 
@@ -57,7 +104,7 @@ namespace TagProcess.Components
             ct.SetSimpleColumn(myText, 300, 300, 780, 585, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase(args.subject, textFont);
+            myText = new Phrase(args.team_name, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 535, 15, Element.ALIGN_LEFT);
             ct.Go();
 
@@ -69,13 +116,13 @@ namespace TagProcess.Components
             ct.SetSimpleColumn(myText, 300, 300, 780, 425, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase(args.total_rank, textFont);
+            myText = new Phrase(args.overall_rank, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 375, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            if (args.subject_rank != "0")
+            if (args.team_tank != "0")
             { 
-                myText = new Phrase(args.subject_rank, textFont);
+                myText = new Phrase(args.team_tank, textFont);
                 ct.SetSimpleColumn(myText, 300, 300, 780, 325, 15, Element.ALIGN_LEFT);
                 ct.Go();
             }

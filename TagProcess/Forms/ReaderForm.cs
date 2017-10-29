@@ -215,7 +215,7 @@ namespace TagProcess
             foreach (string i in checkedListBox_group.CheckedItems)
             {
                 foreach (var j in g)
-                    if (j.name == i)
+                    if (j.reg == i)
                         groups_n.Add(j.id);
             }
 

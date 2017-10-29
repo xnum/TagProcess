@@ -45,6 +45,7 @@
             this.grpbUnused2 = new System.Windows.Forms.GroupBox();
             this.btnPrintScore = new System.Windows.Forms.Button();
             this.btnShowReaderForm = new System.Windows.Forms.Button();
+            this.btnScoreReview = new System.Windows.Forms.Button();
             this.grpbUnused1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -111,14 +112,14 @@
             this.slblTag});
             this.statusStrip1.Location = new System.Drawing.Point(0, 121);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(306, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(428, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // slblStatus
             // 
             this.slblStatus.Name = "slblStatus";
-            this.slblStatus.Size = new System.Drawing.Size(291, 17);
+            this.slblStatus.Size = new System.Drawing.Size(413, 17);
             this.slblStatus.Spring = true;
             this.slblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -135,7 +136,7 @@
             this.tsmiLogFile});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(306, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(428, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -179,11 +180,12 @@
             // 
             // grpbUnused2
             // 
+            this.grpbUnused2.Controls.Add(this.btnScoreReview);
             this.grpbUnused2.Controls.Add(this.btnPrintScore);
             this.grpbUnused2.Controls.Add(this.btnShowReaderForm);
             this.grpbUnused2.Location = new System.Drawing.Point(196, 28);
             this.grpbUnused2.Name = "grpbUnused2";
-            this.grpbUnused2.Size = new System.Drawing.Size(97, 83);
+            this.grpbUnused2.Size = new System.Drawing.Size(174, 83);
             this.grpbUnused2.TabIndex = 4;
             this.grpbUnused2.TabStop = false;
             this.grpbUnused2.Text = "現場作業";
@@ -208,11 +210,21 @@
             this.btnShowReaderForm.UseVisualStyleBackColor = true;
             this.btnShowReaderForm.Click += new System.EventHandler(this.btnShowReaderForm_Click);
             // 
+            // btnScoreReview
+            // 
+            this.btnScoreReview.Location = new System.Drawing.Point(89, 20);
+            this.btnScoreReview.Name = "btnScoreReview";
+            this.btnScoreReview.Size = new System.Drawing.Size(75, 23);
+            this.btnScoreReview.TabIndex = 6;
+            this.btnScoreReview.Text = "成績修正";
+            this.btnScoreReview.UseVisualStyleBackColor = true;
+            this.btnScoreReview.Click += new System.EventHandler(this.btnScoreReview_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(306, 143);
+            this.ClientSize = new System.Drawing.Size(428, 143);
             this.Controls.Add(this.grpbUnused2);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -254,6 +266,7 @@
         private System.Windows.Forms.ToolStripStatusLabel slblStatus;
         private System.Windows.Forms.ToolStripStatusLabel slblTag;
         private System.Windows.Forms.Button btnPrintScore;
+        private System.Windows.Forms.Button btnScoreReview;
     }
 }
 

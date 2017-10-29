@@ -131,6 +131,7 @@
             // 
             // textBox_batch_start
             // 
+            this.textBox_batch_start.Enabled = false;
             this.textBox_batch_start.Location = new System.Drawing.Point(94, 21);
             this.textBox_batch_start.Name = "textBox_batch_start";
             this.textBox_batch_start.Size = new System.Drawing.Size(100, 22);
@@ -260,6 +261,7 @@
             // 
             // textBox_team_rank
             // 
+            this.textBox_team_rank.Enabled = false;
             this.textBox_team_rank.Location = new System.Drawing.Point(93, 161);
             this.textBox_team_rank.Name = "textBox_team_rank";
             this.textBox_team_rank.Size = new System.Drawing.Size(100, 22);
@@ -277,6 +279,7 @@
             // 
             // textBox_overall_rank
             // 
+            this.textBox_overall_rank.Enabled = false;
             this.textBox_overall_rank.Location = new System.Drawing.Point(93, 133);
             this.textBox_overall_rank.Name = "textBox_overall_rank";
             this.textBox_overall_rank.Size = new System.Drawing.Size(100, 22);
@@ -311,6 +314,7 @@
             // 
             // textBox_group
             // 
+            this.textBox_group.Enabled = false;
             this.textBox_group.Location = new System.Drawing.Point(93, 77);
             this.textBox_group.Name = "textBox_group";
             this.textBox_group.Size = new System.Drawing.Size(100, 22);
@@ -345,6 +349,7 @@
             // 
             // textBox_date
             // 
+            this.textBox_date.Enabled = false;
             this.textBox_date.Location = new System.Drawing.Point(93, 21);
             this.textBox_date.Name = "textBox_date";
             this.textBox_date.Size = new System.Drawing.Size(100, 22);

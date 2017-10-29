@@ -62,7 +62,6 @@ namespace TagProcess.Forms
 
             if (result == null)
             {
-                MessageBox.Show("找不到該編號");
                 return;
             }
 
@@ -99,7 +98,6 @@ namespace TagProcess.Forms
             var result = keeper.fetchResultByTagOrRace(tag, null);
             if (result == null)
             {
-                MessageBox.Show("找不到該晶片所屬選手" + tag);
                 return;
             }
 
@@ -110,18 +108,20 @@ namespace TagProcess.Forms
         {
             ScoreGenerator.ScoreArguments args = new ScoreGenerator.ScoreArguments();
 
-            args.date = textBox_date.Text;
+            args.today = textBox_date.Text;
             args.name = textBox_name.Text;
             args.group = textBox_group.Text;
-            args.subject = textBox_team_name.Text;
-            args.total_rank = textBox_overall_rank.Text;
-            args.subject_rank = textBox_team_rank.Text;
+            args.team_name = textBox_team_name.Text;
+            args.overall_rank = textBox_overall_rank.Text;
+            args.team_tank = textBox_team_rank.Text;
             DateTime end_time = DateTime.Parse(textBox_tag_end.Text);
             DateTime tag_start_time = DateTime.Parse(textBox_tag_start.Text);
             DateTime batch_start_time = DateTime.Parse(textBox_batch_start.Text);
 
             args.batch_run_time = end_time.Subtract(batch_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
             args.tag_run_time = end_time.Subtract(tag_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+
+            // TODO write back to db
 
             ScoreGenerator.exportScoreToPDF(args);
         }

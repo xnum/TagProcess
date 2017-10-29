@@ -312,6 +312,13 @@ namespace TagProcess
         private void printScore_Click(object sender, EventArgs e)
         {
             //Components.ScoreGenerator.exportScoreToPDF();
+            //var f = new ScoreReviewForm();
+            var f = new ScoreListForm();
+            f.ShowDialog();
+        }
+
+        private void btnScoreReview_Click(object sender, EventArgs e)
+        {
             var f = new ScoreReviewForm();
             f.ShowDialog();
         }
