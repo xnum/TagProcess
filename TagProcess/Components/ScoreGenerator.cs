@@ -7,69 +7,100 @@ using System.Diagnostics;
 using System.Management;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace TagProcess.Components
 {
+    public class ScoreArguments
+    {
+        public string today;
+        public string name;
+        public string group;
+        public string team_name;
+        public string overall_rank;
+        public string team_rank;
+        public DateTime tag_start_time;
+        public DateTime tag_end_time;
+        public DateTime batch_start_time;
+
+        public string batch_run_time;
+        public string tag_run_time;
+
+        public bool Check()
+        {
+            // 隨便選一個 只要回傳false就好
+            if (name == "")
+                return DialogResult.Ignore == MessageBox.Show("姓名為空");
+
+            if(group == "")
+                return DialogResult.Ignore == MessageBox.Show("組別為空");
+
+            if(team_rank == "")
+                return DialogResult.Ignore == MessageBox.Show("組別名次為空");
+
+            if(tag_start_time.CompareTo(new DateTime(2017, 10, 28)) <= 0 || tag_start_time.CompareTo(DateTime.Now) >= 0)
+                return DialogResult.Ignore == MessageBox.Show("晶片開始時間有誤"+tag_start_time);
+
+            if (tag_end_time.CompareTo(new DateTime(2017, 10, 28)) <= 0 || tag_end_time.CompareTo(DateTime.Now) >= 0)
+                return DialogResult.Ignore == MessageBox.Show("晶片結束時間有誤" + tag_end_time);
+
+            if (batch_start_time.CompareTo(new DateTime(2017, 10, 28)) <= 0 || batch_start_time.CompareTo(DateTime.Now) >= 0)
+                return DialogResult.Ignore == MessageBox.Show("大會開始時間有誤" + batch_start_time);
+
+            if (tag_end_time.CompareTo(tag_start_time) <= 0)
+                return DialogResult.Ignore == MessageBox.Show("晶片結束時間"+tag_end_time+"小於晶片開始時間" + tag_start_time);
+
+            if (tag_end_time.CompareTo(batch_start_time) <= 0)
+                return DialogResult.Ignore == MessageBox.Show("晶片結束時間" + tag_end_time + "小於大會開始時間" + batch_start_time);
+
+            return true;
+        }
+
+        public ScoreArguments()
+        {
+
+        }
+
+        /// <summary>
+        /// 傳入參數前應該檢查是否資料正確
+        /// </summary>
+        /// <param name="res"></param>
+        public ScoreArguments(TimeKeeper.RecordResult res)
+        {
+            today = DateTime.Now.ToShortDateString();
+            name = res.p["name"];
+            group = res.group.name;
+            team_name = res.p["team_name"];
+            overall_rank = res.overall.ToString();
+            team_rank = res.team.ToString();
+            tag_end_time = new DateTime(2055, 12, 31);
+            tag_start_time = new DateTime(1999, 12, 31);
+            batch_start_time = res.group.batch_start_time;
+
+            foreach (var r in res.recs)
+            {
+                switch (r.station_id)
+                {
+                    case "1":
+                        tag_start_time = r.time;
+                        break;
+                    case "5":
+                        tag_end_time = r.time;
+                        break;
+                }
+            }
+
+            CountRunTime();
+        }
+
+        public void CountRunTime()
+        {
+            batch_run_time = tag_end_time.Subtract(batch_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+            tag_run_time = tag_end_time.Subtract(tag_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+        }
+    }
     public class ScoreGenerator
     {
-        public class ScoreArguments
-        {
-            public string today;
-            public string name;
-            public string group;
-            public string team_name;
-            public string overall_rank;
-            public string team_rank;
-            public DateTime tag_start_time;
-            public DateTime tag_end_time;
-            public DateTime batch_start_time;
-
-            public string batch_run_time;
-            public string tag_run_time;
-
-            public ScoreArguments()
-            {
-
-            }
-
-            /// <summary>
-            /// 傳入參數前應該檢查是否資料正確
-            /// </summary>
-            /// <param name="res"></param>
-            public ScoreArguments(TimeKeeper.RecordResult res)
-            {
-                today = DateTime.Now.ToShortDateString();
-                name = res.p["name"];
-                group = res.group.name;
-                team_name = res.p["team_name"];
-                overall_rank = res.overall.ToString();
-                team_rank = res.team.ToString();
-                tag_end_time = new DateTime(2055, 12, 31);
-                tag_start_time = new DateTime(1999, 12, 31);
-                batch_start_time = res.group.batch_start_time;
-
-                foreach (var r in res.recs)
-                {
-                    switch (r.station_id)
-                    {
-                        case "1":
-                            tag_start_time = r.time;
-                            break;
-                        case "5":
-                            tag_end_time = r.time;
-                            break;
-                    }
-                }
-
-                CountRunTime();
-            }
-
-            public void CountRunTime()
-            {
-                batch_run_time = tag_end_time.Subtract(batch_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
-                tag_run_time = tag_end_time.Subtract(tag_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
-            }
-        }
 
         public static void exportScoreToPDF(ScoreArguments args)
         {

@@ -106,7 +106,7 @@ namespace TagProcess.Forms
 
         private void print_button_Click(object sender, EventArgs e)
         {
-            ScoreGenerator.ScoreArguments args = new ScoreGenerator.ScoreArguments();
+            ScoreArguments args = new ScoreArguments();
 
             args.today = textBox_date.Text;
             args.name = textBox_name.Text;
@@ -118,9 +118,12 @@ namespace TagProcess.Forms
             DateTime tag_start_time = DateTime.Parse(textBox_tag_start.Text);
             DateTime batch_start_time = DateTime.Parse(textBox_batch_start.Text);
 
-            args.batch_run_time = end_time.Subtract(batch_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
-            args.tag_run_time = end_time.Subtract(tag_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+            if(!args.Check())
+            {
+                return;
+            }
 
+            args.CountRunTime();
             // TODO write back to db
 
             ScoreGenerator.exportScoreToPDF(args);
