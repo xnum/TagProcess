@@ -8,6 +8,7 @@ using System.Management;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
+using RawPrint;
 
 namespace TagProcess.Components
 {
@@ -102,7 +103,7 @@ namespace TagProcess.Components
     public class ScoreGenerator
     {
 
-        public static void exportScoreToPDF(ScoreArguments args)
+        public static void exportScoreToPDF(ScoreArguments args, string printer)
         {
             var doc = new Document(PageSize.A4, 3, 3, 3, 3);
             var writer = PdfWriter.GetInstance(doc, new FileStream(args.name + "score.pdf", FileMode.Create));
@@ -162,10 +163,15 @@ namespace TagProcess.Components
             doc.Close();
 
             //Process.Start("score.pdf");
-            Thread t = new Thread(Print);
-            t.IsBackground = true;
-            t.Start(args.name + "score.pdf");
+            //Thread t = new Thread(Print);
+            //t.IsBackground = true;
+            //t.Start(args.name + "score.pdf");
             //Print(args.name + "score.pdf");
+            string filename = args.name + "score.pdf";
+            string pwd = Directory.GetCurrentDirectory();
+            IPrinter p = new Printer();
+            p.PrintRawFile(printer, pwd+"\\"+filename, filename);
+            //PDFPrint.SendFileToPrinter();
         }
 
         public static void Print(object param)

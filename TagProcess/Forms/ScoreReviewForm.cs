@@ -126,7 +126,7 @@ namespace TagProcess.Forms
             args.CountRunTime();
             // TODO write back to db
 
-            ScoreGenerator.exportScoreToPDF(args);
+            //ScoreGenerator.exportScoreToPDF(args);
         }
 
         private void textBox_race_id_KeyDown(object sender, KeyEventArgs e)

@@ -20,6 +20,10 @@ namespace TagProcess.Forms
         public ScoreListForm()
         {
             InitializeComponent();
+            foreach(string printerName in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
+            {
+                cb_printer.Items.Add(printerName);
+            }
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -67,7 +71,7 @@ namespace TagProcess.Forms
 
             dgv.Rows[0].Cells[0].Value = "送印中";
 
-            ScoreGenerator.exportScoreToPDF(args);
+            ScoreGenerator.exportScoreToPDF(args, (string)cb_printer.SelectedItem);
 
             dgv.Rows[0].Cells[0].Value = "已列印";
 
