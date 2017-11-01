@@ -171,6 +171,9 @@ namespace TagProcess.Components
         public static void Print(object param)
         {
             string filePath = (string)param;
+            PDFPrint.SendFileToPrinter(filePath);
+            return;
+            
             //var Status = PrintJobStatus.Printing;
             var Message = string.Empty;
             try
