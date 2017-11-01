@@ -133,7 +133,7 @@ namespace TagProcess.Components
             //Process.Start("score.pdf");
             Thread t = new Thread(Print);
             t.IsBackground = true;
-            //t.Start(args.name + "score.pdf");
+            t.Start(args.name + "score.pdf");
             //Print(args.name + "score.pdf");
         }
 
