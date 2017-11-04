@@ -114,9 +114,9 @@ namespace TagProcess.Forms
             args.team_name = textBox_team_name.Text;
             args.overall_rank = textBox_overall_rank.Text;
             args.team_rank = textBox_team_rank.Text;
-            DateTime end_time = DateTime.Parse(textBox_tag_end.Text);
-            DateTime tag_start_time = DateTime.Parse(textBox_tag_start.Text);
-            DateTime batch_start_time = DateTime.Parse(textBox_batch_start.Text);
+            args.tag_end_time = DateTime.Parse(textBox_tag_end.Text);
+            args.tag_start_time = DateTime.Parse(textBox_tag_start.Text);
+            args.batch_start_time = DateTime.Parse(textBox_batch_start.Text);
 
             if(!args.Check())
             {
@@ -125,7 +125,8 @@ namespace TagProcess.Forms
 
             args.CountRunTime();
             // TODO write back to db
-
+            ScoreGenerator sg = new ScoreGenerator();
+            sg.exportScoreToPDF(args, "");
             //ScoreGenerator.exportScoreToPDF(args);
         }
 

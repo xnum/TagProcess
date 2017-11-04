@@ -126,8 +126,10 @@ namespace TagProcess.Components
             this.args = args;
 
             PrintDocument pd = new PrintDocument();
+            PrintController pc = new System.Drawing.Printing.StandardPrintController();
             pd.PrinterSettings.PrinterName = printer;
             pd.PrintPage += printPage;
+            pd.PrintController = pc;
             pd.Print();
         }
 
