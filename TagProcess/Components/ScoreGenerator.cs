@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 using RawPrint;
+using System.Drawing.Printing;
+using System.Drawing;
 
 namespace TagProcess.Components
 {
@@ -33,14 +35,14 @@ namespace TagProcess.Components
             if (name == "")
                 return DialogResult.Ignore == MessageBox.Show("姓名為空");
 
-            if(group == "")
+            if (group == "")
                 return DialogResult.Ignore == MessageBox.Show("組別為空");
 
-            if(team_rank == "")
+            if (team_rank == "")
                 return DialogResult.Ignore == MessageBox.Show("組別名次為空");
 
-            if(tag_start_time.CompareTo(new DateTime(2017, 10, 28)) <= 0 || tag_start_time.CompareTo(DateTime.Now) >= 0)
-                return DialogResult.Ignore == MessageBox.Show("晶片開始時間有誤"+tag_start_time);
+            if (tag_start_time.CompareTo(new DateTime(2017, 10, 28)) <= 0 || tag_start_time.CompareTo(DateTime.Now) >= 0)
+                return DialogResult.Ignore == MessageBox.Show("晶片開始時間有誤" + tag_start_time);
 
             if (tag_end_time.CompareTo(new DateTime(2017, 10, 28)) <= 0 || tag_end_time.CompareTo(DateTime.Now) >= 0)
                 return DialogResult.Ignore == MessageBox.Show("晶片結束時間有誤" + tag_end_time);
@@ -49,7 +51,7 @@ namespace TagProcess.Components
                 return DialogResult.Ignore == MessageBox.Show("大會開始時間有誤" + batch_start_time);
 
             if (tag_end_time.CompareTo(tag_start_time) <= 0)
-                return DialogResult.Ignore == MessageBox.Show("晶片結束時間"+tag_end_time+"小於晶片開始時間" + tag_start_time);
+                return DialogResult.Ignore == MessageBox.Show("晶片結束時間" + tag_end_time + "小於晶片開始時間" + tag_start_time);
 
             if (tag_end_time.CompareTo(batch_start_time) <= 0)
                 return DialogResult.Ignore == MessageBox.Show("晶片結束時間" + tag_end_time + "小於大會開始時間" + batch_start_time);
@@ -102,21 +104,47 @@ namespace TagProcess.Components
     }
     public class ScoreGenerator
     {
+        private System.Drawing.Font font;
+        private ScoreArguments args;
 
-        public static void exportScoreToPDF(ScoreArguments args, string printer)
+        public void printPage(object sender, PrintPageEventArgs e)
+        {
+            e.Graphics.DrawString(args.name, font, Brushes.Black, 400, 150, new StringFormat());
+            e.Graphics.DrawString(args.today, font, Brushes.Black, 400, 250, new StringFormat());
+            e.Graphics.DrawString(args.group, font, Brushes.Black, 400, 350, new StringFormat());
+            e.Graphics.DrawString(args.team_name, font, Brushes.Black, 400, 450, new StringFormat());
+            e.Graphics.DrawString(args.batch_run_time, font, Brushes.Black, 400, 550, new StringFormat());
+            e.Graphics.DrawString(args.tag_run_time, font, Brushes.Black, 400, 650, new StringFormat());
+            e.Graphics.DrawString(args.overall_rank, font, Brushes.Black, 400, 750, new StringFormat());
+            e.Graphics.DrawString(args.team_rank, font, Brushes.Black, 400, 850, new StringFormat());
+        }
+
+        public void exportScoreToPDF(ScoreArguments args, string printer)
+        {
+            font = new System.Drawing.Font("KAIU", 16);
+
+            this.args = args;
+
+            PrintDocument pd = new PrintDocument();
+            pd.PrinterSettings.PrinterName = printer;
+            pd.PrintPage += printPage;
+            pd.Print();
+        }
+
+        public static void exportScoreToPDFB(ScoreArguments args, string printer)
         {
             var doc = new Document(PageSize.A4, 3, 3, 3, 3);
             var writer = PdfWriter.GetInstance(doc, new FileStream(args.name + "score.pdf", FileMode.Create));
             string chFontPath = "c:\\windows\\fonts\\KAIU.TTF";
             BaseFont chBaseFont = BaseFont.CreateFont(chFontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            Font textFont = new Font(chBaseFont, 16);
+            iTextSharp.text.Font textFont = new iTextSharp.text.Font(chBaseFont, 16);
 
             doc.Open();
 
             try
             {
-                Image bg = Image.GetInstance("a.jpg");
-                bg.Alignment = Image.UNDERLYING;
+                iTextSharp.text.Image bg = iTextSharp.text.Image.GetInstance("a.jpg");
+                bg.Alignment = iTextSharp.text.Image.UNDERLYING;
                 bg.ScaleToFit(doc.PageSize.Width - 6, doc.PageSize.Height - 6);
                 bg.SetAbsolutePosition(3, 3);
                 doc.Add(bg);
@@ -154,7 +182,7 @@ namespace TagProcess.Components
             ct.Go();
 
             if (args.team_rank != "0")
-            { 
+            {
                 myText = new Phrase(args.team_rank, textFont);
                 ct.SetSimpleColumn(myText, 300, 300, 780, 325, 15, Element.ALIGN_LEFT);
                 ct.Go();
@@ -170,8 +198,29 @@ namespace TagProcess.Components
             string filename = args.name + "score.pdf";
             string pwd = Directory.GetCurrentDirectory();
             IPrinter p = new Printer();
-            p.PrintRawFile(printer, pwd+"\\"+filename, filename);
+            GSPrint(printer, pwd + "\\" + filename);
+            //p.PrintRawFile(printer, pwd + "\\" + filename, filename);
             //PDFPrint.SendFileToPrinter();
+        }
+
+        public static void GSPrint(string printer, string filename)
+        {
+            const string gsPrintExecutable = @"D:\Ghostgum\gsview\gsprint.exe";
+            const string gsExecutable = @"C:\Program Files\gs\gs9.22\bin\gswin64c.exe";
+
+            string processArgs = string.Format("-ghostscript \"{0}\" -copies=1 -all -printer \"{1}\" \"{2}\"", gsExecutable, printer, filename);
+
+            var gsProcessInfo = new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = gsPrintExecutable,
+                Arguments = processArgs
+            };
+
+            using (var gsProcess = Process.Start(gsProcessInfo))
+            {
+                gsProcess.WaitForExit();
+            }
         }
 
         public static void Print(object param)
@@ -179,7 +228,7 @@ namespace TagProcess.Components
             string filePath = (string)param;
             PDFPrint.SendFileToPrinter(filePath);
             return;
-            
+
             //var Status = PrintJobStatus.Printing;
             var Message = string.Empty;
             try
@@ -255,7 +304,7 @@ namespace TagProcess.Components
                 "SELECT * FROM Win32_PrintJob";
             var printJobs =
                      new ManagementObjectSearcher(searchQuery).Get();
-            foreach(ManagementObject job in printJobs)
+            foreach (ManagementObject job in printJobs)
             {
                 if ((string)job.Properties["Document"].Value == file)
                     return true;
