@@ -200,7 +200,8 @@ namespace TagProcess
                             { "組別", "type" },
                             { "手機", "phone" },
                             { "地址", "address" },
-                            { "性別", "male" }
+                            { "性別", "male" },
+                            { "身分證字號", "sid" }
                         };
                         Dictionary<int, string> mapTable = new Dictionary<int, string>();
                         for(int i = 0; i < reader.FieldCount; ++i)
