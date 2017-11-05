@@ -239,7 +239,7 @@ namespace TagProcess
                             string groupName = "###";
                             foreach(var index in mapTable.Keys)
                             {
-                                string val = reader.GetString(index);
+                                string val = reader.GetValue(index)?.ToString();
                                 if (val == null) val = "";
                                 if (mapTable[index] == "reg")
                                     groupName = val + groupName;
@@ -248,6 +248,9 @@ namespace TagProcess
                                 else
                                     row.Add(mapTable[index], val);
                             }
+
+                            if (groupName == "###") break;
+
                             row.Add("group", groupName);
                             groups.Add(groupName);
                             data.Add(row);
