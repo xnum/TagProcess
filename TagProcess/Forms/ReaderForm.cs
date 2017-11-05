@@ -153,7 +153,7 @@ namespace TagProcess
                 start_time = keeper.fetchStartRecords();
             }
 
-            while(touchedView.Rows.Count >= 15)
+            while(touchedView.Rows.Count >= 100)
                 touchedView.Rows.RemoveAt(0);
             touchedView.Refresh();
         }

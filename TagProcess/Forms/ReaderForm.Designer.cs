@@ -406,7 +406,7 @@
             this.touchedView.Location = new System.Drawing.Point(385, 12);
             this.touchedView.Name = "touchedView";
             this.touchedView.RowTemplate.Height = 24;
-            this.touchedView.Size = new System.Drawing.Size(603, 349);
+            this.touchedView.Size = new System.Drawing.Size(834, 349);
             this.touchedView.TabIndex = 19;
             // 
             // refresh_timer
@@ -416,45 +416,55 @@
             // 
             // Column5
             // 
+            this.Column5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Column5.HeaderText = "晶片tag";
             this.Column5.Name = "Column5";
+            this.Column5.Width = 68;
             // 
             // Column1
             // 
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Column1.HeaderText = "編號";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
-            this.Column1.Width = 70;
+            this.Column1.Width = 54;
             // 
             // Column2
             // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Column2.HeaderText = "姓名";
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
-            this.Column2.Width = 70;
+            this.Column2.Width = 54;
             // 
             // Column3
             // 
+            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Column3.HeaderText = "組別";
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
+            this.Column3.Width = 54;
             // 
             // Column4
             // 
+            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Column4.HeaderText = "感應時間";
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
+            this.Column4.Width = 78;
             // 
             // Column6
             // 
+            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Column6.HeaderText = "起點時間";
             this.Column6.Name = "Column6";
+            this.Column6.Width = 78;
             // 
             // ReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1000, 377);
+            this.ClientSize = new System.Drawing.Size(1231, 377);
             this.Controls.Add(this.touchedView);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
