@@ -108,7 +108,7 @@ namespace TagProcess
                 {
                     if (got_cmd.type == IPXCmd.Type.GetTag && start_button.Text != "開始")
                     {
-                        if (!keeper.addData(comboBox_checkpoint.SelectedIndex, got_cmd)) // 新增失敗就不做以下動作
+                        if (!keeper.addData(station_id, got_cmd)) // 新增失敗就不做以下動作
                             continue;
                         textBox_status[i].Text = got_cmd.data;
                         string race_id = "";

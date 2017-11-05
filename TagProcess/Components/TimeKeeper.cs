@@ -146,6 +146,10 @@ namespace TagProcess
                 /* 如果只跑圈數1圈 第一次是1 第二次是2 3以上才排除 */
                 if (res_station > maxRoundCount + 1) return false;
             }
+            else
+            {
+                res_station = station;
+            }
             data.station_id = res_station;
             uploadList.Add(data);
             uploadTagData(false);
