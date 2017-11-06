@@ -81,7 +81,6 @@ namespace TagProcess
                 try
                 {
                     string line = reader.ReadLine();
-                    FileLogger.Instance.logPacket(line);
                     IPXCmd recvCmd = new IPXCmd(line);
                     recvQ.Enqueue(recvCmd);
                 }

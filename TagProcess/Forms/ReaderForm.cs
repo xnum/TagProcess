@@ -108,6 +108,8 @@ namespace TagProcess
                 {
                     if (got_cmd.type == IPXCmd.Type.GetTag && start_button.Text != "開始")
                     {
+                        FileLogger.Instance.logPacket(String.Format("{0}\t{1}\t{2}\t{3}", 
+                            station_id, got_cmd.data, got_cmd.time, (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000));
                         if (!keeper.addData(station_id, got_cmd)) // 新增失敗就不做以下動作
                             continue;
                         textBox_status[i].Text = got_cmd.data;
@@ -139,7 +141,7 @@ namespace TagProcess
                     clients[i].Put(new IPXCmd(IPXCmd.Type.SetDate));
                 }
 
-                if (refresh_count % 50 == 1) // 每5秒取得一次時間
+                if (refresh_count % 10 == 1) // 每1秒取得一次時間
                 {
                     clients[i].Put(new IPXCmd(IPXCmd.Type.GetDate));
                 }

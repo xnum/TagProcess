@@ -24,6 +24,8 @@ namespace TagProcess
             pacFile = new FileStream("packet.txt", FileMode.Append, FileAccess.Write, FileShare.Read, bufferSize: 4096);
             pacWriter = new StreamWriter(pacFile, Encoding.ASCII);
             pacWriter.AutoFlush = true;
+
+            pacWriter.WriteLine("---- Program started at " + DateTime.Now.ToString() + "----");
         }
 
         public static FileLogger Instance { get { return _instance; } }
