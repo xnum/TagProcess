@@ -16,6 +16,10 @@ namespace TagProcess.Forms
         private ParticipantsRepository repo = ParticipantsRepository.Instance;
         private TimeKeeper keeper = TimeKeeper.Instance;
         private TagUSBReader usbReader = TagUSBReader.Instance;
+
+        ScoreArguments origin_args;
+        int pid = -1;
+        string tag_id = "";
         public ScoreReviewForm()
         {
             InitializeComponent();
@@ -23,6 +27,9 @@ namespace TagProcess.Forms
 
         public void showResult(TimeKeeper.RecordResult res)
         {
+            pid = Int32.Parse(res.p["id"]);
+            tag_id = res.p["tag_id"];
+
             textBox_date.Text = DateTime.Now.ToShortDateString();
             textBox_name.Text = res.p["name"];
             textBox_group.Text = res.group.name;
@@ -54,6 +61,7 @@ namespace TagProcess.Forms
                 
             }
 
+            origin_args = getArg();
         }
 
         private void button_search_race_Click(object sender, EventArgs e)
@@ -104,7 +112,7 @@ namespace TagProcess.Forms
             showResult(result);
         }
 
-        private void print_button_Click(object sender, EventArgs e)
+        private ScoreArguments getArg()
         {
             ScoreArguments args = new ScoreArguments();
 
@@ -118,14 +126,38 @@ namespace TagProcess.Forms
             args.tag_start_time = DateTime.Parse(textBox_tag_start.Text);
             args.batch_start_time = DateTime.Parse(textBox_batch_start.Text);
 
+            return args;
+        }
+
+        private void print_button_Click(object sender, EventArgs e)
+        {
+            ScoreArguments args = getArg();
+
             if(!args.Check())
             {
                 return;
             }
 
             args.CountRunTime();
-            // TODO write back to db
+
+            if (args.name != origin_args.name)
+            {
+                repo.updateParticipantName(pid, args.name);
+            }
+
+            if(args.tag_start_time != origin_args.tag_start_time)
+            {
+                keeper.updateRecord(tag_id, 1, args.tag_start_time);
+            }
+
+            if(args.tag_end_time != origin_args.tag_end_time)
+            {
+                keeper.updateRecord(tag_id, 5, args.tag_end_time);
+            }
+
+
             ScoreGenerator sg = new ScoreGenerator();
+
             sg.exportScoreToPDF(args, "");
             //ScoreGenerator.exportScoreToPDF(args);
         }

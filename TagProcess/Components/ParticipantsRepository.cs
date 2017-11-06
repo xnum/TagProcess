@@ -442,5 +442,25 @@ namespace TagProcess
 
             return null;
         }
+
+        public bool updateParticipantName(int id, string name)
+        {
+            RestRequest req = new RestRequest("participant", Method.PATCH);
+            req.AddParameter("id", id);
+            req.AddParameter("name", name);
+            var res = server.ExecuteHttpRequest(req);
+
+            if (res == null) return false;
+
+            if (!res.Content.Equals("Ok"))
+            {
+                OnLog("修改姓名失敗: " + res.Content);
+                return false;
+            }
+
+            return true;
+        }
+
+
     }
 }

@@ -108,6 +108,29 @@ namespace TagProcess
             return true;
         }
 
+        public bool updateRecord(string tag_id, int station_id, DateTime time)
+        {
+            List<Dictionary<string, string>> items = new List<Dictionary<string, string>>();
+            Dictionary<string, string> item = new Dictionary<string, string>();
+            item.Add("tag_id", tag_id);
+            item.Add("station_id", station_id.ToString());
+            item.Add("time", time.ToString(MySqlDateTimeFormat));
+
+            RestRequest req = new RestRequest("participant", Method.PATCH);
+            req.AddParameter("tags", JsonConvert.SerializeObject(req));
+            var res = server.ExecuteHttpRequest(req);
+
+            if (res == null) return false;
+
+            if (!res.Content.Equals("Ok"))
+            {
+                OnLog("修改時間失敗: " + res.Content);
+                return false;
+            }
+
+            return true;
+        }
+
         public bool addData(int station, IPXCmd data)
         {
             if (!seenTag.ContainsKey(station))
