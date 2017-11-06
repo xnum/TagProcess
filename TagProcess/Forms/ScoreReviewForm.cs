@@ -23,6 +23,18 @@ namespace TagProcess.Forms
         public ScoreReviewForm()
         {
             InitializeComponent();
+
+            keeper.Log += LogToMe;
+        }
+
+        ~ScoreReviewForm()
+        {
+            keeper.Log -= LogToMe;
+        }
+
+        public void LogToMe(string msg)
+        {
+            MessageBox.Show(msg);
         }
 
         public void showResult(TimeKeeper.RecordResult res)

@@ -115,16 +115,17 @@ namespace TagProcess
             item.Add("tag_id", tag_id);
             item.Add("station_id", station_id.ToString());
             item.Add("time", time.ToString(MySqlDateTimeFormat));
+            items.Add(item);
 
-            RestRequest req = new RestRequest("participant", Method.PATCH);
-            req.AddParameter("tags", JsonConvert.SerializeObject(req));
+            RestRequest req = new RestRequest("records", Method.POST);
+            req.AddParameter("tags", JsonConvert.SerializeObject(items));
             var res = server.ExecuteHttpRequest(req);
 
             if (res == null) return false;
 
             if (!res.Content.Equals("Ok"))
             {
-                OnLog("修改時間失敗: " + res.Content);
+                OnLog("上傳時間失敗: " + res.Content);
                 return false;
             }
 

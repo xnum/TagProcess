@@ -454,7 +454,7 @@ namespace TagProcess
 
             if (!res.Content.Equals("Ok"))
             {
-                OnLog("修改姓名失敗: " + res.Content);
+                OnLog("上傳姓名失敗: " + res.Content);
                 return false;
             }
 
