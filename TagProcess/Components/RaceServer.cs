@@ -19,6 +19,7 @@ namespace TagProcess
 
         private string serverUrl = null;
         private int competition_id = -5;
+        public string name { get; private set; }
 
         public delegate void LogHandler(string msg);
         public event LogHandler Log;
@@ -92,6 +93,7 @@ namespace TagProcess
                 {
                     competition_id = id;
                     OnLog("成功： 目前進行中活動[" + name + "]");
+                    this.name = name;
                     return true;
                 }
             }

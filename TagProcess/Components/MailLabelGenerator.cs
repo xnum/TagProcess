@@ -30,9 +30,10 @@ namespace TagProcess
             cell.FixedHeight = 80;
             cell.Border = Rectangle.RECTANGLE;
 
+            string comp_name = RaceServer.Instance.name;
             int count = 0;
             foreach (var p in participants)
-            {
+            {    
                 string content = String.Format("收件者(選手號碼：{2})\n{0}\n{1}\n",p.address,p.name,p.race_id == "" ? "無" : p.race_id);
                 cell.Phrase = new Phrase(content, textFont);
                 table.AddCell(cell);
