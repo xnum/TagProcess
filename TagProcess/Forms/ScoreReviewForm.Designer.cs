@@ -71,7 +71,6 @@
             this.textBox_tag_id.Name = "textBox_tag_id";
             this.textBox_tag_id.Size = new System.Drawing.Size(181, 22);
             this.textBox_tag_id.TabIndex = 0;
-            this.textBox_tag_id.Text = "05800323b920";
             // 
             // textBox_race_id
             // 
@@ -79,7 +78,6 @@
             this.textBox_race_id.Name = "textBox_race_id";
             this.textBox_race_id.Size = new System.Drawing.Size(181, 22);
             this.textBox_race_id.TabIndex = 1;
-            this.textBox_race_id.Text = "2001";
             this.textBox_race_id.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_race_id_KeyDown);
             // 
             // label1

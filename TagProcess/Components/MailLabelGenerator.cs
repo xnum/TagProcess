@@ -21,27 +21,37 @@ namespace TagProcess
             PdfWriter.GetInstance(doc, new FileStream("mail.pdf", FileMode.Create));
             string chFontPath = "c:\\windows\\fonts\\KAIU.TTF";
             BaseFont chBaseFont = BaseFont.CreateFont(chFontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            Font textFont = new Font(chBaseFont, 12);
+            Font textFont = new Font(chBaseFont, 8);
 
             doc.Open();
-            PdfPTable table = new PdfPTable(2);
+            PdfPTable table = new PdfPTable(4);
+            table.TotalWidth = 400f;
+            table.LockedWidth = true;
+            string comp_name = RaceServer.Instance.name;
+
+            PdfPCell header = new PdfPCell(new Phrase(""));
+            header.Colspan = 4;
+            header.HorizontalAlignment = Element.ALIGN_CENTER;// 表頭內文置中
+            table.AddCell(header);
 
             PdfPCell cell = new PdfPCell(new Phrase(""));
-            cell.FixedHeight = 80;
+            cell.FixedHeight = 40;
             cell.Border = Rectangle.RECTANGLE;
 
-            string comp_name = RaceServer.Instance.name;
+            
             int count = 0;
             foreach (var p in participants)
-            {    
-                string content = String.Format("收件者(選手號碼：{2})\n{0}\n{1}\n",p.address,p.name,p.race_id == "" ? "無" : p.race_id);
+            {
+                string content = String.Format("{3}\n{1}({2})\n{0}\n", p.group,p.name,p.race_id == "" ? "" : p.race_id,comp_name);
+
                 cell.Phrase = new Phrase(content, textFont);
                 table.AddCell(cell);
                 count++;
             }
-            if (count % 2 == 1)
+            if (count % 4 > 0)
             {
                 cell.Phrase = new Phrase("以下空白", textFont);
+                cell.Colspan = count % 4;
                 table.AddCell(cell);
             }
             doc.Add(table);
