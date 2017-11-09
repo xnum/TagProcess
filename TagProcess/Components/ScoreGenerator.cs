@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using RawPrint;
 using System.Drawing.Printing;
 using System.Drawing;
+using System.Collections.Concurrent;
 
 namespace TagProcess.Components
 {
@@ -104,33 +105,47 @@ namespace TagProcess.Components
     }
     public class ScoreGenerator
     {
-        private System.Drawing.Font font;
-        private ScoreArguments args;
+        public static string printer;
+        public static BlockingCollection<ScoreArguments> queue = new BlockingCollection<ScoreArguments>();
+        private static System.Drawing.Font font;
+        public static ScoreArguments args = new ScoreArguments();
 
-        public void printPage(object sender, PrintPageEventArgs e)
+        public static void printPage(object sender, PrintPageEventArgs e)
         {
-            e.Graphics.DrawString(args.name, font, Brushes.Black, 400, 150, new StringFormat());
-            e.Graphics.DrawString(args.today, font, Brushes.Black, 400, 250, new StringFormat());
-            e.Graphics.DrawString(args.group, font, Brushes.Black, 400, 350, new StringFormat());
-            e.Graphics.DrawString(args.team_name, font, Brushes.Black, 400, 450, new StringFormat());
-            e.Graphics.DrawString(args.batch_run_time, font, Brushes.Black, 400, 550, new StringFormat());
-            e.Graphics.DrawString(args.tag_run_time, font, Brushes.Black, 400, 650, new StringFormat());
-            e.Graphics.DrawString(args.overall_rank, font, Brushes.Black, 400, 750, new StringFormat());
-            e.Graphics.DrawString(args.team_rank, font, Brushes.Black, 400, 850, new StringFormat());
+            e.Graphics.DrawString(ScoreGenerator.args.name, font, Brushes.Black, 400, 150, new StringFormat());
+            e.Graphics.DrawString(ScoreGenerator.args.today, font, Brushes.Black, 400, 250, new StringFormat());
+            e.Graphics.DrawString(ScoreGenerator.args.group, font, Brushes.Black, 400, 350, new StringFormat());
+            e.Graphics.DrawString(ScoreGenerator.args.team_name, font, Brushes.Black, 400, 450, new StringFormat());
+            e.Graphics.DrawString(ScoreGenerator.args.batch_run_time, font, Brushes.Black, 400, 550, new StringFormat());
+            e.Graphics.DrawString(ScoreGenerator.args.tag_run_time, font, Brushes.Black, 400, 650, new StringFormat());
+            e.Graphics.DrawString(ScoreGenerator.args.overall_rank, font, Brushes.Black, 400, 750, new StringFormat());
+            e.Graphics.DrawString(ScoreGenerator.args.team_rank, font, Brushes.Black, 400, 850, new StringFormat());
         }
 
-        public void exportScoreToPDF(ScoreArguments args, string printer)
+        public static void Worker()
         {
             font = new System.Drawing.Font("KAIU", 16);
+            while (!queue.IsAddingCompleted)
+            {
+                ScoreArguments a = queue.Take();
+                args = a;
+                PrintDocument pd = new PrintDocument();
+                PrintController pc = new System.Drawing.Printing.StandardPrintController();
+                if (printer != "") pd.PrinterSettings.PrinterName = printer;
+                pd.PrintPage += printPage;
+                pd.PrintController = pc;
+                pd.Print();
+            }
+        }
 
-            this.args = args;
+        public static void exportScoreToPDF(ScoreArguments args, string printer)
+        {
+            ScoreGenerator.printer = printer;
+            queue.Add(args);
 
-            PrintDocument pd = new PrintDocument();
-            PrintController pc = new System.Drawing.Printing.StandardPrintController();
-            if(printer != "")pd.PrinterSettings.PrinterName = printer;
-            pd.PrintPage += printPage;
-            pd.PrintController = pc;
-            pd.Print();
+            //this.args = args;
+
+
         }
 
         public static void exportScoreToPDFB(ScoreArguments args, string printer)

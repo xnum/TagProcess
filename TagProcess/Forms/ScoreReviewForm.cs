@@ -168,9 +168,9 @@ namespace TagProcess.Forms
             }
 
 
-            ScoreGenerator sg = new ScoreGenerator();
+            
 
-            sg.exportScoreToPDF(args, "");
+            ScoreGenerator.exportScoreToPDF(args, "");
             //ScoreGenerator.exportScoreToPDF(args);
         }
 

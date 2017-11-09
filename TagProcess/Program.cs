@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TagProcess.Components;
 
 namespace TagProcess
 {
@@ -19,6 +21,8 @@ namespace TagProcess
             Application.SetCompatibleTextRenderingDefault(false);
             RaceServer.Instance.Log += FileLogger.Instance.log;
             ParticipantsRepository.Instance.Log += FileLogger.Instance.log;
+            Thread t = new Thread(ScoreGenerator.Worker);
+            t.Start();
             Application.Run(new MainForm());
         }
     }
