@@ -352,30 +352,30 @@ namespace TagProcess
         public bool uploadParticipant(Participant p)
         {
             OnLog("開始上傳修改後選手資料，ID = " + p.id);
-            RestRequest req_for_parti = new RestRequest("participant", Method.PATCH);
-            req_for_parti.AddParameter("id", p.id);
-            req_for_parti.AddParameter("group_id", p.group_id);
+            RestRequest req_for_parti = new RestRequest("api/json/chip_user/"+p.id+"/edit", Method.PUT);
+            //req_for_parti.AddParameter("id", p.id);
+            //req_for_parti.AddParameter("group_id", p.group_id);
             req_for_parti.AddParameter("race_id", p.race_id);
-            req_for_parti.AddParameter("male", p.male);
+            req_for_parti.AddParameter("gender", p.male);
             req_for_parti.AddParameter("tag_id", p.tag_id);
             req_for_parti.AddParameter("name", p.name);
-            req_for_parti.AddParameter("birth", p.birth);
-            req_for_parti.AddParameter("address", p.address);
+            req_for_parti.AddParameter("birthday", p.birth);
+            //req_for_parti.AddParameter("address", p.address);
             req_for_parti.AddParameter("team_name", p.team_name);
-            req_for_parti.AddParameter("phone", p.phone);
+            //req_for_parti.AddParameter("phone", p.phone);
             var res_for_parti = server.ExecuteHttpRequest(req_for_parti);
 
             if (res_for_parti == null) return false;
 
-            updateResult res = JsonConvert.DeserializeObject<updateResult>(res_for_parti.Content);
-            if (res.code != "200")
+            //updateResult res = JsonConvert.DeserializeObject<updateResult>(res_for_parti.Content);
+            if (!res_for_parti.Content.Contains("ok"))
             {
                 OnLog("更新選手資料發生錯誤: " + res.msg);
                 return false;
             }
 
             /* 將伺服器UPDATE後的資料，同步回本地物件中 */
-            var result_body = res.p;
+            var result_body = p;
             for(int i = 0; i < participants.Count; ++i)
             {
                 if(participants[i].id == result_body.id)
