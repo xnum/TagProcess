@@ -43,13 +43,19 @@
             this.tsmiServerUrl = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiLogFile = new System.Windows.Forms.ToolStripMenuItem();
             this.grpbUnused2 = new System.Windows.Forms.GroupBox();
+            this.btnScoreReview = new System.Windows.Forms.Button();
             this.btnPrintScore = new System.Windows.Forms.Button();
             this.btnShowReaderForm = new System.Windows.Forms.Button();
-            this.btnScoreReview = new System.Windows.Forms.Button();
+            this.panel_main = new System.Windows.Forms.Panel();
+            this.panel_act = new System.Windows.Forms.Panel();
+            this.comboBox_act = new System.Windows.Forms.ComboBox();
+            this.button_choose_act = new System.Windows.Forms.Button();
             this.grpbUnused1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.grpbUnused2.SuspendLayout();
+            this.panel_main.SuspendLayout();
+            this.panel_act.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpbUnused1
@@ -58,7 +64,7 @@
             this.grpbUnused1.Controls.Add(this.btnPrintMailLabel);
             this.grpbUnused1.Controls.Add(this.btnShowParticipantsViewForm);
             this.grpbUnused1.Controls.Add(this.btnImportData);
-            this.grpbUnused1.Location = new System.Drawing.Point(13, 26);
+            this.grpbUnused1.Location = new System.Drawing.Point(3, 8);
             this.grpbUnused1.Name = "grpbUnused1";
             this.grpbUnused1.Size = new System.Drawing.Size(176, 85);
             this.grpbUnused1.TabIndex = 0;
@@ -112,14 +118,14 @@
             this.slblTag});
             this.statusStrip1.Location = new System.Drawing.Point(0, 121);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(428, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(380, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // slblStatus
             // 
             this.slblStatus.Name = "slblStatus";
-            this.slblStatus.Size = new System.Drawing.Size(413, 17);
+            this.slblStatus.Size = new System.Drawing.Size(365, 17);
             this.slblStatus.Spring = true;
             this.slblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -136,7 +142,7 @@
             this.tsmiLogFile});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(428, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(380, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -183,12 +189,22 @@
             this.grpbUnused2.Controls.Add(this.btnScoreReview);
             this.grpbUnused2.Controls.Add(this.btnPrintScore);
             this.grpbUnused2.Controls.Add(this.btnShowReaderForm);
-            this.grpbUnused2.Location = new System.Drawing.Point(196, 28);
+            this.grpbUnused2.Location = new System.Drawing.Point(185, 8);
             this.grpbUnused2.Name = "grpbUnused2";
             this.grpbUnused2.Size = new System.Drawing.Size(174, 83);
             this.grpbUnused2.TabIndex = 4;
             this.grpbUnused2.TabStop = false;
             this.grpbUnused2.Text = "現場作業";
+            // 
+            // btnScoreReview
+            // 
+            this.btnScoreReview.Location = new System.Drawing.Point(89, 20);
+            this.btnScoreReview.Name = "btnScoreReview";
+            this.btnScoreReview.Size = new System.Drawing.Size(75, 23);
+            this.btnScoreReview.TabIndex = 6;
+            this.btnScoreReview.Text = "成績修正";
+            this.btnScoreReview.UseVisualStyleBackColor = true;
+            this.btnScoreReview.Click += new System.EventHandler(this.btnScoreReview_Click);
             // 
             // btnPrintScore
             // 
@@ -210,25 +226,51 @@
             this.btnShowReaderForm.UseVisualStyleBackColor = true;
             this.btnShowReaderForm.Click += new System.EventHandler(this.btnShowReaderForm_Click);
             // 
-            // btnScoreReview
+            // panel_main
             // 
-            this.btnScoreReview.Location = new System.Drawing.Point(89, 20);
-            this.btnScoreReview.Name = "btnScoreReview";
-            this.btnScoreReview.Size = new System.Drawing.Size(75, 23);
-            this.btnScoreReview.TabIndex = 6;
-            this.btnScoreReview.Text = "成績修正";
-            this.btnScoreReview.UseVisualStyleBackColor = true;
-            this.btnScoreReview.Click += new System.EventHandler(this.btnScoreReview_Click);
+            this.panel_main.Controls.Add(this.panel_act);
+            this.panel_main.Controls.Add(this.grpbUnused1);
+            this.panel_main.Controls.Add(this.grpbUnused2);
+            this.panel_main.Location = new System.Drawing.Point(0, 27);
+            this.panel_main.Name = "panel_main";
+            this.panel_main.Size = new System.Drawing.Size(378, 91);
+            this.panel_main.TabIndex = 5;
+            // 
+            // panel_act
+            // 
+            this.panel_act.Controls.Add(this.button_choose_act);
+            this.panel_act.Controls.Add(this.comboBox_act);
+            this.panel_act.Location = new System.Drawing.Point(0, 0);
+            this.panel_act.Name = "panel_act";
+            this.panel_act.Size = new System.Drawing.Size(380, 93);
+            this.panel_act.TabIndex = 5;
+            // 
+            // comboBox_act
+            // 
+            this.comboBox_act.FormattingEnabled = true;
+            this.comboBox_act.Location = new System.Drawing.Point(13, 30);
+            this.comboBox_act.Name = "comboBox_act";
+            this.comboBox_act.Size = new System.Drawing.Size(263, 20);
+            this.comboBox_act.TabIndex = 0;
+            // 
+            // button_choose_act
+            // 
+            this.button_choose_act.Location = new System.Drawing.Point(283, 29);
+            this.button_choose_act.Name = "button_choose_act";
+            this.button_choose_act.Size = new System.Drawing.Size(75, 23);
+            this.button_choose_act.TabIndex = 1;
+            this.button_choose_act.Text = "選擇活動";
+            this.button_choose_act.UseVisualStyleBackColor = true;
+            this.button_choose_act.Click += new System.EventHandler(this.button_choose_act_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(428, 143);
-            this.Controls.Add(this.grpbUnused2);
+            this.ClientSize = new System.Drawing.Size(380, 143);
+            this.Controls.Add(this.panel_main);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.grpbUnused1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "主選單";
@@ -238,6 +280,8 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.grpbUnused2.ResumeLayout(false);
+            this.panel_main.ResumeLayout(false);
+            this.panel_act.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -267,6 +311,10 @@
         private System.Windows.Forms.ToolStripStatusLabel slblTag;
         private System.Windows.Forms.Button btnPrintScore;
         private System.Windows.Forms.Button btnScoreReview;
+        private System.Windows.Forms.Panel panel_main;
+        private System.Windows.Forms.Panel panel_act;
+        private System.Windows.Forms.Button button_choose_act;
+        private System.Windows.Forms.ComboBox comboBox_act;
     }
 }
 

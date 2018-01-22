@@ -390,27 +390,34 @@ namespace TagProcess
         /// <param name="str">Json encode participants data</param>
         /// <param name="groups">Json encode groups data</param>
         /// <returns></returns>
-        public bool storeParticipants(string str, string groups)
-        {
-            RestRequest req_for_group = new RestRequest("race_groups/import", Method.POST);
-            req_for_group.AddParameter("group", groups);
-            var res_for_group = server.ExecuteHttpRequest(req_for_group);
-
-            if (res_for_group == null) return false;
-
-            if (!res_for_group.Content.Equals("Ok"))
-            {
-                OnLog("上傳組別失敗: " + res_for_group.Content);
-                return false;
-            }
-            
-            RestRequest req = new RestRequest("participants/import", Method.POST);
-            req.AddParameter("str", str);
+        public bool storeParticipants(string str)
+        {          
+            RestRequest req = new RestRequest("api/json/chip_user/import", Method.POST);
+            req.AddParameter("activity", server.competition_id);
+            req.AddParameter("user", str);
             IRestResponse res = server.ExecuteHttpRequest(req);
 
             if (res == null) return false;
 
-            if (!res.Content.Equals("Ok"))
+            if (!res.Content.Contains("ok"))
+            {
+                OnLog("上傳選手失敗: " + res.Content);
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool storeGroups(string str)
+        {
+            RestRequest req = new RestRequest("api/json/chip_race_group/import", Method.POST);
+            req.AddParameter("activity", server.competition_id);
+            req.AddParameter("group", str);
+            IRestResponse res = server.ExecuteHttpRequest(req);
+
+            if (res == null) return false;
+
+            if (!res.Content.Contains("ok"))
             {
                 OnLog("上傳選手失敗: " + res.Content);
                 return false;

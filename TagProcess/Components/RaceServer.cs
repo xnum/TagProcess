@@ -18,7 +18,7 @@ namespace TagProcess
         private static readonly RaceServer _instance = new RaceServer();
 
         private string serverUrl = null;
-        private int competition_id = -5;
+        public int competition_id = -5;
         public string name { get; private set; }
 
         public delegate void LogHandler(string msg);
@@ -63,6 +63,48 @@ namespace TagProcess
             return response;
         }
 
+        public class ActResult
+        {
+            public string result;
+            public List<Dictionary<string, string>> ret;
+        }
+
+        public class Activity
+        {
+            public int id;
+            public string name;
+            public override string ToString() { return name; }
+        }
+
+        public Activity[] GetActivityList()
+        {
+            var response = ExecuteHttpRequest(new RestRequest("api/json/activity/list", Method.GET));
+            if(response == null)
+            {
+                OnLog("連線失敗");
+                return null;
+            }
+
+            ActResult result = JsonConvert.DeserializeObject<ActResult>(response.Content);
+
+            //string r = result["result"];
+            //List<Dictionary<string, string>> ret = result["ret"];
+            List<Activity> retList = new List<Activity>();
+            foreach(Dictionary<string, string> obj in result.ret)
+            {
+                string is_enable = obj["chipEnable"];
+                if (is_enable == "true")
+                {
+                    Activity act = new Activity();
+                    act.id = int.Parse(obj["id"]);
+                    act.name = obj["name"];
+                    retList.Add(act);
+                 }
+            }
+
+            return retList.ToArray();
+        }
+
         /// <summary>
         /// 選單設定伺服器網址 return連線結果
         /// </summary>
@@ -71,37 +113,17 @@ namespace TagProcess
         {
             serverUrl = url;
             competition_id = -5;
-            var response = ExecuteHttpRequest(new RestRequest("competitions/current", Method.GET));
+            GetActivityList();
+            /*
+            var response = ExecuteHttpRequest(new RestRequest("api/json/activity/list", Method.GET));
             if (response == null)
             {
                 OnLog("連線失敗");
                 return false;
             }
+            */
 
-            try
-            {
-                JObject result = JsonConvert.DeserializeObject<JObject>(response.Content);
-                int id = (int)result["id"];
-                string name = (string)result["name"];
-
-                if(id < 0)
-                {
-                    OnLog("警告： 目前無啟用中活動");
-                    return false;
-                }
-                else
-                {
-                    competition_id = id;
-                    OnLog("成功： 目前進行中活動[" + name + "]");
-                    this.name = name;
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                OnLog("Json解析錯誤: " + e.Message);
-                return false;
-            }
+            return true;
         }
 
         /// <summary>

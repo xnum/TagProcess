@@ -28,7 +28,22 @@ namespace TagProcess
             server.Log += printToStatusLabel;
             string url = Properties.Settings.Default.ServerUrl;
             server.SetServerUrl(url);
+            SetActivityList();
             refreshCOMPort();
+        }
+
+        public void SetActivityList()
+        {
+            panel_act.Show();
+            //panel_main.Hide();
+
+            comboBox_act.Items.Clear();
+            RaceServer.Activity[] acts = server.GetActivityList();
+
+            foreach(RaceServer.Activity act in acts)
+            {
+                comboBox_act.Items.Add(act);
+            }
         }
 
         /// <summary>
@@ -42,6 +57,7 @@ namespace TagProcess
             if (input.ShowDialog() == DialogResult.OK)
             {
                 server.SetServerUrl(input.GetResult());
+                SetActivityList();
             }
         }
 
@@ -178,97 +194,149 @@ namespace TagProcess
                 {
                     do // 尋找資料表
                     {
-                        if(reader.Name != "報名資料")
-                            continue;
-
-                        // 擷取第一行分析欄位
-                        if(!reader.Read())
+                        if (reader.Name == "報名資料")
                         {
-                            MessageBox.Show("錯誤：讀取第一行失敗");
-                            return;
-                        }
-
-                        // 找到欄位名稱 -> 欄位index的對應
-                        // mapTable紀錄 欄位index -> 資料名稱
-                        // e.g. 姓名 -> 3 -> name
-                        Dictionary<string, string> chi2engTable = new Dictionary<string, string> {
-                            { "姓名", "name" },
-                            { "團體名稱", "team_name" },
-                            { "跑者編號", "race_id" },
-                            { "出生日期", "birth" },
-                            { "報名項目", "reg" },
-                            { "組別", "type" },
-                            { "手機", "phone" },
-                            { "地址", "address" },
-                            { "性別", "male" },
-                            { "身分證字號", "sid" }
-                        };
-                        Dictionary<int, string> mapTable = new Dictionary<int, string>();
-                        for(int i = 0; i < reader.FieldCount; ++i)
-                        {
-                            string headerStr = reader.GetString(i);
-                            if(headerStr == null || headerStr.Length < 2)
+                            // 擷取第一行分析欄位
+                            if (!reader.Read())
                             {
-                                continue;
+                                MessageBox.Show("錯誤：讀取第一行失敗");
+                                return;
                             }
 
-                            // 以下針對各欄位名稱填表
-                            if(chi2engTable.ContainsKey(headerStr))
+                            // 找到欄位名稱 -> 欄位index的對應
+                            // mapTable紀錄 欄位index -> 資料名稱
+                            // e.g. 姓名 -> 3 -> name
+                            Dictionary<string, string> chi2engTable = new Dictionary<string, string> {
+                                { "姓名", "name" },
+                                { "團體名稱", "team_name" },
+                                { "跑者編號", "race_id" },
+                                { "出生日期", "birth" },
+                                { "報名項目", "reg" },
+                                { "組別", "type" },
+                                { "性別", "male" },
+                                { "身分證字號", "id_number" }
+                            };
+
+                            Dictionary<int, string> mapTable = new Dictionary<int, string>();
+                            for (int i = 0; i < reader.FieldCount; ++i)
                             {
-                                mapTable[i] = chi2engTable[headerStr];
+                                string headerStr = reader.GetString(i);
+                                if (headerStr == null || headerStr.Length < 2)
+                                {
+                                    continue;
+                                }
+
+                                // 以下針對各欄位名稱填表
+                                if (chi2engTable.ContainsKey(headerStr))
+                                {
+                                    mapTable[i] = chi2engTable[headerStr];
+                                }
                             }
-                        }
 
-                        // 檢驗資料是否正確
-                        if(chi2engTable.Count != mapTable.Count)
-                        {
-                            string missingCol = "";
-                            foreach (var key in chi2engTable.Keys)
-                                if (mapTable.ContainsValue(chi2engTable[key]))
-                                    missingCol += chi2engTable[key] + "\n";
-                            MessageBox.Show("錯誤：缺少欄位" + missingCol);
-                            return;
-                        }
-
-                        // 開始轉換資料
-                        List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
-                        HashSet<string> groups = new HashSet<string>();
-
-                        while (reader.Read())
-                        {
-                            Dictionary<string, string> row = new Dictionary<string, string>();
-                            string groupName = "###";
-                            foreach(var index in mapTable.Keys)
+                            // 檢驗資料是否正確
+                            if (chi2engTable.Count != mapTable.Count)
                             {
-                                string val = reader.GetValue(index)?.ToString();
-                                if (val == null) val = "";
-                                if (mapTable[index] == "reg")
-                                    groupName = val + groupName;
-                                else if (mapTable[index] == "type")
-                                    groupName += val;
-                                else
+                                string missingCol = "";
+                                foreach (var key in chi2engTable.Keys)
+                                    if (mapTable.ContainsValue(chi2engTable[key]))
+                                        missingCol += chi2engTable[key] + "\n";
+                                MessageBox.Show("錯誤：缺少欄位" + missingCol);
+                                return;
+                            }
+
+                            // 開始轉換資料
+                            List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
+
+                            while (reader.Read())
+                            {
+                                Dictionary<string, string> row = new Dictionary<string, string>();
+                                foreach (var index in mapTable.Keys)
+                                {
+                                    string val = reader.GetValue(index)?.ToString();
+                                    if (val == null) val = "";
                                     row.Add(mapTable[index], val);
+                                }
+
+                                data.Add(row);
                             }
 
-                            if (groupName == "###") break;
+                            string str = Newtonsoft.Json.JsonConvert.SerializeObject(data);
+                            Debug.WriteLine(str);
+                            if (true == repo.storeParticipants(str))
+                                MessageBox.Show("上傳成功");
+                            else
+                                MessageBox.Show("上傳失敗");
+                        } else if (reader.Name == "活動組別")
+                        {
+                            // 擷取第一行分析欄位
+                            if (!reader.Read())
+                            {
+                                MessageBox.Show("錯誤：讀取第一行失敗");
+                                return;
+                            }
 
-                            row.Add("group", groupName);
-                            groups.Add(groupName);
-                            data.Add(row);
+                            // 找到欄位名稱 -> 欄位index的對應
+                            // mapTable紀錄 欄位index -> 資料名稱
+                            // e.g. 姓名 -> 3 -> name
+                            Dictionary<string, string> chi2engTable = new Dictionary<string, string> {
+                                { "組別", "type" },
+                                { "性別", "male" },
+                                { "報名項目", "reg" }
+                            };
+
+                            Dictionary<int, string> mapTable = new Dictionary<int, string>();
+                            for (int i = 0; i < reader.FieldCount; ++i)
+                            {
+                                string headerStr = reader.GetString(i);
+                                if (headerStr == null || headerStr.Length < 2)
+                                {
+                                    continue;
+                                }
+
+                                // 以下針對各欄位名稱填表
+                                if (chi2engTable.ContainsKey(headerStr))
+                                {
+                                    mapTable[i] = chi2engTable[headerStr];
+                                }
+                            }
+
+                            // 檢驗資料是否正確
+                            if (chi2engTable.Count != mapTable.Count)
+                            {
+                                string missingCol = "";
+                                foreach (var key in chi2engTable.Keys)
+                                    if (mapTable.ContainsValue(chi2engTable[key]))
+                                        missingCol += chi2engTable[key] + "\n";
+                                MessageBox.Show("錯誤：缺少欄位" + missingCol);
+                                return;
+                            }
+
+                            // 開始轉換資料
+                            List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
+
+                            while (reader.Read())
+                            {
+                                Dictionary<string, string> row = new Dictionary<string, string>();
+                                foreach (var index in mapTable.Keys)
+                                {
+                                    string val = reader.GetValue(index)?.ToString();
+                                    if (val == null) val = "";
+                                    row.Add(mapTable[index], val);
+                                }
+
+                                data.Add(row);
+                            }
+
+                            string str = Newtonsoft.Json.JsonConvert.SerializeObject(data);
+                            Debug.WriteLine(str);
+                            if (true == repo.storeGroups(str))
+                                MessageBox.Show("上傳成功");
+                            else
+                                MessageBox.Show("上傳失敗");
                         }
-
-                        string str = Newtonsoft.Json.JsonConvert.SerializeObject(data);
-                        string str_group = Newtonsoft.Json.JsonConvert.SerializeObject(groups);
-                        Debug.WriteLine(str);
-                        Debug.WriteLine(str_group);
-                        if (true == repo.storeParticipants(str, str_group))
-                            MessageBox.Show("上傳成功");
-                        else
-                            MessageBox.Show("上傳失敗");
-                        return;
                     } while (reader.NextResult());
 
-                    MessageBox.Show("錯誤：找不到資料表 [報名資料]");
+                    //MessageBox.Show("錯誤：找不到資料表 [報名資料]");
                 }
             }
         }
@@ -325,6 +393,15 @@ namespace TagProcess
         {
             var f = new ScoreReviewForm();
             f.ShowDialog();
+        }
+
+        private void button_choose_act_Click(object sender, EventArgs e)
+        {
+            RaceServer.Activity act = (RaceServer.Activity)comboBox_act.SelectedItem;
+            server.competition_id = act.id;
+
+            panel_act.Hide();
+            panel_main.Show();
         }
     }
 }

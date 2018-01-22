@@ -25,7 +25,7 @@ namespace TagProcess.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://127.0.0.1:8082")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://testweb.in-action.tw")]
         public string ServerUrl {
             get {
                 return ((string)(this["ServerUrl"]));
