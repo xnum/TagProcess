@@ -308,23 +308,31 @@ namespace TagProcess
         public bool fetchParticipants()
         {
             Clear();
-            var res_for_parti = server.ExecuteHttpRequest(new RestRequest("participants/current", Method.GET));
+            var req = new RestRequest("api/json/chip_user/list", Method.GET);
+            req.AddParameter("activity", server.competition_id);
+            var res_for_parti = server.ExecuteHttpRequest(req);
             if (res_for_parti == null) return false;
 
             OnLog("Json decoding (participants)");
-            participants = JsonConvert.DeserializeObject<List<Participant>>(res_for_parti.Content);
+            var def = new { result = "", ret = new List<Participant>() };
+            var r = JsonConvert.DeserializeAnonymousType(res_for_parti.Content, def);
+            participants = r.ret;
 
-            foreach(var p in participants)
+            foreach (var p in participants)
             {
                 helper.tryAddTag(p.tag_id);
             }
 
-            var res_for_groups = server.ExecuteHttpRequest(new RestRequest("race_groups/current", Method.GET));
+            var rg = new RestRequest("api/json/chip_race_group/list", Method.GET);
+            req.AddParameter("activity", server.competition_id);
+            var res_for_groups = server.ExecuteHttpRequest(rg);
 
             if (res_for_groups == null) return false;
 
             OnLog("Json decoding (groups)");
-            var groups = JsonConvert.DeserializeObject<List<RaceGroups>>(res_for_groups.Content);
+            var d = new { result = "", ret = new List<RaceGroups>() };
+            var g = JsonConvert.DeserializeAnonymousType(res_for_groups.Content, d);
+            var groups = g.ret;
 
             helper.setGroups(groups);
 

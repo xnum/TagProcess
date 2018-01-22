@@ -127,14 +127,21 @@ namespace TagProcess.Components
             font = new System.Drawing.Font("KAIU", 16);
             while (!queue.IsAddingCompleted)
             {
-                ScoreArguments a = queue.Take();
-                args = a;
-                PrintDocument pd = new PrintDocument();
-                PrintController pc = new System.Drawing.Printing.StandardPrintController();
-                if (printer != "") pd.PrinterSettings.PrinterName = printer;
-                pd.PrintPage += printPage;
-                pd.PrintController = pc;
-                pd.Print();
+                try
+                {
+                    ScoreArguments a = queue.Take();
+                    args = a;
+                    PrintDocument pd = new PrintDocument();
+                    PrintController pc = new System.Drawing.Printing.StandardPrintController();
+                    if (printer != "") pd.PrinterSettings.PrinterName = printer;
+                    pd.PrintPage += printPage;
+                    pd.PrintController = pc;
+                    pd.Print();
+                }
+                catch
+                {
+                    return;
+                }
             }
         }
 

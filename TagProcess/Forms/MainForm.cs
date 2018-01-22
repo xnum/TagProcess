@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using TagProcess.Forms;
 using System.IO;
 using ExcelDataReader;
+using TagProcess.Components;
 
 namespace TagProcess
 {
@@ -402,6 +403,11 @@ namespace TagProcess
 
             panel_act.Hide();
             panel_main.Show();
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ScoreGenerator.queue.CompleteAdding();
         }
     }
 }

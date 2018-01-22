@@ -48,8 +48,8 @@
             this.btnShowReaderForm = new System.Windows.Forms.Button();
             this.panel_main = new System.Windows.Forms.Panel();
             this.panel_act = new System.Windows.Forms.Panel();
-            this.comboBox_act = new System.Windows.Forms.ComboBox();
             this.button_choose_act = new System.Windows.Forms.Button();
+            this.comboBox_act = new System.Windows.Forms.ComboBox();
             this.grpbUnused1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -245,14 +245,6 @@
             this.panel_act.Size = new System.Drawing.Size(380, 93);
             this.panel_act.TabIndex = 5;
             // 
-            // comboBox_act
-            // 
-            this.comboBox_act.FormattingEnabled = true;
-            this.comboBox_act.Location = new System.Drawing.Point(13, 30);
-            this.comboBox_act.Name = "comboBox_act";
-            this.comboBox_act.Size = new System.Drawing.Size(263, 20);
-            this.comboBox_act.TabIndex = 0;
-            // 
             // button_choose_act
             // 
             this.button_choose_act.Location = new System.Drawing.Point(283, 29);
@@ -262,6 +254,14 @@
             this.button_choose_act.Text = "選擇活動";
             this.button_choose_act.UseVisualStyleBackColor = true;
             this.button_choose_act.Click += new System.EventHandler(this.button_choose_act_Click);
+            // 
+            // comboBox_act
+            // 
+            this.comboBox_act.FormattingEnabled = true;
+            this.comboBox_act.Location = new System.Drawing.Point(13, 30);
+            this.comboBox_act.Name = "comboBox_act";
+            this.comboBox_act.Size = new System.Drawing.Size(263, 20);
+            this.comboBox_act.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -274,6 +274,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "主選單";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.grpbUnused1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
