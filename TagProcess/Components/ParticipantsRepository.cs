@@ -370,7 +370,7 @@ namespace TagProcess
             //updateResult res = JsonConvert.DeserializeObject<updateResult>(res_for_parti.Content);
             if (!res_for_parti.Content.Contains("ok"))
             {
-                OnLog("更新選手資料發生錯誤: " + res.msg);
+                OnLog("更新選手資料發生錯誤: " + res_for_parti.Content);
                 return false;
             }
 
