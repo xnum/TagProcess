@@ -33,9 +33,16 @@ namespace TagProcess
         {
             InitializeComponent();
 
-            textBox_ip = new TextBox[] { textBox_ip0, textBox_ip1, textBox_ip2 };
-            textBox_status = new TextBox[] { textBox_status0, textBox_status1, textBox_status2 };
-            textBox_time = new TextBox[] { textBox_time0, textBox_time1, textBox_time2 };
+            comboBox_station.Items.Clear();
+
+            Dictionary<string, int> dict = new Dictionary<string, int>() { { "起點", 1 }, { "檢查點1", 2 }, { "檢查點2", 3 }, { "檢查點3", 4 }, { "終點", 99 } };
+            comboBox_station.DataSource = new BindingSource(dict, null);
+            comboBox_station.DisplayMember = "Key"; 
+            comboBox_station.ValueMember = "Value";
+
+            textBox_ip = new TextBox[] { textBox_reader_ip1, textBox_reader_ip2, textBox_reader_ip3 };
+            textBox_status = new TextBox[] {  };
+            textBox_time = new TextBox[] { };
 
             readerWorker = new BackgroundWorker[3];
             for (int i = 0; i < this.readerWorker.Length; ++i)
@@ -46,24 +53,23 @@ namespace TagProcess
             }
 
             HashSet<string> seenGroup = new HashSet<string>();
-            foreach(var item in repo.helper.getGroups())
+            foreach(RaceGroups item in repo.helper.getGroups())
             {
-                if(seenGroup.Add(item.reg))
-                    checkedListBox_group.Items.Add(item.reg);
+                dgv_group.Rows.Add(false, item.id, item.name, "");
             }
             
         }
 
         private void SetText(string text, int index)
         {
-            if (textBox_status[index].InvokeRequired)
+            if (textBox_log.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(SetText);
                 Invoke(d, new object[] { text , index });
             }
             else
             {
-                textBox_status[index].Text = text;
+                textBox_log.AppendText("Reader " + index + ":" + text + "\r\n");
             }
         }
 
@@ -97,7 +103,7 @@ namespace TagProcess
         private void refresh_timer_Tick(object sender, EventArgs e)
         {
             refresh_count++;
-            textBox_localtime.Text = DateTime.Now.ToString();
+            label_localtime.Text = DateTime.Now.ToString();
 
             for(int i = 0; i < 3; ++i)
             {
@@ -106,8 +112,11 @@ namespace TagProcess
                 IPXCmd got_cmd = null;
                 while(clients[i].TryGet(out got_cmd))
                 {
-                    if (got_cmd.type == IPXCmd.Type.GetTag && start_button.Text != "開始")
+                    if (got_cmd.type == IPXCmd.Type.GetTag)
                     {
+                        keeper.addData(station_id, got_cmd);
+
+                        /*
                         FileLogger.Instance.logPacket(String.Format("{0}\t{1}\t{2}\t{3}", 
                             station_id, got_cmd.data, got_cmd.time, (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000));
                         if (!keeper.addData(station_id, got_cmd)) // 新增失敗就不做以下動作
@@ -128,12 +137,15 @@ namespace TagProcess
                         touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
                         
                         System.Media.SystemSounds.Beep.Play(); // 播放音效
+                        */
                     }
 
+                    /*
                     if (got_cmd.type == IPXCmd.Type.GetDate || got_cmd.type == IPXCmd.Type.SetDate)
                     {
                         textBox_time[i].Text = got_cmd.time.ToString();
                     }
+                    */
                 }
 
                 if (refresh_count % 100 == 1) // 每10秒設定一次時間
@@ -141,7 +153,7 @@ namespace TagProcess
                     clients[i].Put(new IPXCmd(IPXCmd.Type.SetDate));
                 }
 
-                if (refresh_count % 10 == 1) // 每1秒取得一次時間
+                if (refresh_count % 50 == 1) // 每5秒取得一次時間
                 {
                     clients[i].Put(new IPXCmd(IPXCmd.Type.GetDate));
                 }
@@ -152,60 +164,22 @@ namespace TagProcess
 
             if (refresh_count % 300 == 1)
             {
-                start_time = keeper.fetchStartRecords();
+                //start_time = keeper.fetchStartRecords();
             }
 
             while(touchedView.Rows.Count >= 100)
                 touchedView.Rows.RemoveAt(0);
-            touchedView.Refresh();
-        }
+            //if(refresh_count % 10 == 1)touchedView.Refresh();
 
-        private void comboBox_checkpoint_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ComboBox cb = (ComboBox)sender;
-            if(cb.SelectedIndex <= 1) // 起點或單點模式
-            {
-                checkedListBox_group.Enabled = true;
-            }
-            else
-            {
-                checkedListBox_group.Enabled = false;
-            }
-
-            if (cb.SelectedIndex == 0)
-            {// 單點模式才能設定圈數
-                textBox_maxRound.Enabled = true;
-                textBox_limitSecond.Enabled = true;
-            }
-            else
-            {
-                textBox_maxRound.Enabled = false;
-                textBox_limitSecond.Enabled = false;
-            }
-        }
-
-        private void start_button_Click(object sender, EventArgs e)
-        {
-            if (start_button.Text == "開始")
-            {
-                if (!start()) return;
-
-                start_button.Text = "停止";
-                comboBox_checkpoint.Enabled = false;
-                checkedListBox_group.Enabled = false;
-            }
-            else
-            {
-                start_button.Text = "開始";
-                comboBox_checkpoint.Enabled = true;
-                checkedListBox_group.Enabled = true;
-            }
-
+            label_tagged.Text = keeper.GetTaggedP().ToString();
+            label_total.Text = keeper.GetTotalP().ToString();
+            label_upload.Text = keeper.GetUploadP().ToString();
+            label_buffered.Text = keeper.GetBufferedP().ToString();
         }
 
         private bool start()
         {
-            int station_n = comboBox_checkpoint.SelectedIndex;
+            int station_n = 0;// comboBox_checkpoint.SelectedIndex;
             if (station_n < 0)
             {
                 MessageBox.Show("未選擇檢查點");
@@ -214,12 +188,14 @@ namespace TagProcess
 
             List<int> groups_n = new List<int>();
             List<RaceGroups> g = repo.helper.getGroups();
+            /*
             foreach (string i in checkedListBox_group.CheckedItems)
             {
                 foreach (var j in g)
                     if (j.reg == i)
                         groups_n.Add(j.id);
             }
+            */
 
             if (station_n <= 1 && groups_n.Count < 0) // 起點與單點模式
             {
@@ -230,12 +206,12 @@ namespace TagProcess
             station_id = station_n;
 
             int max_round = -1;
-            int limit_sec = -1;
+            int limit_sec = 3;
             if (station_n == 0)
             {
                 try
                 {
-                    max_round = Int32.Parse(textBox_maxRound.Text);
+                    //max_round = Int32.Parse(textBox_maxRound.Text);
                 }
                 catch
                 {
@@ -245,7 +221,7 @@ namespace TagProcess
 
                 try
                 {
-                    limit_sec = Int32.Parse(textBox_limitSecond.Text);
+                    //limit_sec = Int32.Parse(textBox_limitSecond.Text);
                 }
                 catch
                 {
@@ -257,5 +233,37 @@ namespace TagProcess
             return keeper.setStartCompetition(station_n, max_round, groups_n, limit_sec);
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            List<string> ids = new List<string>();
+            string msg = "";
+            for(int i = 0; i < dgv_group.Rows.Count; ++i)
+            {
+                DataGridViewCheckBoxCell chkbox = (DataGridViewCheckBoxCell)dgv_group.Rows[i].Cells[0];
+                if(chkbox != null && (bool)chkbox.FormattedValue == true)
+                {
+                    string id = dgv_group.Rows[i].Cells[1].Value.ToString();
+                    ids.Add(id);
+                    msg += id +":"+dgv_group.Rows[i].Cells[2].Value.ToString() + "\r\n";
+                }
+            }
+
+            DialogResult res = MessageBox.Show(msg, "選取組別", MessageBoxButtons.YesNo);
+            
+        }
+
+        private void comboBox_station_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox_station.SelectedValue is int)
+            {
+                station_id = (int)comboBox_station.SelectedValue;
+            }
+            else
+            {
+                var v = (KeyValuePair<string, int>)comboBox_station.SelectedValue;
+                station_id = v.Value;
+            }
+            SetText("Station ID = " + station_id, 0);
+        }
     }
 }

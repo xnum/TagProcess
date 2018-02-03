@@ -181,6 +181,26 @@ namespace TagProcess
             return true;
         }
 
+        public int GetTotalP()
+        {
+            return ParticipantsRepository.Instance.participants.Count;
+        }
+
+        public int GetTaggedP()
+        {
+            return 0;
+        }
+
+        public int GetUploadP()
+        {
+            return 0;
+        }
+
+        public int GetBufferedP()
+        {
+            return 0;
+        }
+
         public void notifyTimeout()
         {
             uploadTagData(true);

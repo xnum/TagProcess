@@ -16,6 +16,7 @@ namespace TagProcess
         public string name;
         public string reg;
         public string type;
+        public DateTime start_time;
     }
 
     public class ParticipantHelper
