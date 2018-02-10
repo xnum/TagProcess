@@ -9,6 +9,12 @@ using System.Windows.Forms;
 
 namespace TagProcess
 {
+    class UploadType
+    {
+        public string tag;
+        public DateTime time;
+        public int station;
+    }
     public class TimeKeeper
     {
         private static readonly TimeKeeper _instance = new TimeKeeper();
@@ -19,16 +25,15 @@ namespace TagProcess
         public delegate void LogHandler(string msg);
         public event LogHandler Log;
 
-        private Dictionary<string, DateTime> filter = null;
-        private Dictionary<string, int> roundCounter = null;
-        private Dictionary<int, HashSet<string>> seenTag = null;
-        private int maxRoundCount = 0;
-        private List<IPXCmd> uploadList = new List<IPXCmd>();
+        private int station_id = 0;
+        private Dictionary<string, DateTime> tag_store = new Dictionary<string, DateTime>();
+        private Dictionary<string, Participant> tag_id_to_participant_table = new Dictionary<string, Participant>();
+        private Dictionary<int, DateTime> group_start_time = new Dictionary<int, DateTime>();
 
-        /// <summary>
-        /// 限制起跑時間必須在start_time內，否則算第二圈
-        /// </summary>
-        private DateTime start_time;
+        // 包含待上傳資料，防止重複
+        private HashSet<string> uploaded_tag = new HashSet<string>();
+        // 待上傳資料
+        private List<UploadType> buffered_data = new List<UploadType>();
 
         protected void OnLog(string msg)
         {
@@ -44,30 +49,34 @@ namespace TagProcess
         /// <param name="max_round"></param>
         /// <param name="groups_id"></param>
         /// <returns></returns>
-        public bool setStartCompetition(int station, int max_round, List<int> groups_id, int limit_sec)
+        public bool setStartCompetition(int station, List<int> groups_id)
         {
-            RestRequest req = new RestRequest("competitions/batch_start", Method.POST);
-            req.AddParameter("station", station);
-            req.AddParameter("batch", 0);
+            station_id = station;
+
+            // build table
+            foreach (Participant p in ParticipantsRepository.Instance.participants)
+            {
+                tag_id_to_participant_table[p.tag_id] = p;
+            }
+
+            foreach (int id in groups_id)
+            {
+                group_start_time[id] = DateTime.Now;
+            }
+
+            RestRequest req = new RestRequest("api/json/chip_race_group/batch_start", Method.PUT);
             req.AddParameter("groups", JsonConvert.SerializeObject(groups_id));
             req.AddParameter("time", DateTime.Now.ToString(MySqlDateTimeFormat));
             IRestResponse res = server.ExecuteHttpRequest(req);
 
             if (res == null) return false;
 
-            if (!res.Content.Equals("Ok"))
+            if (!res.Content.Contains("ok"))
             {
                 OnLog("上傳組別失敗" + res.Content);
                 return false;
             }
 
-            filter = new Dictionary<string, DateTime>();
-            roundCounter = new Dictionary<string, int>();
-            uploadList = new List<IPXCmd>();
-            maxRoundCount = max_round;
-            start_time = DateTime.Now;
-            start_time.AddSeconds(limit_sec);
-            seenTag = new Dictionary<int, HashSet<string>>();
             return true;
         }
 
@@ -78,33 +87,55 @@ namespace TagProcess
         /// <returns></returns>
         public bool uploadTagData(bool force)
         {
-            if (force == false && uploadList.Count <= 10) // 小於10筆不主動上傳
-                return true;
-
-            List<Dictionary<string, string>> payload = new List<Dictionary<string, string>>();
-            foreach (var d in uploadList)
+            // 從 tag_store 撈出該上傳的資料
+            foreach(KeyValuePair<string, DateTime> tag in tag_store)
             {
-                payload.Add(
-                    new Dictionary<string, string>() {
-                        { "tag_id", d.data },
-                        { "time", d.time.ToString(MySqlDateTimeFormat) },
-                        { "station_id", d.station_id.ToString() }
-                    });
+                if (uploaded_tag.Contains(tag.Key)) continue;
+
+                DateTime rec_time = tag.Value;
+                // 記錄到的資料 比10秒前還早 代表為10秒之前的資料
+                if(rec_time <= DateTime.Now.Subtract(TimeSpan.FromSeconds(10)))
+                {
+                    // addData時已經確認存在
+                    Participant p = tag_id_to_participant_table[tag.Key];
+
+                    // 還沒起跑 略過
+                    if(group_start_time.ContainsKey(p.group_id) == false)
+                    {
+                        continue;
+                    }
+
+                    DateTime gtime = group_start_time[p.group_id];
+
+                    // 記錄到的時間 比組別起跑時間晚三秒
+                    if(rec_time.AddSeconds(3) >= gtime)
+                    {
+                        uploaded_tag.Add(tag.Key);
+                        buffered_data.Add(new UploadType { tag = tag.Key, station = station_id, time = tag.Value });
+                    }
+                }
             }
 
-            RestRequest req_for_group = new RestRequest("records", Method.POST);
-            req_for_group.AddParameter("tags", JsonConvert.SerializeObject(payload));
-            IRestResponse res_for_group = server.ExecuteHttpRequest(req_for_group);
-
-            if (res_for_group == null) return false;
-
-            if (!res_for_group.Content.Equals("Ok"))
+            if(buffered_data.Count >= 5 || (force == true && buffered_data.Count >= 1))
             {
-                OnLog("上傳組別失敗" + res_for_group.Content);
-                return false;
+                RestRequest req = new RestRequest("api/json/chip_records/batch_create", Method.POST);
+                req.AddParameter("tag_data ", JsonConvert.SerializeObject(buffered_data));
+                req.AddParameter("activity", server.competition_id);
+
+                buffered_data.Clear();
+
+                IRestResponse res = server.ExecuteHttpRequest(req);
+
+                if (res == null) return false;
+
+                if (!res.Content.Contains("ok"))
+                {
+                    OnLog("上傳組別失敗" + res.Content);
+                    return false;
+                }
+
             }
 
-            uploadList.Clear();
             return true;
         }
 
@@ -134,51 +165,31 @@ namespace TagProcess
 
         public bool addData(int station, IPXCmd data)
         {
-            if (!seenTag.ContainsKey(station))
+            if(tag_id_to_participant_table.ContainsKey(data.data) == false)
             {
-                seenTag.Add(station, new HashSet<string>());
+                OnLog(data.data + "不存在");
+                return false;
             }
 
+            Participant p = tag_id_to_participant_table[data.data];
 
-
-            // 檢測是否在時間內已新增過
-            if (filter.ContainsKey(data.data))
+            // 還沒起跑或無資料 存最後一筆
+            if(group_start_time.ContainsKey(p.group_id) == false || tag_store.ContainsKey(data.data) == false)
             {
-                var lastSeenTime = filter[data.data];
-                TimeSpan diff = DateTime.Now - lastSeenTime;
-                if (diff.TotalSeconds <= 30) return false; // 小於30秒內的資料 即忽略
+                tag_store[data.data] = data.time;
+                return true;
             }
 
-            filter[data.data] = DateTime.Now;
-
-            int res_station = 1;
-            if (station == 0) // 單點模式，用內建的Counter紀錄圈數
+            // 已經起跑 比對已存成績和目前成績 決定是否更新
+            // 紀錄時間比群組時間早 才有必要更新
+            DateTime group_time = group_start_time[p.group_id];
+            if(tag_store[data.data] <= group_time)
             {
-                if (roundCounter.ContainsKey(data.data)) // 存在的情況下 將其+1後取出使用
-                {
-                    res_station = ++roundCounter[data.data];
-                }
-                else // 不存在的情況下 設為1(=起點)
-                {
-                    /* 如果限制起跑時間小於現在 代表還是第一圈*/
-                    if (start_time > DateTime.Now)
-                        roundCounter[data.data] = res_station = 1;
-                    else
-                        roundCounter[data.data] = res_station = 2;
-                }
-
-                /* 如果只跑圈數1圈 第一次是1 第二次是2 3以上才排除 */
-                if (res_station > maxRoundCount + 1) return false;
+                tag_store[data.data] = data.time;
+                return true;
             }
-            else
-            {
-                res_station = station;
-            }
-            data.station_id = res_station;
-            uploadList.Add(data);
-            uploadTagData(false);
 
-            return true;
+            return false;
         }
 
         public int GetTotalP()
@@ -188,17 +199,17 @@ namespace TagProcess
 
         public int GetTaggedP()
         {
-            return 0;
+            return tag_store.Count;
         }
 
         public int GetUploadP()
         {
-            return 0;
+            return uploaded_tag.Count - buffered_data.Count;
         }
 
         public int GetBufferedP()
         {
-            return 0;
+            return buffered_data.Count;
         }
 
         public void notifyTimeout()

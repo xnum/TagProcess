@@ -325,7 +325,7 @@ namespace TagProcess
             }
 
             var rg = new RestRequest("api/json/chip_race_group/list", Method.GET);
-            req.AddParameter("activity", server.competition_id);
+            rg.AddParameter("activity", server.competition_id);
             var res_for_groups = server.ExecuteHttpRequest(rg);
 
             if (res_for_groups == null) return false;

@@ -17,12 +17,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.touchedView = new System.Windows.Forms.DataGridView();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.refresh_timer = new System.Windows.Forms.Timer(this.components);
             this.label4 = new System.Windows.Forms.Label();
             this.label_localtime = new System.Windows.Forms.Label();
@@ -36,6 +30,10 @@
             this.textBox_reader_ip3 = new System.Windows.Forms.TextBox();
             this.label_reader3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label_buffered = new System.Windows.Forms.Label();
+            this.label_upload = new System.Windows.Forms.Label();
+            this.label_total = new System.Windows.Forms.Label();
+            this.label_tagged = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -49,10 +47,12 @@
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox_station = new System.Windows.Forms.ComboBox();
-            this.label_tagged = new System.Windows.Forms.Label();
-            this.label_total = new System.Windows.Forms.Label();
-            this.label_upload = new System.Windows.Forms.Label();
-            this.label_buffered = new System.Windows.Forms.Label();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.touchedView)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_group)).BeginInit();
@@ -70,55 +70,10 @@
             this.Column6});
             this.touchedView.Location = new System.Drawing.Point(532, 12);
             this.touchedView.Name = "touchedView";
+            this.touchedView.RowHeadersVisible = false;
             this.touchedView.RowTemplate.Height = 24;
             this.touchedView.Size = new System.Drawing.Size(687, 470);
             this.touchedView.TabIndex = 19;
-            // 
-            // Column5
-            // 
-            this.Column5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Column5.HeaderText = "晶片tag";
-            this.Column5.Name = "Column5";
-            this.Column5.Width = 68;
-            // 
-            // Column1
-            // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Column1.HeaderText = "編號";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Width = 54;
-            // 
-            // Column2
-            // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Column2.HeaderText = "姓名";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            this.Column2.Width = 54;
-            // 
-            // Column3
-            // 
-            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Column3.HeaderText = "組別";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            this.Column3.Width = 54;
-            // 
-            // Column4
-            // 
-            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Column4.HeaderText = "感應時間";
-            this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
-            this.Column4.Width = 78;
-            // 
-            // Column6
-            // 
-            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Column6.HeaderText = "起點時間";
-            this.Column6.Name = "Column6";
-            this.Column6.Width = 78;
             // 
             // refresh_timer
             // 
@@ -242,6 +197,42 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "人數資訊";
             // 
+            // label_buffered
+            // 
+            this.label_buffered.AutoSize = true;
+            this.label_buffered.Location = new System.Drawing.Point(92, 98);
+            this.label_buffered.Name = "label_buffered";
+            this.label_buffered.Size = new System.Drawing.Size(11, 12);
+            this.label_buffered.TabIndex = 7;
+            this.label_buffered.Text = "0";
+            // 
+            // label_upload
+            // 
+            this.label_upload.AutoSize = true;
+            this.label_upload.Location = new System.Drawing.Point(92, 72);
+            this.label_upload.Name = "label_upload";
+            this.label_upload.Size = new System.Drawing.Size(11, 12);
+            this.label_upload.TabIndex = 6;
+            this.label_upload.Text = "0";
+            // 
+            // label_total
+            // 
+            this.label_total.AutoSize = true;
+            this.label_total.Location = new System.Drawing.Point(92, 46);
+            this.label_total.Name = "label_total";
+            this.label_total.Size = new System.Drawing.Size(11, 12);
+            this.label_total.TabIndex = 5;
+            this.label_total.Text = "0";
+            // 
+            // label_tagged
+            // 
+            this.label_tagged.AutoSize = true;
+            this.label_tagged.Location = new System.Drawing.Point(92, 21);
+            this.label_tagged.Name = "label_tagged";
+            this.label_tagged.Size = new System.Drawing.Size(11, 12);
+            this.label_tagged.TabIndex = 4;
+            this.label_tagged.Text = "0";
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -307,6 +298,7 @@
             this.Column9});
             this.dgv_group.Location = new System.Drawing.Point(14, 152);
             this.dgv_group.Name = "dgv_group";
+            this.dgv_group.RowHeadersVisible = false;
             this.dgv_group.RowTemplate.Height = 24;
             this.dgv_group.Size = new System.Drawing.Size(404, 159);
             this.dgv_group.TabIndex = 33;
@@ -364,41 +356,55 @@
             this.comboBox_station.TabIndex = 35;
             this.comboBox_station.SelectedIndexChanged += new System.EventHandler(this.comboBox_station_SelectedIndexChanged);
             // 
-            // label_tagged
+            // Column5
             // 
-            this.label_tagged.AutoSize = true;
-            this.label_tagged.Location = new System.Drawing.Point(92, 21);
-            this.label_tagged.Name = "label_tagged";
-            this.label_tagged.Size = new System.Drawing.Size(11, 12);
-            this.label_tagged.TabIndex = 4;
-            this.label_tagged.Text = "0";
+            this.Column5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column5.FillWeight = 150F;
+            this.Column5.HeaderText = "晶片tag";
+            this.Column5.MinimumWidth = 130;
+            this.Column5.Name = "Column5";
+            this.Column5.Width = 130;
             // 
-            // label_total
+            // Column1
             // 
-            this.label_total.AutoSize = true;
-            this.label_total.Location = new System.Drawing.Point(92, 46);
-            this.label_total.Name = "label_total";
-            this.label_total.Size = new System.Drawing.Size(11, 12);
-            this.label_total.TabIndex = 5;
-            this.label_total.Text = "0";
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column1.FillWeight = 120F;
+            this.Column1.HeaderText = "編號";
+            this.Column1.MinimumWidth = 100;
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
             // 
-            // label_upload
+            // Column2
             // 
-            this.label_upload.AutoSize = true;
-            this.label_upload.Location = new System.Drawing.Point(92, 72);
-            this.label_upload.Name = "label_upload";
-            this.label_upload.Size = new System.Drawing.Size(11, 12);
-            this.label_upload.TabIndex = 6;
-            this.label_upload.Text = "0";
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column2.HeaderText = "姓名";
+            this.Column2.MinimumWidth = 80;
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.Width = 80;
             // 
-            // label_buffered
+            // Column3
             // 
-            this.label_buffered.AutoSize = true;
-            this.label_buffered.Location = new System.Drawing.Point(92, 98);
-            this.label_buffered.Name = "label_buffered";
-            this.label_buffered.Size = new System.Drawing.Size(11, 12);
-            this.label_buffered.TabIndex = 7;
-            this.label_buffered.Text = "0";
+            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column3.HeaderText = "組別";
+            this.Column3.MinimumWidth = 100;
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            // 
+            // Column4
+            // 
+            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column4.HeaderText = "感應時間";
+            this.Column4.MinimumWidth = 100;
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            // 
+            // Column6
+            // 
+            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column6.HeaderText = "起點時間";
+            this.Column6.MinimumWidth = 100;
+            this.Column6.Name = "Column6";
             // 
             // ReaderForm
             // 
@@ -425,6 +431,7 @@
             this.Controls.Add(this.label4);
             this.Name = "ReaderForm";
             this.Text = "ReaderForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ReaderForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.touchedView)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -437,12 +444,6 @@
         #endregion
         private System.Windows.Forms.DataGridView touchedView;
         private System.Windows.Forms.Timer refresh_timer;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label_localtime;
         private System.Windows.Forms.Label label_reader1;
@@ -472,5 +473,11 @@
         private System.Windows.Forms.Label label_upload;
         private System.Windows.Forms.Label label_total;
         private System.Windows.Forms.Label label_tagged;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
     }
 }

@@ -57,7 +57,8 @@ namespace TagProcess
             {
                 dgv_group.Rows.Add(false, item.id, item.name, "");
             }
-            
+
+            keeper.Log += SetText;
         }
 
         private void SetText(string text, int index)
@@ -73,6 +74,20 @@ namespace TagProcess
             }
         }
 
+        private void SetText(string text)
+        {
+            if (textBox_log.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetText);
+                Invoke(d, new object[] { text });
+            }
+            else
+            {
+                textBox_log.AppendText(text + "\r\n");
+            }
+        }
+
+
         private void readerWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             int index = (int)e.Argument;
@@ -86,11 +101,13 @@ namespace TagProcess
             }
 
             clients[index].run();
+
+            SetText("執行緒已終止", index);
         }
 
         private void readerWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-
+            
         }
 
         private void button_conn0_Click(object sender, EventArgs e)
@@ -177,65 +194,9 @@ namespace TagProcess
             label_buffered.Text = keeper.GetBufferedP().ToString();
         }
 
-        private bool start()
-        {
-            int station_n = 0;// comboBox_checkpoint.SelectedIndex;
-            if (station_n < 0)
-            {
-                MessageBox.Show("未選擇檢查點");
-                return false;
-            }
-
-            List<int> groups_n = new List<int>();
-            List<RaceGroups> g = repo.helper.getGroups();
-            /*
-            foreach (string i in checkedListBox_group.CheckedItems)
-            {
-                foreach (var j in g)
-                    if (j.reg == i)
-                        groups_n.Add(j.id);
-            }
-            */
-
-            if (station_n <= 1 && groups_n.Count < 0) // 起點與單點模式
-            {
-                MessageBox.Show("未選擇起跑組別");
-                return false;
-            }
-
-            station_id = station_n;
-
-            int max_round = -1;
-            int limit_sec = 3;
-            if (station_n == 0)
-            {
-                try
-                {
-                    //max_round = Int32.Parse(textBox_maxRound.Text);
-                }
-                catch
-                {
-                    MessageBox.Show("最大圈數輸入錯誤");
-                    return false;
-                }
-
-                try
-                {
-                    //limit_sec = Int32.Parse(textBox_limitSecond.Text);
-                }
-                catch
-                {
-                    MessageBox.Show("限制感應秒數輸入錯誤");
-                    return false;
-                }
-            }
-
-            return keeper.setStartCompetition(station_n, max_round, groups_n, limit_sec);
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            List<string> ids = new List<string>();
+            List<int> ids = new List<int>();
             string msg = "";
             for(int i = 0; i < dgv_group.Rows.Count; ++i)
             {
@@ -243,13 +204,26 @@ namespace TagProcess
                 if(chkbox != null && (bool)chkbox.FormattedValue == true)
                 {
                     string id = dgv_group.Rows[i].Cells[1].Value.ToString();
-                    ids.Add(id);
+                    ids.Add(Int32.Parse(id));
                     msg += id +":"+dgv_group.Rows[i].Cells[2].Value.ToString() + "\r\n";
                 }
             }
 
             DialogResult res = MessageBox.Show(msg, "選取組別", MessageBoxButtons.YesNo);
             
+            if(res == DialogResult.Yes)
+            {
+                if(true == keeper.setStartCompetition(station_id, ids))
+                {
+                    for (int i = 0; i < dgv_group.Rows.Count; ++i)
+                    {
+                        if (ids.Contains(Int32.Parse(dgv_group.Rows[i].Cells[1].Value.ToString())))
+                        {
+                            dgv_group.Rows[i].Cells[3].Value = DateTime.Now.ToString();
+                        }
+                    }
+                }
+            }
         }
 
         private void comboBox_station_SelectedIndexChanged(object sender, EventArgs e)
@@ -264,6 +238,11 @@ namespace TagProcess
                 station_id = v.Value;
             }
             SetText("Station ID = " + station_id, 0);
+        }
+
+        private void ReaderForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            keeper.Log -= SetText;
         }
     }
 }
