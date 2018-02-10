@@ -116,7 +116,7 @@ namespace TagProcess
                 }
             }
 
-            if(buffered_data.Count >= 5 || (force == true && buffered_data.Count >= 1))
+            if(buffered_data.Count >= 10 || (force == true && buffered_data.Count >= 1))
             {
                 RestRequest req = new RestRequest("api/json/chip_records/batch_create", Method.POST);
                 req.AddParameter("tag_data ", JsonConvert.SerializeObject(buffered_data));
@@ -134,30 +134,6 @@ namespace TagProcess
                     return false;
                 }
 
-            }
-
-            return true;
-        }
-
-        public bool updateRecord(string tag_id, int station_id, DateTime time)
-        {
-            List<Dictionary<string, string>> items = new List<Dictionary<string, string>>();
-            Dictionary<string, string> item = new Dictionary<string, string>();
-            item.Add("tag_id", tag_id);
-            item.Add("station_id", station_id.ToString());
-            item.Add("time", time.ToString(MySqlDateTimeFormat));
-            items.Add(item);
-
-            RestRequest req = new RestRequest("records", Method.POST);
-            req.AddParameter("tags", JsonConvert.SerializeObject(items));
-            var res = server.ExecuteHttpRequest(req);
-
-            if (res == null) return false;
-
-            if (!res.Content.Equals("Ok"))
-            {
-                OnLog("上傳時間失敗: " + res.Content);
-                return false;
             }
 
             return true;
@@ -186,6 +162,7 @@ namespace TagProcess
             if(tag_store[data.data] <= group_time)
             {
                 tag_store[data.data] = data.time;
+                uploadTagData(false);
                 return true;
             }
 
