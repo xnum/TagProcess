@@ -277,7 +277,7 @@ namespace TagProcess
         private ParticipantsRepository()
         {
             server = RaceServer.Instance;
-            participants = null;
+            participants = new List<Participant>();
 
         }
 

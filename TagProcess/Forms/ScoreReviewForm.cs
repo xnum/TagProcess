@@ -159,12 +159,14 @@ namespace TagProcess.Forms
 
             if(args.tag_start_time != origin_args.tag_start_time)
             {
-                keeper.updateRecord(tag_id, 1, args.tag_start_time);
+                //keeper.updateRecord(tag_id, 1, args.tag_start_time);
+                MessageBox.Show("無法修改，請至網站修改");
             }
 
             if(args.tag_end_time != origin_args.tag_end_time)
             {
-                keeper.updateRecord(tag_id, 5, args.tag_end_time);
+                //keeper.updateRecord(tag_id, 5, args.tag_end_time);
+                MessageBox.Show("無法修改，請至網站修改");
             }
 
 

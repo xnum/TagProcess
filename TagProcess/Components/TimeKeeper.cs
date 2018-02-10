@@ -42,6 +42,25 @@ namespace TagProcess
 
         private RaceServer server = RaceServer.Instance;
         private const string MySqlDateTimeFormat = "yyyy/MM/dd HH:mm:ss";
+
+        // for test, don't call
+        public void Clear()
+        {
+            tag_store.Clear();
+            tag_id_to_participant_table.Clear();
+            group_start_time.Clear();
+            uploaded_tag.Clear();
+            buffered_data.Clear();
+        }
+
+        public void Init()
+        {
+            // build table
+            foreach (Participant p in ParticipantsRepository.Instance.participants)
+            {
+                tag_id_to_participant_table[p.tag_id] = p;
+            }
+        }
         /// <summary>
         /// 通知伺服器有哪些組別起跑，作為大會起跑時間
         /// </summary>
@@ -53,11 +72,7 @@ namespace TagProcess
         {
             station_id = station;
 
-            // build table
-            foreach (Participant p in ParticipantsRepository.Instance.participants)
-            {
-                tag_id_to_participant_table[p.tag_id] = p;
-            }
+            Init();
 
             foreach (int id in groups_id)
             {
@@ -85,8 +100,9 @@ namespace TagProcess
         /// </summary>
         /// <param name="force">設為True，表示要強制上傳資料，否則讓程式決定是否上傳</param>
         /// <returns></returns>
-        public bool uploadTagData(bool force)
+        public bool uploadTagData(bool force, DateTime? now = null)
         {
+            DateTime nowt = now.GetValueOrDefault(DateTime.Now);
             // 從 tag_store 撈出該上傳的資料
             foreach(KeyValuePair<string, DateTime> tag in tag_store)
             {
@@ -94,7 +110,7 @@ namespace TagProcess
 
                 DateTime rec_time = tag.Value;
                 // 記錄到的資料 比10秒前還早 代表為10秒之前的資料
-                if(rec_time <= DateTime.Now.Subtract(TimeSpan.FromSeconds(10)))
+                if(rec_time <= nowt.Subtract(TimeSpan.FromSeconds(10)))
                 {
                     // addData時已經確認存在
                     Participant p = tag_id_to_participant_table[tag.Key];
@@ -169,22 +185,22 @@ namespace TagProcess
             return false;
         }
 
-        public int GetTotalP()
+        public int GetTotalCount()
         {
             return ParticipantsRepository.Instance.participants.Count;
         }
 
-        public int GetTaggedP()
+        public int GetTagCount()
         {
             return tag_store.Count;
         }
 
-        public int GetUploadP()
+        public int GetUploadedCount()
         {
             return uploaded_tag.Count - buffered_data.Count;
         }
 
-        public int GetBufferedP()
+        public int GetBufferedCount()
         {
             return buffered_data.Count;
         }

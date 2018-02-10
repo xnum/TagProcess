@@ -43,6 +43,7 @@ namespace TagProcess
         /// <returns></returns>
         public IRestResponse ExecuteHttpRequest(RestRequest request)
         {
+            if (serverUrl == null) return null;
             OnLog("嘗試連線到: " + serverUrl + "/" + request.Resource);
             RestClient client = new RestClient(serverUrl);
             IRestResponse response = client.Execute(request);

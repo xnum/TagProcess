@@ -27,7 +27,6 @@ namespace TagProcess
         private TimeKeeper keeper = TimeKeeper.Instance;
 
         private IpicoClient[] clients = new IpicoClient[3];
-        private Dictionary<string, string> start_time = null;
 
         public ReaderForm()
         {
@@ -188,10 +187,10 @@ namespace TagProcess
                 touchedView.Rows.RemoveAt(0);
             //if(refresh_count % 10 == 1)touchedView.Refresh();
 
-            label_tagged.Text = keeper.GetTaggedP().ToString();
-            label_total.Text = keeper.GetTotalP().ToString();
-            label_upload.Text = keeper.GetUploadP().ToString();
-            label_buffered.Text = keeper.GetBufferedP().ToString();
+            label_tagged.Text = keeper.GetTagCount().ToString();
+            label_total.Text = keeper.GetTotalCount().ToString();
+            label_upload.Text = keeper.GetUploadedCount().ToString();
+            label_buffered.Text = keeper.GetBufferedCount().ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
