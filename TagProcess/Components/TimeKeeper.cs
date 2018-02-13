@@ -356,8 +356,7 @@ namespace TagProcess
         // 固定時間觸發伺服器工作
         public string triggerServer()
         {
-            RestRequest req = new RestRequest("api/json/chip_user/records", Method.GET);
-            req.AddParameter("activity", server.competition_id);
+            RestRequest req = new RestRequest("api/json/update_records_time/" + server.competition_id, Method.POST);
             var res = server.ExecuteHttpRequest(req);
 
             var def = new { result = "", ret = "" };
@@ -365,7 +364,7 @@ namespace TagProcess
 
             OnLog(res.Content);
 
-            RestRequest req2 = new RestRequest("api/json/chip_user/records", Method.GET);
+            RestRequest req2 = new RestRequest("api/json/update_records_rank/" + server.competition_id, Method.POST);
             req2.AddParameter("activity", server.competition_id);
             var res2 = server.ExecuteHttpRequest(req2);
 
