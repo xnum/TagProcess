@@ -127,7 +127,8 @@ namespace TagProcess
                     if(rec_time.AddSeconds(3) >= gtime)
                     {
                         uploaded_tag.Add(tag.Key);
-                        buffered_data.Add(new UploadType { tag = tag.Key, station = station_id, time = tag.Value });
+                        buffered_data.Add(new UploadType { tag = tag.Key, station = station_id,
+                            time = tag.Value < gtime ? gtime : tag.Value });
                     }
                 }
             }
@@ -230,55 +231,55 @@ namespace TagProcess
 
         public class RecordResult
         {
-            public int code;
-            public string msg;
-            public Record[] recs;
-            public Group group;
-            public Dictionary<string, string> p;
-            public int overall;
-            public int team;
+            public int id;
+            public string id_number;
+            public string name;
+            public int male;
+            public DateTime birth;
+            public string team_name;
+            public string tag_id;
+            public string race_id;
+            public int total_rank;
+            public int group_rank;
+            public int activity_time;
+            public int personal_time;
+            public int group_id;
+            public string chip_race_group_name;
+            public int activity;
 
             public bool checkData()
             {
-                /*
-                textBox_date.Text = DateTime.Now.ToShortDateString();
-                textBox_name.Text = res.p["name"];
-                textBox_group.Text = res.group.name;
-                textBox_batch_start.Text = res.group.batch_start_time.ToLongTimeString();
-                textBox_overall_rank.Text = res.overall.ToString();
-                textBox_team_rank.Text = res.team.ToString();
-                textBox_team_name.Text = res.p["team_name"];
-                */
-
-                if (!p.ContainsKey("name") || p["name"] == "")
+                if (name == "")
                 {
                     MessageBox.Show("姓名不存在");
                     return false;
                 }
 
-                if (!p.ContainsKey("team_name"))
-                {
-                    MessageBox.Show("團體名稱不存在");
-                    return false;
-                }
-
-                if (group.name == "")
+                if (chip_race_group_name == "")
                 {
                     MessageBox.Show("報名組別不存在");
                     return false;
                 }
 
-                if (overall <= 0)
+                if (total_rank <= 0)
                 {
                     MessageBox.Show("總排名有誤");
                     return false;
                 }
 
+                if(activity_time <= 0 || personal_time <= 0)
+                {
+                    MessageBox.Show("成績有誤");
+                    return false;
+                }
+
+                /*
                 if (group.batch_start_time.CompareTo(new DateTime(2017, 10, 28)) <= 0)
                 {
                     MessageBox.Show("組別[" + group.name + "]起跑時間異常: " + group.batch_start_time.ToString());
                     return false;
                 }
+                
 
                 int station_count = 0;
                 foreach (var r in recs)
@@ -327,6 +328,7 @@ namespace TagProcess
                         MessageBox.Show("紀錄例外: " + station_count);
                         break;
                 }
+                */
 
                 return true;
             }
@@ -334,24 +336,43 @@ namespace TagProcess
 
         public RecordResult fetchResultByTagOrRace(string tag, string race)
         {
-            RestRequest req = new RestRequest("record", Method.GET);
+            RestRequest req = new RestRequest("api/json/chip_user/records", Method.GET);
+            req.AddParameter("activity", server.competition_id);
             if (tag != null) req.AddParameter("tag_id", tag);
             else if (race != null) req.AddParameter("race_id", race);
             var res = server.ExecuteHttpRequest(req);
-            var obj = JsonConvert.DeserializeObject<RecordResult>(res.Content);
 
-            if (obj.code == 200)
-                return obj;
+            var def = new { result = "", ret = new RecordResult() };
+            var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
+
+            if (obj.result == "ok")
+                return obj.ret;
             else
-                MessageBox.Show(obj.msg);
+                MessageBox.Show(obj.result);
+            OnLog(res.Content);
             return null;
         }
 
+        // 固定時間觸發伺服器工作
+        public string triggerServer()
+        {
+            RestRequest req = new RestRequest("api/json/chip_user/records", Method.GET);
+            req.AddParameter("activity", server.competition_id);
+            var res = server.ExecuteHttpRequest(req);
+
+            var def = new { result = "", ret = "" };
+            var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
+
+            return obj.ret;
+        }
         public Dictionary<string, string> fetchStartRecords()
         {
+            /*
             RestRequest req = new RestRequest("recstart", Method.GET);
             var res = server.ExecuteHttpRequest(req);
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(res.Content);
+            */
+            return null;
         }
     }
 }

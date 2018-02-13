@@ -39,17 +39,18 @@ namespace TagProcess.Forms
 
         public void showResult(TimeKeeper.RecordResult res)
         {
-            pid = Int32.Parse(res.p["id"]);
-            tag_id = res.p["tag_id"];
+            pid = res.id;
+            tag_id = res.tag_id;
 
             textBox_date.Text = DateTime.Now.ToShortDateString();
-            textBox_name.Text = res.p["name"];
-            textBox_group.Text = res.group.name;
+            textBox_name.Text = res.name;
+            textBox_group.Text = res.chip_race_group_name;
             textBox_team_name.Text = "";
-            textBox_batch_start.Text = res.group.batch_start_time.ToLongTimeString();
-            textBox_overall_rank.Text = res.overall.ToString();
-            textBox_team_rank.Text = res.team.ToString();
-            textBox_team_name.Text = res.p["team_name"];
+            textBox_batch_start.Text = ""; // res.group.batch_start_time.ToLongTimeString();
+            textBox_overall_rank.Text = res.total_rank.ToString();
+            textBox_team_rank.Text = res.group_rank.ToString();
+            textBox_team_name.Text = res.team_name;
+            /*
             foreach (var r in res.recs)
             {
                 switch(r.station_id)
@@ -72,7 +73,7 @@ namespace TagProcess.Forms
                 }
                 
             }
-
+            */
             origin_args = getArg();
         }
 
@@ -134,9 +135,9 @@ namespace TagProcess.Forms
             args.team_name = textBox_team_name.Text;
             args.overall_rank = textBox_overall_rank.Text;
             args.team_rank = textBox_team_rank.Text;
-            args.tag_end_time = DateTime.Parse(textBox_tag_end.Text);
-            args.tag_start_time = DateTime.Parse(textBox_tag_start.Text);
-            args.batch_start_time = DateTime.Parse(textBox_batch_start.Text);
+            //args.tag_end_time = DateTime.Parse(textBox_tag_end.Text);
+            //args.tag_start_time = DateTime.Parse(textBox_tag_start.Text);
+            //args.batch_start_time = DateTime.Parse(textBox_batch_start.Text);
 
             return args;
         }

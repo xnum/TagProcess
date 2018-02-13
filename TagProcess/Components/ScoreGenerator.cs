@@ -72,13 +72,17 @@ namespace TagProcess.Components
         public ScoreArguments(TimeKeeper.RecordResult res)
         {
             today = DateTime.Now.ToShortDateString();
-            name = res.p["name"];
-            group = res.group.name;
-            team_name = res.p["team_name"];
-            overall_rank = res.overall.ToString();
-            team_rank = res.team.ToString();
-            tag_end_time = new DateTime(2055, 12, 31);
-            tag_start_time = new DateTime(1999, 12, 31);
+            name = res.name;
+            group = res.chip_race_group_name;
+            team_name = res.team_name;
+            overall_rank = res.total_rank.ToString();
+            team_rank = res.group_rank.ToString();
+            batch_run_time = TimeSpan.FromSeconds(res.activity_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+            tag_run_time = TimeSpan.FromSeconds(res.personal_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+            //tag_end_time = new DateTime(2055, 12, 31);
+            //tag_start_time = new DateTime(1999, 12, 31);
+
+            /*
             batch_start_time = res.group.batch_start_time;
 
             foreach (var r in res.recs)
@@ -95,6 +99,7 @@ namespace TagProcess.Components
             }
 
             CountRunTime();
+            */
         }
 
         public void CountRunTime()

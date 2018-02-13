@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -242,6 +243,38 @@ namespace TagProcess
         private void ReaderForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             keeper.Log -= SetText;
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker wk = sender as BackgroundWorker;
+            while (!wk.CancellationPending)
+            {
+                SetText(DateTime.Now.ToString(), 0);
+                Thread.Sleep(1000);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn.Tag.ToString() == "0" && !backgroundWorker1.IsBusy)
+            {
+                SetText("啟動背景工作", 0);
+                backgroundWorker1.RunWorkerAsync();
+                btn.Tag = "1";
+            }
+            else
+            {
+                SetText("取消背景工作", 0);
+                backgroundWorker1.CancelAsync();
+            }
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            button2.Tag = "0";
+            SetText("背景工作已停止", 0);
         }
     }
 }
