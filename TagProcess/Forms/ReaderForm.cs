@@ -251,7 +251,7 @@ namespace TagProcess
             while (!wk.CancellationPending)
             {
                 SetText(DateTime.Now.ToString(), 0);
-                Thread.Sleep(1000);
+                Thread.Sleep(30000);
             }
         }
 
