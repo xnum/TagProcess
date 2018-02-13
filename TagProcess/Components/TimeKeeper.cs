@@ -363,8 +363,16 @@ namespace TagProcess
             var def = new { result = "", ret = "" };
             var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
 
-            return obj.ret;
+            RestRequest req2 = new RestRequest("api/json/chip_user/records", Method.GET);
+            req2.AddParameter("activity", server.competition_id);
+            var res2 = server.ExecuteHttpRequest(req2);
+
+            var def2 = new { result = "", ret = "" };
+            var obj2 = JsonConvert.DeserializeAnonymousType(res.Content, def2);
+
+            return obj2.ret;
         }
+
         public Dictionary<string, string> fetchStartRecords()
         {
             /*
