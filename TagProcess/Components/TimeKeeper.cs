@@ -126,7 +126,7 @@ namespace TagProcess
                     DateTime gtime = group_start_time[p.group_id];
 
                     // 記錄到的時間 比組別起跑時間晚三秒
-                    if(rec_time.AddSeconds(3) >= gtime)
+                    if(rec_time.AddSeconds(3) >= gtime || station_id != 1)
                     {
                         uploaded_tag.Add(tag.Key);
                         buffered_data.Add(new UploadType { tag = tag.Key, station = station_id,
