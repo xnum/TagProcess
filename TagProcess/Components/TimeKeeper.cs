@@ -129,6 +129,7 @@ namespace TagProcess
                         uploaded_tag.Add(tag.Key);
                         buffered_data.Add(new UploadType { tag = tag.Key, station = station_id,
                             time = tag.Value < gtime ? gtime : tag.Value });
+                        OnLog(tag.Key + " ok");
                     }
                 }
             }
