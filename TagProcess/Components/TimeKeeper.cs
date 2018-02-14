@@ -11,9 +11,9 @@ namespace TagProcess
 {
     class UploadType
     {
-        public string tag;
+        public string tag_id;
         public DateTime time;
-        public int station;
+        public int station_id;
     }
     public class TimeKeeper
     {
@@ -129,7 +129,7 @@ namespace TagProcess
                     if(rec_time.AddSeconds(3) >= gtime || station_id != 1)
                     {
                         uploaded_tag.Add(tag.Key);
-                        buffered_data.Add(new UploadType { tag = tag.Key, station = station_id,
+                        buffered_data.Add(new UploadType { tag_id = tag.Key, station_id = station_id,
                             time = tag.Value < gtime ? gtime : tag.Value });
                         OnLog(tag.Key + " ok");
                     }
@@ -139,7 +139,7 @@ namespace TagProcess
             if(buffered_data.Count >= 10 || (force == true && buffered_data.Count >= 1))
             {
                 RestRequest req = new RestRequest("api/json/chip_records/batch_create", Method.POST);
-                req.AddParameter("tag_data ", JsonConvert.SerializeObject(buffered_data));
+                req.AddParameter("tag_data", JsonConvert.SerializeObject(buffered_data));
                 req.AddParameter("activity", server.competition_id);
 
                 buffered_data.Clear();
