@@ -114,23 +114,41 @@ namespace TagProcess
                 // 記錄到的資料 比10秒前還早 代表為10秒之前的資料
                 if(rec_time <= nowt.Subtract(TimeSpan.FromSeconds(10)))
                 {
-                    // addData時已經確認存在
-                    Participant p = tag_id_to_participant_table[tag.Key];
-
-                    // 還沒起跑 略過
-                    if(group_start_time.ContainsKey(p.group_id) == false)
+                    if (station_id == 1)
                     {
-                        continue;
+                        // addData時已經確認存在
+                        Participant p = tag_id_to_participant_table[tag.Key];
+
+                        // 還沒起跑 略過
+                        if (group_start_time.ContainsKey(p.group_id) == false)
+                        {
+                            continue;
+                        }
+
+                        DateTime gtime = group_start_time[p.group_id];
+
+                        // 記錄到的時間 比組別起跑時間晚三秒
+                        if (rec_time.AddSeconds(3) >= gtime)
+                        {
+                            uploaded_tag.Add(tag.Key);
+                            buffered_data.Add(new UploadType
+                            {
+                                tag = tag.Key,
+                                station = station_id,
+                                time = tag.Value < gtime ? gtime : tag.Value
+                            });
+                            OnLog(tag.Key + " ok");
+                        }
                     }
-
-                    DateTime gtime = group_start_time[p.group_id];
-
-                    // 記錄到的時間 比組別起跑時間晚三秒
-                    if(rec_time.AddSeconds(3) >= gtime || station_id != 1)
+                    else
                     {
                         uploaded_tag.Add(tag.Key);
-                        buffered_data.Add(new UploadType { tag = tag.Key, station = station_id,
-                            time = tag.Value < gtime ? gtime : tag.Value });
+                        buffered_data.Add(new UploadType
+                        {
+                            tag = tag.Key,
+                            station = station_id,
+                            time = tag.Value
+                        });
                         OnLog(tag.Key + " ok");
                     }
                 }
