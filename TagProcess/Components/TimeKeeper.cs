@@ -166,6 +166,12 @@ namespace TagProcess
 
             Participant p = tag_id_to_participant_table[data.data];
 
+            if(station != 1 && tag_store.ContainsKey(data.data) == false)
+            {
+                tag_store[data.data] = data.time;
+                return true;
+            }
+
             // 還沒起跑或無資料 存最後一筆
             if(group_start_time.ContainsKey(p.group_id) == false || tag_store.ContainsKey(data.data) == false)
             {
@@ -362,18 +368,16 @@ namespace TagProcess
             var def = new { result = "", ret = "" };
             var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
 
-            OnLog(res.Content);
+            //OnLog(res.Content);
 
             RestRequest req2 = new RestRequest("api/json/update_records_rank/" + server.competition_id, Method.POST);
-            req2.AddParameter("activity", server.competition_id);
             var res2 = server.ExecuteHttpRequest(req2);
 
-            var def2 = new { result = "", ret = "" };
-            var obj2 = JsonConvert.DeserializeAnonymousType(res2.Content, def2);
+            var obj2 = JsonConvert.DeserializeAnonymousType(res2.Content, def);
 
-            OnLog(res2.Content);
+            //OnLog(res2.Content);
 
-            return obj2.ret;
+            return res.Content + "\r\n" + res2.Content;
         }
 
         public Dictionary<string, string> fetchStartRecords()

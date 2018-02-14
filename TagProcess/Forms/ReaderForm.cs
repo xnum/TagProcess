@@ -251,7 +251,8 @@ namespace TagProcess
             while (!wk.CancellationPending)
             {
                 SetText(DateTime.Now.ToString(), 0);
-                keeper.triggerServer();
+                string res = keeper.triggerServer();
+                wk.ReportProgress(0, res);
                 Thread.Sleep(30000);
             }
         }
@@ -276,6 +277,14 @@ namespace TagProcess
         {
             button2.Tag = "0";
             SetText("背景工作已停止", 0);
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if(e.UserState != null)
+            {
+                SetText(e.UserState as string, 0);
+            }
         }
     }
 }
