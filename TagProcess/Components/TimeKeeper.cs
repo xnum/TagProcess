@@ -74,6 +74,8 @@ namespace TagProcess
 
             Init();
 
+            if (station != 1) return true;
+
             foreach (int id in groups_id)
             {
                 group_start_time[id] = DateTime.Now;
