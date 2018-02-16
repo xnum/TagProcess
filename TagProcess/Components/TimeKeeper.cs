@@ -31,7 +31,8 @@ namespace TagProcess
         private Dictionary<int, DateTime> group_start_time = new Dictionary<int, DateTime>();
 
         // 包含待上傳資料，防止重複
-        private HashSet<string> uploaded_tag = new HashSet<string>();
+        private int upload_count = 0;
+        private HashSet<string> committed_tag = new HashSet<string>();
         // 待上傳資料
         private List<UploadType> buffered_data = new List<UploadType>();
 
@@ -49,8 +50,9 @@ namespace TagProcess
             tag_store.Clear();
             tag_id_to_participant_table.Clear();
             group_start_time.Clear();
-            uploaded_tag.Clear();
+            committed_tag.Clear();
             buffered_data.Clear();
+            upload_count = 0;
         }
 
         public void Init(int n)
@@ -94,6 +96,18 @@ namespace TagProcess
             return true;
         }
 
+        private void enqueue(string tag, int station, DateTime t)
+        {
+            committed_tag.Add(tag);
+            buffered_data.Add(new UploadType
+            {
+                tag_id = tag,
+                station_id = station,
+                time = t
+            });
+            OnLog(tag + " ok");
+        }
+
         /// <summary>
         /// 比賽進行時，上傳Tag資料
         /// </summary>
@@ -105,7 +119,7 @@ namespace TagProcess
             // 從 tag_store 撈出該上傳的資料
             foreach(KeyValuePair<string, DateTime> tag in tag_store)
             {
-                if (uploaded_tag.Contains(tag.Key)) continue;
+                if (committed_tag.Contains(tag.Key)) continue;
 
                 DateTime rec_time = tag.Value;
                 // 記錄到的資料 比10秒前還早 代表為10秒之前的資料
@@ -127,26 +141,12 @@ namespace TagProcess
                         // 記錄到的時間 比組別起跑時間晚三秒
                         if (rec_time.AddSeconds(3) >= gtime)
                         {
-                            uploaded_tag.Add(tag.Key);
-                            buffered_data.Add(new UploadType
-                            {
-                                tag_id = tag.Key,
-                                station_id = station_id,
-                                time = tag.Value < gtime ? gtime : tag.Value
-                            });
-                            OnLog(tag.Key + " ok");
+                            enqueue(tag.Key, station_id, tag.Value < gtime ? gtime : tag.Value);
                         }
                     }
                     else
                     {
-                        uploaded_tag.Add(tag.Key);
-                        buffered_data.Add(new UploadType
-                        {
-                            tag_id = tag.Key,
-                            station_id = station_id,
-                            time = tag.Value
-                        });
-                        OnLog(tag.Key + " ok");
+                        enqueue(tag.Key, station_id, tag.Value);
                     }
                 }
             }
@@ -157,18 +157,26 @@ namespace TagProcess
                 req.AddParameter("tag_data", JsonConvert.SerializeObject(buffered_data));
                 req.AddParameter("activity", server.competition_id);
 
+                var copied_data = buffered_data.ToArray();
                 buffered_data.Clear();
 
                 IRestResponse res = server.ExecuteHttpRequest(req);
 
-                if (res == null) return false;
-
-                if (!res.Content.Contains("ok"))
+                if (res == null)
                 {
-                    OnLog("上傳組別失敗" + res.Content);
+                    buffered_data.AddRange(copied_data);
                     return false;
                 }
 
+                var def = new { result = "", total = 0, error = new List<Dictionary<string, string>>() };
+                var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
+
+                foreach(var ele in obj.error)
+                {
+                    OnLog("Error: " + ele["tag_id"] + " " + ele["error"]);
+                }
+
+                upload_count += obj.total;
             }
 
             return true;
@@ -176,6 +184,8 @@ namespace TagProcess
 
         public bool addData(int station, IPXCmd data)
         {
+            FileLogger.Instance.logPacket(data.data + "\t" + data.time);
+
             if(tag_id_to_participant_table.ContainsKey(data.data) == false)
             {
                 OnLog(data.data + "不存在");
@@ -222,7 +232,7 @@ namespace TagProcess
 
         public int GetUploadedCount()
         {
-            return uploaded_tag.Count - buffered_data.Count;
+            return upload_count - buffered_data.Count;
         }
 
         public int GetBufferedCount()
