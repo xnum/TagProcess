@@ -71,10 +71,8 @@ namespace TagProcess
         /// <param name="max_round"></param>
         /// <param name="groups_id"></param>
         /// <returns></returns>
-        public bool setStartCompetition(int station, List<int> groups_id)
+        public bool setStartCompetition(List<int> groups_id)
         {
-            if (station != 1) return true;
-
             foreach (int id in groups_id)
             {
                 group_start_time[id] = DateTime.Now;

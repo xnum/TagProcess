@@ -55,6 +55,8 @@
             this.comboBox_station = new System.Windows.Forms.ComboBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.button2 = new System.Windows.Forms.Button();
+            this.checkBox_station = new System.Windows.Forms.CheckBox();
+            this.textBox_station = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.touchedView)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_group)).BeginInit();
@@ -427,11 +429,32 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // checkBox_station
+            // 
+            this.checkBox_station.AutoSize = true;
+            this.checkBox_station.Location = new System.Drawing.Point(324, 78);
+            this.checkBox_station.Name = "checkBox_station";
+            this.checkBox_station.Size = new System.Drawing.Size(60, 16);
+            this.checkBox_station.TabIndex = 37;
+            this.checkBox_station.Text = "自訂站";
+            this.checkBox_station.UseVisualStyleBackColor = true;
+            this.checkBox_station.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // textBox_station
+            // 
+            this.textBox_station.Location = new System.Drawing.Point(387, 76);
+            this.textBox_station.Name = "textBox_station";
+            this.textBox_station.Size = new System.Drawing.Size(100, 22);
+            this.textBox_station.TabIndex = 38;
+            this.textBox_station.TextChanged += new System.EventHandler(this.textBox_station_TextChanged);
+            // 
             // ReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1231, 505);
+            this.Controls.Add(this.textBox_station);
+            this.Controls.Add(this.checkBox_station);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.comboBox_station);
             this.Controls.Add(this.button1);
@@ -503,5 +526,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox checkBox_station;
+        private System.Windows.Forms.TextBox textBox_station;
     }
 }

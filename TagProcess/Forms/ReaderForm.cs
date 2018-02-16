@@ -36,7 +36,7 @@ namespace TagProcess
 
             comboBox_station.Items.Clear();
 
-            Dictionary<string, int> dict = new Dictionary<string, int>() { { "起點", 1 }, { "檢查點1", 2 }, { "檢查點2", 3 }, { "檢查點3", 4 }, { "終點", 99 } };
+            Dictionary<string, int> dict = new Dictionary<string, int>() { { "起點", 1 }, { "終點", 99 } };
             comboBox_station.DataSource = new BindingSource(dict, null);
             comboBox_station.DisplayMember = "Key"; 
             comboBox_station.ValueMember = "Value";
@@ -205,7 +205,7 @@ namespace TagProcess
             
             if(res == DialogResult.Yes)
             {
-                if(true == keeper.setStartCompetition(station_id, ids))
+                if(true == keeper.setStartCompetition(ids))
                 {
                     for (int i = 0; i < dgv_group.Rows.Count; ++i)
                     {
@@ -220,17 +220,17 @@ namespace TagProcess
 
         private void comboBox_station_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (checkBox_station.Checked) return;
             if (comboBox_station.SelectedValue is int)
             {
-                station_id = (int)comboBox_station.SelectedValue;
+                set_station_id((int)comboBox_station.SelectedValue);
             }
             else
             {
                 var v = (KeyValuePair<string, int>)comboBox_station.SelectedValue;
-                station_id = v.Value;
+                set_station_id(v.Value);
             }
-            SetText("Station ID = " + station_id, 0);
-            keeper.Init(station_id);
+
         }
 
         private void ReaderForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -278,6 +278,35 @@ namespace TagProcess
             {
                 SetText(e.UserState as string, 0);
             }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox_station.Checked == false)
+                comboBox_station_SelectedIndexChanged(null, null);
+            else
+                textBox_station_TextChanged(null, null);
+        }
+
+        private void textBox_station_TextChanged(object sender, EventArgs e)
+        {
+            if (checkBox_station.Checked == false) return;
+
+            try
+            {
+                set_station_id(Int32.Parse(textBox_station.Text));
+            }
+            catch(Exception ex)
+            {
+                return;
+            }
+        }
+
+        private void set_station_id(int id)
+        {
+            station_id = id;
+            SetText("Station ID = " + station_id, 0);
+            keeper.Init(station_id);
         }
     }
 }
