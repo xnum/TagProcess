@@ -28,6 +28,7 @@ namespace TagProcess
         private TimeKeeper keeper = TimeKeeper.Instance;
 
         private IpicoClient[] clients = new IpicoClient[3];
+        private Dictionary<string, string> start_time;
 
         public ReaderForm()
         {
@@ -116,7 +117,8 @@ namespace TagProcess
         {
             Button btn = (Button)sender;
             int index = int.Parse((string)btn.Tag);
-            readerWorker[index].RunWorkerAsync(index);
+            if(!readerWorker[index].IsBusy)
+                readerWorker[index].RunWorkerAsync(index);
         }
 
         private void refresh_timer_Tick(object sender, EventArgs e)
@@ -133,11 +135,6 @@ namespace TagProcess
                 {
                     if (got_cmd.type == IPXCmd.Type.GetTag)
                     {
-                        keeper.addData(station_id, got_cmd);
-
-                        /*
-                        FileLogger.Instance.logPacket(String.Format("{0}\t{1}\t{2}\t{3}", 
-                            station_id, got_cmd.data, got_cmd.time, (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000));
                         if (!keeper.addData(station_id, got_cmd)) // 新增失敗就不做以下動作
                             continue;
                         textBox_status[i].Text = got_cmd.data;
@@ -156,15 +153,7 @@ namespace TagProcess
                         touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
                         
                         System.Media.SystemSounds.Beep.Play(); // 播放音效
-                        */
                     }
-
-                    /*
-                    if (got_cmd.type == IPXCmd.Type.GetDate || got_cmd.type == IPXCmd.Type.SetDate)
-                    {
-                        textBox_time[i].Text = got_cmd.time.ToString();
-                    }
-                    */
                 }
 
                 if (refresh_count % 100 == 1) // 每10秒設定一次時間
@@ -183,7 +172,8 @@ namespace TagProcess
 
             if (refresh_count % 300 == 1)
             {
-                //start_time = keeper.fetchStartRecords();
+                var v = keeper.fetchStartRecords();
+                if (v != null) start_time = v;
             }
 
             while(touchedView.Rows.Count >= 100)

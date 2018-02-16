@@ -164,6 +164,7 @@ namespace TagProcess
 
                 if (res == null)
                 {
+                    OnLog("連線失敗");
                     buffered_data.AddRange(copied_data);
                     return false;
                 }
@@ -184,9 +185,10 @@ namespace TagProcess
 
         public bool addData(int station, IPXCmd data)
         {
-            FileLogger.Instance.logPacket(data.data + "\t" + data.time);
+            FileLogger.Instance.logPacket(String.Format("{0}\t{1}\t{2}\t{3}",
+                station, data.data, data.time, DateTime.Now));
 
-            if(tag_id_to_participant_table.ContainsKey(data.data) == false)
+            if (tag_id_to_participant_table.ContainsKey(data.data) == false)
             {
                 OnLog(data.data + "不存在");
                 return false;
@@ -410,12 +412,29 @@ namespace TagProcess
 
         public Dictionary<string, string> fetchStartRecords()
         {
-            /*
-            RestRequest req = new RestRequest("recstart", Method.GET);
-            var res = server.ExecuteHttpRequest(req);
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(res.Content);
-            */
-            return null;
+            try
+            {
+                RestRequest req = new RestRequest("api/json/chip_records/list", Method.GET);
+                req.AddParameter("activity", server.competition_id);
+                req.AddParameter("station_id", 1);
+                var res = server.ExecuteHttpRequest(req);
+
+                var def = new { result = "", ret = new List<Dictionary<string, string>>() };
+                var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
+
+                Dictionary<string, string> ret = new Dictionary<string, string>();
+                foreach (var item in obj.ret)
+                {
+                    ret[item["tag_id"]] = item["time"];
+                }
+
+                return ret;
+            }
+            catch(Exception ex)
+            {
+                OnLog(ex.Message);
+                return null;
+            }
         }
     }
 }
