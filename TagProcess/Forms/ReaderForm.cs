@@ -59,6 +59,8 @@ namespace TagProcess
             }
 
             keeper.Log += SetText;
+
+            keeper.Init(1);
         }
 
         private void SetText(string text, int index)
@@ -238,6 +240,7 @@ namespace TagProcess
                 station_id = v.Value;
             }
             SetText("Station ID = " + station_id, 0);
+            keeper.Init(station_id);
         }
 
         private void ReaderForm_FormClosed(object sender, FormClosedEventArgs e)

@@ -28,7 +28,7 @@ namespace TagProcess.Tests
             pr.participants.Add(new Participant() { id = 1, group_id = 1, tag_id = "tag0001" });
 
             k.Clear();
-            k.Init();
+            k.Init(1);
         }
 
         [TestMethod()]

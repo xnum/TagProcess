@@ -53,8 +53,9 @@ namespace TagProcess
             buffered_data.Clear();
         }
 
-        public void Init()
+        public void Init(int n)
         {
+            station_id = n;
             // build table
             foreach (Participant p in ParticipantsRepository.Instance.participants)
             {
@@ -70,10 +71,6 @@ namespace TagProcess
         /// <returns></returns>
         public bool setStartCompetition(int station, List<int> groups_id)
         {
-            station_id = station;
-
-            Init();
-
             if (station != 1) return true;
 
             foreach (int id in groups_id)
