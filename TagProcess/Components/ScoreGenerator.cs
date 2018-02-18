@@ -19,6 +19,7 @@ namespace TagProcess.Components
     {
         public string today;
         public string name;
+        public string race_id;
         public string group;
         public string team_name;
         public string total_rank;
@@ -76,6 +77,7 @@ namespace TagProcess.Components
         {
             today = DateTime.Now.ToShortDateString();
             name = res.name;
+            race_id = res.race_id;
             group = res.chip_race_group_name;
             team_name = res.team_name;
             reg = res.reg;
@@ -124,19 +126,20 @@ namespace TagProcess.Components
 
         public static void printPage(object sender, PrintPageEventArgs e)
         {
-            e.Graphics.DrawString(ScoreGenerator.args.name, font, Brushes.Black, 400, 150, new StringFormat());
-            //e.Graphics.DrawString(ScoreGenerator.args.today, font, Brushes.Black, 400, 250, new StringFormat());
-            e.Graphics.DrawString(ScoreGenerator.args.group, font, Brushes.Black, 400, 350, new StringFormat());
-            e.Graphics.DrawString(ScoreGenerator.args.team_name, font, Brushes.Black, 400, 450, new StringFormat());
-            e.Graphics.DrawString(ScoreGenerator.args.batch_run_time, font, Brushes.Black, 400, 550, new StringFormat());
-            e.Graphics.DrawString(ScoreGenerator.args.tag_run_time, font, Brushes.Black, 400, 650, new StringFormat());
-            e.Graphics.DrawString(ScoreGenerator.args.total_rank, font, Brushes.Black, 400, 750, new StringFormat());
-            e.Graphics.DrawString(ScoreGenerator.args.team_rank, font, Brushes.Black, 400, 850, new StringFormat());
+            e.Graphics.DrawString("選手姓名 : " + ScoreGenerator.args.name, font, Brushes.Black, 200, 300, new StringFormat());
+            e.Graphics.DrawString("選手編號 : " + ScoreGenerator.args.race_id, font, Brushes.Black, 200, 350, new StringFormat());
+            e.Graphics.DrawString("團體名稱 : " + ScoreGenerator.args.team_name, font, Brushes.Black, 200, 400, new StringFormat());
+            e.Graphics.DrawString("參賽項目 : " + ScoreGenerator.args.reg, font, Brushes.Black, 200, 450, new StringFormat());
+            e.Graphics.DrawString("參賽組別 : " + ScoreGenerator.args.type, font, Brushes.Black, 200, 500, new StringFormat());
+            e.Graphics.DrawString("大會時間 : " + ScoreGenerator.args.batch_run_time, font, Brushes.Black, 200, 550, new StringFormat());
+            e.Graphics.DrawString("晶片時間 : " + ScoreGenerator.args.tag_run_time, font, Brushes.Black, 200, 600, new StringFormat());
+            e.Graphics.DrawString("大會名次 : " + ScoreGenerator.args.total_rank, font, Brushes.Black, 200, 650, new StringFormat());
+            e.Graphics.DrawString("分組名次 : " + ScoreGenerator.args.team_rank, font, Brushes.Black, 200, 700, new StringFormat());
         }
 
         public static void Worker()
         {
-            font = new System.Drawing.Font("KAIU", 16);
+            font = new System.Drawing.Font("KAIU", 18, FontStyle.Bold);
             while (!queue.IsAddingCompleted)
             {
                 try
