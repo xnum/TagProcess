@@ -274,12 +274,18 @@ namespace TagProcess
             public string tag_id;
             public string race_id;
             public int total_rank;
+            public int total_gender_rank;
             public int group_rank;
             public int activity_time;
             public int personal_time;
             public int group_id;
             public string chip_race_group_name;
             public int activity;
+            public string reg;
+            public string type;
+            public DateTime chip_race_group_start_time;
+            public DateTime chip_user_start_time;
+            public DateTime chip_user_end_time;
 
             public bool checkData()
             {

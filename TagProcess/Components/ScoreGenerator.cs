@@ -21,7 +21,8 @@ namespace TagProcess.Components
         public string name;
         public string group;
         public string team_name;
-        public string overall_rank;
+        public string total_rank;
+        public string total_gender_rank;
         public string team_rank;
         public DateTime tag_start_time;
         public DateTime tag_end_time;
@@ -29,6 +30,8 @@ namespace TagProcess.Components
 
         public string batch_run_time;
         public string tag_run_time;
+        public string reg;
+        public string type;
 
         public bool Check()
         {
@@ -75,12 +78,16 @@ namespace TagProcess.Components
             name = res.name;
             group = res.chip_race_group_name;
             team_name = res.team_name;
-            overall_rank = res.total_rank.ToString();
+            reg = res.reg;
+            type = res.type;
+            total_rank = res.total_rank.ToString();
+            total_gender_rank = res.total_gender_rank.ToString();
             team_rank = res.group_rank.ToString();
             batch_run_time = TimeSpan.FromSeconds(res.activity_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
             tag_run_time = TimeSpan.FromSeconds(res.personal_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
-            //tag_end_time = new DateTime(2055, 12, 31);
-            //tag_start_time = new DateTime(1999, 12, 31);
+            batch_start_time = res.chip_race_group_start_time;
+            tag_end_time = res.chip_user_start_time;
+            tag_start_time = res.chip_user_end_time;
 
             /*
             batch_start_time = res.group.batch_start_time;
@@ -118,12 +125,12 @@ namespace TagProcess.Components
         public static void printPage(object sender, PrintPageEventArgs e)
         {
             e.Graphics.DrawString(ScoreGenerator.args.name, font, Brushes.Black, 400, 150, new StringFormat());
-            e.Graphics.DrawString(ScoreGenerator.args.today, font, Brushes.Black, 400, 250, new StringFormat());
+            //e.Graphics.DrawString(ScoreGenerator.args.today, font, Brushes.Black, 400, 250, new StringFormat());
             e.Graphics.DrawString(ScoreGenerator.args.group, font, Brushes.Black, 400, 350, new StringFormat());
             e.Graphics.DrawString(ScoreGenerator.args.team_name, font, Brushes.Black, 400, 450, new StringFormat());
             e.Graphics.DrawString(ScoreGenerator.args.batch_run_time, font, Brushes.Black, 400, 550, new StringFormat());
             e.Graphics.DrawString(ScoreGenerator.args.tag_run_time, font, Brushes.Black, 400, 650, new StringFormat());
-            e.Graphics.DrawString(ScoreGenerator.args.overall_rank, font, Brushes.Black, 400, 750, new StringFormat());
+            e.Graphics.DrawString(ScoreGenerator.args.total_rank, font, Brushes.Black, 400, 750, new StringFormat());
             e.Graphics.DrawString(ScoreGenerator.args.team_rank, font, Brushes.Black, 400, 850, new StringFormat());
         }
 
@@ -206,7 +213,7 @@ namespace TagProcess.Components
             ct.SetSimpleColumn(myText, 300, 300, 780, 425, 15, Element.ALIGN_LEFT);
             ct.Go();
 
-            myText = new Phrase(args.overall_rank, textFont);
+            myText = new Phrase(args.total_rank, textFont);
             ct.SetSimpleColumn(myText, 300, 300, 780, 375, 15, Element.ALIGN_LEFT);
             ct.Go();
 
