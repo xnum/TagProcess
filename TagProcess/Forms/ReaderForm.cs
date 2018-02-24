@@ -42,8 +42,6 @@ namespace TagProcess
             comboBox_station.ValueMember = "Value";
 
             textBox_ip = new TextBox[] { textBox_reader_ip1, textBox_reader_ip2, textBox_reader_ip3 };
-            textBox_status = new TextBox[] {  };
-            textBox_time = new TextBox[] { };
 
             readerWorker = new BackgroundWorker[3];
             for (int i = 0; i < this.readerWorker.Length; ++i)
@@ -66,27 +64,41 @@ namespace TagProcess
 
         private void SetText(string text, int index)
         {
-            if (textBox_log.InvokeRequired)
+            try
             {
-                SetTextCallback d = new SetTextCallback(SetText);
-                Invoke(d, new object[] { text , index });
+                if (textBox_log.InvokeRequired)
+                {
+                    SetTextCallback d = new SetTextCallback(SetText);
+                    Invoke(d, new object[] { text, index });
+                }
+                else
+                {
+                    textBox_log.AppendText("Reader " + index + ":" + text + "\r\n");
+                }
             }
-            else
+            catch(Exception ex)
             {
-                textBox_log.AppendText("Reader " + index + ":" + text + "\r\n");
+                FileLogger.Instance.log(ex.Message + ex.StackTrace);
             }
         }
 
         private void SetText(string text)
         {
-            if (textBox_log.InvokeRequired)
+            try
             {
-                SetTextCallback d = new SetTextCallback(SetText);
-                Invoke(d, new object[] { text });
+                if (textBox_log.InvokeRequired)
+                {
+                    SetTextCallback d = new SetTextCallback(SetText);
+                    Invoke(d, new object[] { text });
+                }
+                else
+                {
+                    textBox_log.AppendText(text + "\r\n");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                textBox_log.AppendText(text + "\r\n");
+                FileLogger.Instance.log(ex.Message + ex.StackTrace);
             }
         }
 
@@ -137,7 +149,7 @@ namespace TagProcess
                     {
                         if (!keeper.addData(station_id, got_cmd)) // 新增失敗就不做以下動作
                             continue;
-                        textBox_status[i].Text = got_cmd.data;
+                        
                         string race_id = "";
                         string name = "";
                         string group = "";
