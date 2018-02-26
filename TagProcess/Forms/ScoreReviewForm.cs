@@ -151,8 +151,6 @@ namespace TagProcess.Forms
                 return;
             }
 
-            args.CountRunTime();
-
             if (args.name != origin_args.name)
             {
                 repo.updateParticipantName(pid, args.name);

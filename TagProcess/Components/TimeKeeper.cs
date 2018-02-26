@@ -194,10 +194,15 @@ namespace TagProcess
 
             Participant p = tag_id_to_participant_table[data.data];
 
-            if(station != 1 && tag_store.ContainsKey(data.data) == false)
+            if(station != 1)
             {
-                tag_store[data.data] = data.time;
-                return true;
+                if (tag_store.ContainsKey(data.data) == false)
+                {
+                    tag_store[data.data] = data.time;
+                    return true;
+                }
+                else
+                    return false;
             }
 
             // 還沒起跑或無資料 存最後一筆

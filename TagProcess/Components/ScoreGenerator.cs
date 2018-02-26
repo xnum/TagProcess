@@ -85,37 +85,16 @@ namespace TagProcess.Components
             total_rank = res.total_rank.ToString();
             total_gender_rank = res.total_gender_rank.ToString();
             team_rank = res.group_rank.ToString();
-            batch_run_time = TimeSpan.FromSeconds(res.activity_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
-            tag_run_time = TimeSpan.FromSeconds(res.personal_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
+            var br_time = TimeSpan.FromSeconds(res.activity_time);
+            batch_run_time = br_time.ToString(br_time.TotalSeconds >= 3600 ? @"hh' 小時 'mm' 分 'ss' 秒'" : @"mm' 分 'ss' 秒'");
+            var tr_time = TimeSpan.FromSeconds(res.personal_time);
+            tag_run_time = tr_time.ToString(tr_time.TotalSeconds >= 3600 ? @"hh' 小時 'mm' 分 'ss' 秒'" : @"mm' 分 'ss' 秒'");
             batch_start_time = res.chip_race_group_start_time;
             tag_end_time = res.chip_user_start_time;
             tag_start_time = res.chip_user_end_time;
 
-            /*
-            batch_start_time = res.group.batch_start_time;
-
-            foreach (var r in res.recs)
-            {
-                switch (r.station_id)
-                {
-                    case "1":
-                        tag_start_time = r.time;
-                        break;
-                    case "5":
-                        tag_end_time = r.time;
-                        break;
-                }
-            }
-
-            CountRunTime();
-            */
         }
 
-        public void CountRunTime()
-        {
-            batch_run_time = tag_end_time.Subtract(batch_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
-            tag_run_time = tag_end_time.Subtract(tag_start_time).ToString(@"hh' 小時 'mm' 分 'ss' 秒'");
-        }
     }
     public class ScoreGenerator
     {
