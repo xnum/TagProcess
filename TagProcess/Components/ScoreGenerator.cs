@@ -109,20 +109,20 @@ namespace TagProcess.Components
 
         public static void printPage(object sender, PrintPageEventArgs e)
         {
-            e.Graphics.DrawString("選手姓名  :   " + args.name, font, Brushes.Black, 180, 350, new StringFormat());
-            e.Graphics.DrawString("選手編號  :   " + args.race_id, font, Brushes.Black, 180, 410, new StringFormat());
-            e.Graphics.DrawString("團體名稱  :   " + args.team_name, font, Brushes.Black, 180, 470, new StringFormat());
-            e.Graphics.DrawString("參賽項目  :   " + args.reg, font, Brushes.Black, 180, 530, new StringFormat());
-            e.Graphics.DrawString("參賽組別  :   " + args.type, font, Brushes.Black, 180, 590, new StringFormat());
-            e.Graphics.DrawString("大會時間  :   " + args.batch_run_time, font, Brushes.Black, 180, 650, new StringFormat());
-            e.Graphics.DrawString("晶片時間  :   " + args.tag_run_time, font, Brushes.Black, 180, 710, new StringFormat());
-            e.Graphics.DrawString("大會名次  :   " + args.total_rank + " / " + args.class_count.ToString(), font, Brushes.Black, 180, 770, new StringFormat());
-            e.Graphics.DrawString("分組名次  :   " + args.team_rank + " / " + args.group_count.ToString(), font, Brushes.Black, 180, 830, new StringFormat());
+            e.Graphics.DrawString("選手姓名  :   " + args.name, font, Brushes.Black, 200, 350, new StringFormat());
+            e.Graphics.DrawString("選手編號  :   " + args.race_id, font, Brushes.Black, 200, 430, new StringFormat());
+            e.Graphics.DrawString("團體名稱  :   " + args.team_name, font, Brushes.Black, 200, 510, new StringFormat());
+            e.Graphics.DrawString("參賽項目  :   " + args.reg, font, Brushes.Black, 200, 590, new StringFormat());
+            e.Graphics.DrawString("參賽組別  :   " + args.type, font, Brushes.Black, 200, 670, new StringFormat());
+            e.Graphics.DrawString("大會時間  :   " + args.batch_run_time, font, Brushes.Black, 200, 750, new StringFormat());
+            e.Graphics.DrawString("晶片時間  :   " + args.tag_run_time, font, Brushes.Black, 200, 830, new StringFormat());
+            e.Graphics.DrawString("大會名次  :   " + args.total_rank + " / " + args.class_count.ToString(), font, Brushes.Black, 200, 910, new StringFormat());
+            e.Graphics.DrawString("分組名次  :   " + args.team_rank + " / " + args.group_count.ToString(), font, Brushes.Black, 200, 990, new StringFormat());
         }
 
         public static void Worker()
         {
-            font = new System.Drawing.Font("KAIU", 18, FontStyle.Bold);
+            font = new System.Drawing.Font("KAIU", 22, FontStyle.Bold);
             while (!queue.IsAddingCompleted)
             {
                 try
