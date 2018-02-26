@@ -34,6 +34,9 @@ namespace TagProcess.Components
         public string reg;
         public string type;
 
+        public int group_count;
+        public int class_count;
+
         public bool Check()
         {
             // 隨便選一個 只要回傳false就好
@@ -92,7 +95,8 @@ namespace TagProcess.Components
             batch_start_time = res.chip_race_group_start_time;
             tag_end_time = res.chip_user_start_time;
             tag_start_time = res.chip_user_end_time;
-
+            group_count = ActivityCountHelper.getGroupCount(res.group_id);
+            class_count = ActivityCountHelper.getClassCount(res.group_id);
         }
 
     }
@@ -105,15 +109,15 @@ namespace TagProcess.Components
 
         public static void printPage(object sender, PrintPageEventArgs e)
         {
-            e.Graphics.DrawString("選手姓名  :   " + ScoreGenerator.args.name, font, Brushes.Black, 180, 350, new StringFormat());
-            e.Graphics.DrawString("選手編號  :   " + ScoreGenerator.args.race_id, font, Brushes.Black, 180, 410, new StringFormat());
-            e.Graphics.DrawString("團體名稱  :   " + ScoreGenerator.args.team_name, font, Brushes.Black, 180, 470, new StringFormat());
-            e.Graphics.DrawString("參賽項目  :   " + ScoreGenerator.args.reg, font, Brushes.Black, 180, 530, new StringFormat());
-            e.Graphics.DrawString("參賽組別  :   " + ScoreGenerator.args.type, font, Brushes.Black, 180, 590, new StringFormat());
-            e.Graphics.DrawString("大會時間  :   " + ScoreGenerator.args.batch_run_time, font, Brushes.Black, 180, 650, new StringFormat());
-            e.Graphics.DrawString("晶片時間  :   " + ScoreGenerator.args.tag_run_time, font, Brushes.Black, 180, 710, new StringFormat());
-            e.Graphics.DrawString("大會名次  :   " + ScoreGenerator.args.total_rank + " / ", font, Brushes.Black, 180, 770, new StringFormat());
-            e.Graphics.DrawString("分組名次  :   " + ScoreGenerator.args.team_rank + " / ", font, Brushes.Black, 180, 830, new StringFormat());
+            e.Graphics.DrawString("選手姓名  :   " + args.name, font, Brushes.Black, 180, 350, new StringFormat());
+            e.Graphics.DrawString("選手編號  :   " + args.race_id, font, Brushes.Black, 180, 410, new StringFormat());
+            e.Graphics.DrawString("團體名稱  :   " + args.team_name, font, Brushes.Black, 180, 470, new StringFormat());
+            e.Graphics.DrawString("參賽項目  :   " + args.reg, font, Brushes.Black, 180, 530, new StringFormat());
+            e.Graphics.DrawString("參賽組別  :   " + args.type, font, Brushes.Black, 180, 590, new StringFormat());
+            e.Graphics.DrawString("大會時間  :   " + args.batch_run_time, font, Brushes.Black, 180, 650, new StringFormat());
+            e.Graphics.DrawString("晶片時間  :   " + args.tag_run_time, font, Brushes.Black, 180, 710, new StringFormat());
+            e.Graphics.DrawString("大會名次  :   " + args.total_rank + " / " + args.class_count.ToString(), font, Brushes.Black, 180, 770, new StringFormat());
+            e.Graphics.DrawString("分組名次  :   " + args.team_rank + " / " + args.group_count.ToString(), font, Brushes.Black, 180, 830, new StringFormat());
         }
 
         public static void Worker()
