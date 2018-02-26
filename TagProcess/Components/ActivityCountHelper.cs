@@ -28,11 +28,13 @@ namespace TagProcess.Components
 
                 var res = server.ExecuteHttpRequest(req);
 
-                var def = new { result = "", ret = new Dictionary<int, RaceGroups>() };
+                var def = new { result = "", ret = new Dictionary<int, GroupCount>() };
                 var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
 
                 if (obj.result == "ok")
-                    return;
+                {
+                    list = obj.ret;
+                }
                 else
                     FileLogger.Instance.log(obj.result);
                 return;
@@ -43,14 +45,18 @@ namespace TagProcess.Components
 
         public static int getGroupCount(int key)
         {
+            fetchGroupCounts();
             if (list.ContainsKey(key))
                 return list[key].group_count;
+            FileLogger.Instance.log("不存在的group_id" + key);
             return 0;
         }
         public static int getClassCount(int key)
         {
+            fetchGroupCounts();
             if (list.ContainsKey(key))
                 return list[key].class_count;
+            FileLogger.Instance.log("不存在的group_id"+key);
             return 0;
         }
     }
