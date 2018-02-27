@@ -14,12 +14,11 @@ namespace TagProcess
 {
     public partial class ReaderForm : Form
     {
-        delegate void SetTextCallback(string text, int index);
+        delegate void SetTextNCallback(string text, int index);
+        delegate void SetText0Callback(string text);
 
         private System.ComponentModel.BackgroundWorker[] readerWorker;
         private TextBox[] textBox_ip;
-        private TextBox[] textBox_status;
-        private TextBox[] textBox_time;
         private int refresh_count = 0;
         private string[] result = new string[] { "", "", ""};
         private int station_id = -1;
@@ -57,18 +56,18 @@ namespace TagProcess
                 dgv_group.Rows.Add(false, item.id, item.name, "");
             }
 
-            keeper.Log += SetText;
+            keeper.Log += SetText0;
 
             keeper.Init(1);
         }
 
-        private void SetText(string text, int index)
+        private void SetTextN(string text, int index)
         {
             try
             {
                 if (textBox_log.InvokeRequired)
                 {
-                    SetTextCallback d = new SetTextCallback(SetText);
+                    SetTextNCallback d = new SetTextNCallback(SetTextN);
                     Invoke(d, new object[] { text, index });
                 }
                 else
@@ -82,13 +81,13 @@ namespace TagProcess
             }
         }
 
-        private void SetText(string text)
+        private void SetText0(string text)
         {
             try
             {
                 if (textBox_log.InvokeRequired)
                 {
-                    SetTextCallback d = new SetTextCallback(SetText);
+                    SetText0Callback d = new SetText0Callback(SetText0);
                     Invoke(d, new object[] { text });
                 }
                 else
@@ -109,7 +108,7 @@ namespace TagProcess
             e.Result = index;
             string ip = textBox_ip[index].Text;
             clients[index] = new IpicoClient(ip);
-            clients[index].Log += (string msg) => { SetText(msg, index); };
+            clients[index].Log += (string msg) => { SetTextN(msg, index); };
             if (!clients[index].connect())
             {
                 return;
@@ -117,7 +116,7 @@ namespace TagProcess
 
             clients[index].run();
 
-            SetText("執行緒已終止", index);
+            SetTextN("執行緒已終止", index);
         }
 
         private void readerWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -247,7 +246,7 @@ namespace TagProcess
 
         private void ReaderForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            keeper.Log -= SetText;
+            keeper.Log -= SetText0;
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -255,7 +254,7 @@ namespace TagProcess
             BackgroundWorker wk = sender as BackgroundWorker;
             while (!wk.CancellationPending)
             {
-                SetText(DateTime.Now.ToString(), 0);
+                SetTextN(DateTime.Now.ToString(), 0);
                 string res = keeper.triggerServer();
                 wk.ReportProgress(0, res);
                 Thread.Sleep(30000);
@@ -267,13 +266,13 @@ namespace TagProcess
             Button btn = sender as Button;
             if (btn.Tag.ToString() == "0" && !backgroundWorker1.IsBusy)
             {
-                SetText("啟動背景工作", 0);
+                SetTextN("啟動背景工作", 0);
                 backgroundWorker1.RunWorkerAsync();
                 btn.Tag = "1";
             }
             else
             {
-                SetText("取消背景工作", 0);
+                SetTextN("取消背景工作", 0);
                 backgroundWorker1.CancelAsync();
             }
         }
@@ -281,14 +280,14 @@ namespace TagProcess
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             button2.Tag = "0";
-            SetText("背景工作已停止", 0);
+            SetTextN("背景工作已停止", 0);
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             if(e.UserState != null)
             {
-                SetText(e.UserState as string, 0);
+                SetTextN(e.UserState as string, 0);
             }
         }
 
@@ -317,7 +316,7 @@ namespace TagProcess
         private void set_station_id(int id)
         {
             station_id = id;
-            SetText("Station ID = " + station_id, 0);
+            SetTextN("Station ID = " + station_id, 0);
             keeper.Init(station_id);
         }
     }
