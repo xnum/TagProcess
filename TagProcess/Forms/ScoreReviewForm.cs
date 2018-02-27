@@ -17,7 +17,6 @@ namespace TagProcess.Forms
         private TimeKeeper keeper = TimeKeeper.Instance;
         private TagUSBReader usbReader = TagUSBReader.Instance;
 
-        ScoreArguments origin_args;
         int pid = -1;
         string tag_id = "";
         public ScoreReviewForm()
@@ -42,39 +41,20 @@ namespace TagProcess.Forms
             pid = res.id;
             tag_id = res.tag_id;
 
-            textBox_date.Text = DateTime.Now.ToShortDateString();
+            textBox_race_id_output.Text = res.race_id;
             textBox_name.Text = res.name;
-            textBox_group.Text = res.chip_race_group_name;
-            textBox_team_name.Text = "";
-            textBox_batch_start.Text = ""; // res.group.batch_start_time.ToLongTimeString();
-            textBox_overall_rank.Text = res.total_rank.ToString();
-            textBox_team_rank.Text = res.group_rank.ToString();
+            textBox_group_type.Text = res.type;
+            textBox_group_reg.Text = res.reg;
             textBox_team_name.Text = res.team_name;
-            /*
-            foreach (var r in res.recs)
-            {
-                switch(r.station_id)
-                {
-                    case "1":
-                        textBox_tag_start.Text = r.time.ToLongTimeString();
-                        break;
-                    case "2":
-                        textBox_check1.Text = r.time.ToLongTimeString();
-                        break;
-                    case "3":
-                        textBox_check2.Text = r.time.ToLongTimeString();
-                        break;
-                    case "4":
-                        textBox_check3.Text = r.time.ToLongTimeString();
-                        break;
-                    default:
-                        textBox_tag_end.Text = r.time.ToLongTimeString();
-                        break;
-                }
-                
-            }
-            */
-            origin_args = getArg();
+
+            textBox_batch_run_time.Text = res.activity_time.ToString();
+            textBox_tag_run_time.Text = res.personal_time.ToString();
+
+            textBox_total_rank.Text = res.total_rank.ToString();
+            textBox_team_rank.Text = res.group_rank.ToString();
+
+            textBox_group_count.Text = ActivityCountHelper.getGroupCount(res.group_id).ToString();
+            textBox_class_count.Text = ActivityCountHelper.getClassCount(res.group_id).ToString();
         }
 
         private void button_search_race_Click(object sender, EventArgs e)
@@ -129,15 +109,30 @@ namespace TagProcess.Forms
         {
             ScoreArguments args = new ScoreArguments();
 
-            args.today = textBox_date.Text;
-            args.name = textBox_name.Text;
-            args.group = textBox_group.Text;
-            args.team_name = textBox_team_name.Text;
-            args.total_rank = textBox_overall_rank.Text;
-            args.team_rank = textBox_team_rank.Text;
-            args.tag_end_time = DateTime.Parse(textBox_tag_end.Text);
-            args.tag_start_time = DateTime.Parse(textBox_tag_start.Text);
-            args.batch_start_time = DateTime.Parse(textBox_batch_start.Text);
+            try
+            {
+                args.name = textBox_name.Text;
+                args.race_id = textBox_race_id_output.Text;
+                args.reg = textBox_group_reg.Text;
+                args.type = textBox_group_type.Text;
+                args.team_name = textBox_team_name.Text;
+
+                args.total_rank = textBox_total_rank.Text;
+                args.team_rank = textBox_team_rank.Text;
+
+                var br_time = TimeSpan.FromSeconds(Int32.Parse(textBox_batch_run_time.Text));
+                args.batch_run_time = br_time.ToString(br_time.TotalSeconds >= 3600 ? @"hh' 小時 'mm' 分 'ss' 秒'" : @"mm' 分 'ss' 秒'");
+                var tr_time = TimeSpan.FromSeconds(Int32.Parse(textBox_tag_run_time.Text));
+                args.tag_run_time = tr_time.ToString(tr_time.TotalSeconds >= 3600 ? @"hh' 小時 'mm' 分 'ss' 秒'" : @"mm' 分 'ss' 秒'");
+
+                args.class_count = Int32.Parse(textBox_class_count.Text);
+                args.group_count = Int32.Parse(textBox_group_count.Text);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
 
             return args;
         }
@@ -146,33 +141,12 @@ namespace TagProcess.Forms
         {
             ScoreArguments args = getArg();
 
-            if(!args.Check())
+            if(args == null || !args.Check())
             {
                 return;
             }
-
-            if (args.name != origin_args.name)
-            {
-                repo.updateParticipantName(pid, args.name);
-            }
-
-            if(args.tag_start_time != origin_args.tag_start_time)
-            {
-                //keeper.updateRecord(tag_id, 1, args.tag_start_time);
-                MessageBox.Show("無法修改，請至網站修改");
-            }
-
-            if(args.tag_end_time != origin_args.tag_end_time)
-            {
-                //keeper.updateRecord(tag_id, 5, args.tag_end_time);
-                MessageBox.Show("無法修改，請至網站修改");
-            }
-
-
-            
-
-            ScoreGenerator.exportScoreToPDF(args, "");
-            //ScoreGenerator.exportScoreToPDF(args);
+        
+            ScoreGenerator.SendToPrinter(args, "");
         }
 
         private void textBox_race_id_KeyDown(object sender, KeyEventArgs e)

@@ -72,7 +72,7 @@ namespace TagProcess.Forms
             dgv.Rows[0].Cells[0].Value = "送印中";
 
             
-            ScoreGenerator.exportScoreToPDF(args, (string)cb_printer.SelectedItem);
+            ScoreGenerator.SendToPrinter(args, (string)cb_printer.SelectedItem);
 
             dgv.Rows[0].Cells[0].Value = "已列印";
 

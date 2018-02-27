@@ -294,6 +294,8 @@ namespace TagProcess
 
             public bool checkData()
             {
+                // ScoreGenerator裡的Check也要修改
+
                 if (name == "")
                 {
                     MessageBox.Show("姓名不存在");
