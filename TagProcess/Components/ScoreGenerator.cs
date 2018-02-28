@@ -22,9 +22,9 @@ namespace TagProcess.Components
         public string race_id;
         public string group;
         public string team_name;
-        public string total_rank;
+        public int total_rank;
         public string total_gender_rank;
-        public string team_rank;
+        public int team_rank;
         public DateTime tag_start_time;
         public DateTime tag_end_time;
         public DateTime batch_start_time;
@@ -43,10 +43,7 @@ namespace TagProcess.Components
             if (name == "")
                 return DialogResult.Ignore == MessageBox.Show("姓名為空");
 
-            if (team_rank == "" || team_rank == "0")
-                return DialogResult.Ignore == MessageBox.Show("組別名次為空");
-
-            if(total_rank == "" || total_rank == "0")
+            if(total_rank <= 0)
                 return DialogResult.Ignore == MessageBox.Show("總名次為空");
 
             return true;
@@ -70,9 +67,9 @@ namespace TagProcess.Components
             team_name = res.team_name;
             reg = res.reg;
             type = res.type;
-            total_rank = res.total_rank.ToString();
+            total_rank = res.total_rank;
             total_gender_rank = res.total_gender_rank.ToString();
-            team_rank = res.group_rank.ToString();
+            team_rank = res.group_rank;
             var br_time = TimeSpan.FromSeconds(res.activity_time);
             batch_run_time = br_time.ToString(br_time.TotalSeconds >= 3600 ? @"hh' 小時 'mm' 分 'ss' 秒'" : @"mm' 分 'ss' 秒'");
             var tr_time = TimeSpan.FromSeconds(res.personal_time);
@@ -101,8 +98,15 @@ namespace TagProcess.Components
             e.Graphics.DrawString("參賽組別  :   " + args.type, font, Brushes.Black, 200, 670, new StringFormat());
             e.Graphics.DrawString("大會時間  :   " + args.batch_run_time, font, Brushes.Black, 200, 750, new StringFormat());
             e.Graphics.DrawString("晶片時間  :   " + args.tag_run_time, font, Brushes.Black, 200, 830, new StringFormat());
-            e.Graphics.DrawString("大會名次  :   " + args.total_rank + " / " + args.class_count.ToString(), font, Brushes.Black, 200, 910, new StringFormat());
-            e.Graphics.DrawString("分組名次  :   " + args.team_rank + " / " + args.group_count.ToString(), font, Brushes.Black, 200, 990, new StringFormat());
+            e.Graphics.DrawString("大會名次  :   " + args.total_rank + " / " + args.class_count, font, Brushes.Black, 200, 910, new StringFormat());
+            if (args.team_rank > 0)
+            {
+                e.Graphics.DrawString("分組名次  :   " + args.team_rank + " / " + args.group_count, font, Brushes.Black, 200, 990, new StringFormat());
+            }
+            else
+            {
+                e.Graphics.DrawString("分組名次  :   N / A", font, Brushes.Black, 200, 990, new StringFormat());
+            }
         }
 
         public static void Worker()

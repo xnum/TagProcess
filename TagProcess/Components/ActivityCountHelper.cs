@@ -13,8 +13,8 @@ namespace TagProcess.Components
     {
         public class GroupCount
         {
-            public int group_count;
-            public int class_count;
+            public int group_count = 0;
+            public int class_count = 0;
         }
 
         private static Dictionary<int, GroupCount> list = null;

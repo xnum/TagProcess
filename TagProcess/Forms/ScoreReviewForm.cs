@@ -117,8 +117,8 @@ namespace TagProcess.Forms
                 args.type = textBox_group_type.Text;
                 args.team_name = textBox_team_name.Text;
 
-                args.total_rank = textBox_total_rank.Text;
-                args.team_rank = textBox_team_rank.Text;
+                args.total_rank = Int32.Parse(textBox_total_rank.Text);
+                args.team_rank = Int32.Parse(textBox_team_rank.Text);
 
                 var br_time = TimeSpan.FromSeconds(Int32.Parse(textBox_batch_run_time.Text));
                 args.batch_run_time = br_time.ToString(br_time.TotalSeconds >= 3600 ? @"hh' 小時 'mm' 分 'ss' 秒'" : @"mm' 分 'ss' 秒'");
