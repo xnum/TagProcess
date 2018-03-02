@@ -121,8 +121,8 @@ namespace TagProcess
                 if (committed_tag.Contains(tag.Key)) continue;
 
                 DateTime rec_time = tag.Value;
-                // 記錄到的資料 比10秒前還早 代表為30秒之前的資料
-                if(rec_time <= nowt.Subtract(TimeSpan.FromSeconds(30)))
+                // 記錄到的資料 比10秒前還早 代表為10秒之前的資料
+                if(rec_time <= nowt.Subtract(TimeSpan.FromSeconds(10)))
                 {
                     if (station_id == 1)
                     {
@@ -138,7 +138,7 @@ namespace TagProcess
                         DateTime gtime = group_start_time[p.group_id];
 
                         // 記錄到的時間 比組別起跑時間晚三秒
-                        if (rec_time.AddSeconds(3) >= gtime)
+                        if (rec_time.AddSeconds(3) >= gtime && rec_time <= gtime.AddSeconds(600))
                         {
                             enqueue(tag.Key, station_id, tag.Value < gtime ? gtime : tag.Value);
                         }

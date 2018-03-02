@@ -161,7 +161,13 @@ namespace TagProcess
                         }
                         string stime = start_time.ContainsKey(got_cmd.data) ? start_time[got_cmd.data] : "查無資料";
                         if (station_id == 1) stime = "";
-                        touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
+                        try
+                        {
+                            touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
+                        }catch(Exception ex)
+                        {
+                            SetText0(ex.Message);
+                        }
                         
                         System.Media.SystemSounds.Beep.Play(); // 播放音效
                     }
