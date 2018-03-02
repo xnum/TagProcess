@@ -168,6 +168,7 @@
             this.textBox_reader_ip1.Name = "textBox_reader_ip1";
             this.textBox_reader_ip1.Size = new System.Drawing.Size(100, 22);
             this.textBox_reader_ip1.TabIndex = 22;
+            this.textBox_reader_ip1.Text = "10.19.1.55";
             // 
             // button_reader_conn1
             // 
@@ -197,6 +198,7 @@
             this.textBox_reader_ip2.Name = "textBox_reader_ip2";
             this.textBox_reader_ip2.Size = new System.Drawing.Size(100, 22);
             this.textBox_reader_ip2.TabIndex = 25;
+            this.textBox_reader_ip2.Text = "10.19.1.56";
             // 
             // label_reader2
             // 

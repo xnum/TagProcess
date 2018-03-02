@@ -257,7 +257,7 @@ namespace TagProcess
                 SetTextN(DateTime.Now.ToString(), 0);
                 string res = keeper.triggerServer();
                 wk.ReportProgress(0, res);
-                Thread.Sleep(30000);
+                Thread.Sleep(10000);
             }
         }
 

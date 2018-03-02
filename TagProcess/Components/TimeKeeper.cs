@@ -75,7 +75,8 @@ namespace TagProcess
         {
             foreach (int id in groups_id)
             {
-                group_start_time[id] = DateTime.Now;
+                if(!groups_id.Contains(id))
+                    group_start_time[id] = DateTime.Now;
             }
 
             RestRequest req = new RestRequest("api/json/chip_race_group/batch_start", Method.PUT);
@@ -120,8 +121,8 @@ namespace TagProcess
                 if (committed_tag.Contains(tag.Key)) continue;
 
                 DateTime rec_time = tag.Value;
-                // 記錄到的資料 比10秒前還早 代表為10秒之前的資料
-                if(rec_time <= nowt.Subtract(TimeSpan.FromSeconds(10)))
+                // 記錄到的資料 比10秒前還早 代表為30秒之前的資料
+                if(rec_time <= nowt.Subtract(TimeSpan.FromSeconds(30)))
                 {
                     if (station_id == 1)
                     {
@@ -205,8 +206,15 @@ namespace TagProcess
                     return false;
             }
 
-            // 還沒起跑或無資料 存最後一筆
-            if(group_start_time.ContainsKey(p.group_id) == false || tag_store.ContainsKey(data.data) == false)
+            // 還沒起跑 存最後一筆
+            if(group_start_time.ContainsKey(p.group_id) == false)
+            {
+                tag_store[data.data] = data.time;
+                return false;
+            }
+
+            // 無資料 存最後一筆
+            if (tag_store.ContainsKey(data.data) == false)
             {
                 tag_store[data.data] = data.time;
                 return true;
