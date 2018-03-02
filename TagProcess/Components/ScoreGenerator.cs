@@ -39,14 +39,14 @@ namespace TagProcess.Components
 
         public bool Check()
         {
+            return true;            
+            
             // 隨便選一個 只要回傳false就好
             if (name == "")
                 return DialogResult.Ignore == MessageBox.Show("姓名為空");
 
             if(total_rank <= 0)
                 return DialogResult.Ignore == MessageBox.Show("總名次為空");
-
-            return true;
         }
 
         public ScoreArguments()
@@ -98,7 +98,16 @@ namespace TagProcess.Components
             e.Graphics.DrawString("參賽組別  :   " + args.type, font, Brushes.Black, 200, 670, new StringFormat());
             e.Graphics.DrawString("大會時間  :   " + args.batch_run_time, font, Brushes.Black, 200, 750, new StringFormat());
             e.Graphics.DrawString("晶片時間  :   " + args.tag_run_time, font, Brushes.Black, 200, 830, new StringFormat());
-            e.Graphics.DrawString("大會名次  :   " + args.total_rank + " / " + args.class_count, font, Brushes.Black, 200, 910, new StringFormat());
+
+            if (args.total_rank > 0)
+            {
+                e.Graphics.DrawString("大會名次  :   " + args.total_rank + " / " + args.class_count, font, Brushes.Black, 200, 910, new StringFormat());
+            }
+            else
+            {
+                e.Graphics.DrawString("大會名次  :   N / A", font, Brushes.Black, 200, 910, new StringFormat());
+            }
+
             if (args.team_rank > 0)
             {
                 e.Graphics.DrawString("分組名次  :   " + args.team_rank + " / " + args.group_count, font, Brushes.Black, 200, 990, new StringFormat());
