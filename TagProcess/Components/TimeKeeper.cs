@@ -206,19 +206,20 @@ namespace TagProcess
                     return false;
             }
 
-            // 還沒起跑 存最後一筆
-            if(group_start_time.ContainsKey(p.group_id) == false)
-            {
-                tag_store[data.data] = data.time;
-                return false;
-            }
-
             // 無資料 存最後一筆
             if (tag_store.ContainsKey(data.data) == false)
             {
                 tag_store[data.data] = data.time;
                 return true;
             }
+
+            // 還沒起跑 存最後一筆
+            if (group_start_time.ContainsKey(p.group_id) == false)
+            {
+                tag_store[data.data] = data.time;
+                return false;
+            }
+
 
             // 已經起跑 比對已存成績和目前成績 決定是否更新
             // 紀錄時間比群組時間早 才有必要更新
