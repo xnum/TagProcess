@@ -241,7 +241,7 @@ namespace TagProcess
             // 已經起跑 比對已存成績和目前成績 決定是否更新
             // 紀錄時間比群組時間早 才有必要更新
             DateTime group_time = group_start_time[p.group_id];
-            if(tag_store[data.data] <= group_time)
+            if(tag_store[data.data] <= group_time && tag_store[data.data] != data.time)
             {
                 tag_store[data.data] = data.time;
                 uploadTagData(false);
