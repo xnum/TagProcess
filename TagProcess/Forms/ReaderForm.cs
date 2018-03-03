@@ -325,5 +325,10 @@ namespace TagProcess
             SetTextN("Station ID = " + station_id, 0);
             keeper.Init(station_id);
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            keeper.ClearTagged();
+        }
     }
 }

@@ -57,6 +57,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.checkBox_station = new System.Windows.Forms.CheckBox();
             this.textBox_station = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.touchedView)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_group)).BeginInit();
@@ -450,11 +451,22 @@
             this.textBox_station.TabIndex = 38;
             this.textBox_station.TextChanged += new System.EventHandler(this.textBox_station_TextChanged);
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(433, 233);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 39;
+            this.button3.Text = "清除";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // ReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1231, 505);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.textBox_station);
             this.Controls.Add(this.checkBox_station);
             this.Controls.Add(this.button2);
@@ -530,5 +542,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.CheckBox checkBox_station;
         private System.Windows.Forms.TextBox textBox_station;
+        private System.Windows.Forms.Button button3;
     }
 }

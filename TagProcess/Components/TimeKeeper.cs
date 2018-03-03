@@ -55,6 +55,21 @@ namespace TagProcess
             upload_count = 0;
         }
 
+        public void ClearTagged()
+        {
+            HashSet<string> removeTags = new HashSet<string>();
+            foreach(string key in tag_store.Keys)
+            {
+                if (committed_tag.Contains(key) == false)
+                    removeTags.Add(key);
+            }
+
+            foreach(string key in removeTags)
+            {
+                tag_store.Remove(key);
+            }
+        }
+
         public void Init(int n)
         {
             station_id = n;
