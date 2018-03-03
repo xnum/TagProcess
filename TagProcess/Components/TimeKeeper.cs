@@ -152,8 +152,10 @@ namespace TagProcess
 
                         DateTime gtime = group_start_time[p.group_id];
 
-                        // 記錄到的時間 比組別起跑時間晚三秒
-                        if (rec_time.AddSeconds(3) >= gtime && rec_time <= gtime.AddSeconds(600))
+                        // 感應時間 - 起跑時間
+                        TimeSpan timediff = rec_time.Subtract(gtime);
+                        double timediff_sec = timediff.TotalSeconds;
+                        if (-3 <= timediff_sec && timediff_sec <= 600)
                         {
                             enqueue(tag.Key, station_id, tag.Value < gtime ? gtime : tag.Value);
                         }
