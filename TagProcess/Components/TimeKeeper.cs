@@ -90,7 +90,7 @@ namespace TagProcess
         {
             foreach (int id in groups_id)
             {
-                if(!groups_id.Contains(id))
+                if(!group_start_time.ContainsKey(id))
                     group_start_time[id] = DateTime.Now;
             }
 
