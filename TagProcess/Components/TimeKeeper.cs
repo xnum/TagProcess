@@ -409,6 +409,8 @@ namespace TagProcess
 
         public RecordResult fetchResultByTagOrRace(string tag, string race)
         {
+            try
+            {
             RestRequest req = new RestRequest("api/json/chip_user/records", Method.GET);
             req.AddParameter("activity", server.competition_id);
             if (tag != null) req.AddParameter("tag_id", tag);
@@ -423,6 +425,12 @@ namespace TagProcess
             else
                 MessageBox.Show(obj.result);
             OnLog(res.Content);
+            }
+            catch(Exception ex)
+            {
+                OnLog(ex.Message);
+                return null;
+            }
             return null;
         }
 
