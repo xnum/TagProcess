@@ -480,6 +480,7 @@
             this.Controls.Add(this.label4);
             this.Name = "ReaderForm";
             this.Text = "ReaderForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReaderForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ReaderForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.touchedView)).EndInit();
             this.groupBox1.ResumeLayout(false);

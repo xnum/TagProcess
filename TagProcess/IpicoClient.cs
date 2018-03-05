@@ -57,6 +57,11 @@ namespace TagProcess
             return true;
         }
 
+        public void disconnect()
+        {
+            client?.Close();
+        }
+
         public bool run()
         { 
             IPXCmd cmd = new IPXCmd(IPXCmd.Type.SetDate);

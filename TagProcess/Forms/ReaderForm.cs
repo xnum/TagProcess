@@ -132,8 +132,10 @@ namespace TagProcess
         {
             Button btn = (Button)sender;
             int index = int.Parse((string)btn.Tag);
-            if(!readerWorker[index].IsBusy)
+            if (!readerWorker[index].IsBusy)
                 readerWorker[index].RunWorkerAsync(index);
+            else
+                SetTextN("忙碌中...",index);
         }
 
         private void refresh_timer_Tick(object sender, EventArgs e)
@@ -198,10 +200,6 @@ namespace TagProcess
                 var v = keeper.fetchStartRecords();
                 if (v != null) start_time = v;
             }
-
-            while(touchedView.Rows.Count >= 100)
-                touchedView.Rows.RemoveAt(0);
-            //if(refresh_count % 10 == 1)touchedView.Refresh();
 
             label_tagged.Text = keeper.GetTagCount().ToString();
             label_total.Text = keeper.GetTotalCount().ToString();
@@ -335,6 +333,26 @@ namespace TagProcess
         private void button3_Click(object sender, EventArgs e)
         {
             keeper.ClearTagged();
+        }
+
+        private void ReaderForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            for(int i = 0; i < readerWorker.Length; ++i)
+            {
+                if(readerWorker[i].IsBusy)
+                {
+                    clients[i]?.disconnect();
+                }
+            }
+
+            for (int i = 0; i < readerWorker.Length; ++i)
+            {
+                if (readerWorker[i].IsBusy)
+                {
+                    SetTextN("等待停止中，無法關閉視窗", i);
+                    e.Cancel = true;
+                }
+            }
         }
     }
 }
