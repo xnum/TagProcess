@@ -19,59 +19,65 @@ namespace TagProcess
         {
             logging("Construct: " + msg);
             type = Type.None;
-            if (msg.Substring(0, 2) == "aa")
-            { // aa 00 058003 22d0ee 0100 170605 203041 5f 0b
-                string tag = msg.Substring(4, 12);
-                if (tag.Substring(0, 3) != "058")
-                    logging("Notice: tag prefix is not 058");
-                type = Type.GetTag;
-                data = tag;
-                time = stringToDateTime(msg.Substring(20, 14));
-            }
-
-            if (msg.Substring(0, 2) == "ab")
+            try
             {
-                string reader_id = msg.Substring(2, 2);
-                int length = Int32.Parse(msg.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
-                string instruction = msg.Substring(6, 2);
-                logging("指令編號為" + instruction);
-                string data = length == 0 ? "" : msg.Substring(8, length);
+                if (msg.Substring(0, 2) == "aa")
+                { // aa 00 058003 22d0ee 0100 170605 203041 5f 0b
+                    string tag = msg.Substring(4, 12);
+                    if (tag.Substring(0, 3) != "058")
+                        logging("Notice: tag prefix is not 058");
+                    type = Type.GetTag;
+                    data = tag;
+                    time = stringToDateTime(msg.Substring(20, 14));
+                }
 
-                if (instruction == "01")
+                if (msg.Substring(0, 2) == "ab")
                 {
-                    if (length == 0)
-                        logging("收到資料為 SetDate ACK [Ignored]");
-                    else
+                    string reader_id = msg.Substring(2, 2);
+                    int length = Int32.Parse(msg.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+                    string instruction = msg.Substring(6, 2);
+                    logging("指令編號為" + instruction);
+                    string data = length == 0 ? "" : msg.Substring(8, length);
+
+                    if (instruction == "01")
                     {
-                        logging("嘗試轉換時間");
-                        time = stringToDateTime(data);
-                        logging("收到時間為" + time);
-                        type = Type.SetDate;
+                        if (length == 0)
+                            logging("收到資料為 SetDate ACK [Ignored]");
+                        else
+                        {
+                            logging("嘗試轉換時間");
+                            time = stringToDateTime(data);
+                            logging("收到時間為" + time);
+                            type = Type.SetDate;
+                        }
                     }
-                }
 
-                if (instruction == "02")
-                {
-                    logging("收到GetDate回應 嘗試轉換");
-                    time = stringToDateTime(msg.Substring(8, 16));
-                    logging("收到時間為" + time);
-                    type = Type.GetDate;
-                }
+                    if (instruction == "02")
+                    {
+                        logging("收到GetDate回應 嘗試轉換");
+                        time = stringToDateTime(msg.Substring(8, 16));
+                        logging("收到時間為" + time);
+                        type = Type.GetDate;
+                    }
 
-                if (instruction[0] == 'f')
-                    type = Type.Error;
-                if (instruction == "f0")
-                    logging("Error: Bad Length (>10)");
-                if (instruction == "f1")
-                    logging("Error: Bad LRC");
-                if (instruction == "f2")
-                    logging("Error: Unknown Instruction");
-                if (instruction == "f3")
-                    logging("Error: Reserved");
-                if (instruction == "f4")
-                    logging("Error: Unsupported command");
-                if (instruction == "f5")
-                    logging("Error: Unsupported sub-command");
+                    if (instruction[0] == 'f')
+                        type = Type.Error;
+                    if (instruction == "f0")
+                        logging("Error: Bad Length (>10)");
+                    if (instruction == "f1")
+                        logging("Error: Bad LRC");
+                    if (instruction == "f2")
+                        logging("Error: Unknown Instruction");
+                    if (instruction == "f3")
+                        logging("Error: Reserved");
+                    if (instruction == "f4")
+                        logging("Error: Unsupported command");
+                    if (instruction == "f5")
+                        logging("Error: Unsupported sub-command");
+                }
+            }catch(Exception ex)
+            {
+                logging("建構失敗：" + ex.Message);
             }
         }
 

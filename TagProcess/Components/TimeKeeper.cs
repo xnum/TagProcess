@@ -93,7 +93,7 @@ namespace TagProcess
                 if (!group_start_time.ContainsKey(id))
                     group_start_time[id] = DateTime.Now;
             }
-
+            
             RestRequest req = new RestRequest("api/json/chip_race_group/batch_start", Method.PUT);
             req.AddParameter("groups", JsonConvert.SerializeObject(groups_id));
             req.AddParameter("time", DateTime.Now.ToString(MySqlDateTimeFormat));
@@ -166,7 +166,7 @@ namespace TagProcess
                     }
                 }
             }
-            return true;
+            
             if (buffered_data.Count >= 10 || (force == true && buffered_data.Count >= 1))
             {
                 RestRequest req = new RestRequest("api/json/chip_records/batch_create", Method.POST);

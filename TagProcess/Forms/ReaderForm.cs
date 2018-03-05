@@ -236,6 +236,10 @@ namespace TagProcess
                     {
                         if (ids.Contains(Int32.Parse(dgv_group.Rows[i].Cells[1].Value.ToString())))
                         {
+                            DataGridViewCheckBoxCell chkbox = (DataGridViewCheckBoxCell)dgv_group.Rows[i].Cells[0];
+                            chkbox.FlatStyle = FlatStyle.Flat;
+                            chkbox.Style.ForeColor = Color.DarkGray;
+                            chkbox.ReadOnly = true;
                             dgv_group.Rows[i].Cells[3].Value = DateTime.Now.ToString();
                         }
                     }
