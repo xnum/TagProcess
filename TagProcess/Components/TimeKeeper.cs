@@ -166,7 +166,7 @@ namespace TagProcess
                     }
                 }
             }
-
+            return true;
             if (buffered_data.Count >= 10 || (force == true && buffered_data.Count >= 1))
             {
                 RestRequest req = new RestRequest("api/json/chip_records/batch_create", Method.POST);

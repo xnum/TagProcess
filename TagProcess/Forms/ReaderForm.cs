@@ -107,7 +107,7 @@ namespace TagProcess
             int index = (int)e.Argument;
             e.Result = index;
             string ip = textBox_ip[index].Text;
-            textBox_ip[index].BackColor = Color.FromArgb(192, 255, 192);
+            
 
             clients[index] = new IpicoClient(ip);
             clients[index].Log += (string msg) => { SetTextN(msg, index); };
@@ -116,16 +116,17 @@ namespace TagProcess
                 return;
             }
 
-            clients[index].run();
-
-            textBox_ip[index].BackColor = Color.FromArgb(255, 192, 192);
+            clients[index].run();          
 
             SetTextN("執行緒已終止", index);
+
+            e.Result = index;
         }
 
         private void readerWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            
+            int index = (int)e.Result;
+            textBox_ip[index].BackColor = Color.FromArgb(255, 192, 192);
         }
 
         private void button_conn0_Click(object sender, EventArgs e)
@@ -133,15 +134,18 @@ namespace TagProcess
             Button btn = (Button)sender;
             int index = int.Parse((string)btn.Tag);
             if (!readerWorker[index].IsBusy)
+            {
+                textBox_ip[index].BackColor = Color.FromArgb(192, 255, 192);
                 readerWorker[index].RunWorkerAsync(index);
+            }
             else
-                SetTextN("忙碌中...",index);
+                SetTextN("忙碌中...", index);
         }
 
         private void refresh_timer_Tick(object sender, EventArgs e)
         {
             refresh_count++;
-            label_localtime.Text = DateTime.Now.ToString();
+            label_localtime.Text = DateTime.Now.ToShortTimeString();
 
             for(int i = 0; i < 3; ++i)
             {
@@ -333,6 +337,7 @@ namespace TagProcess
         private void button3_Click(object sender, EventArgs e)
         {
             keeper.ClearTagged();
+            touchedView.Rows.Clear();
         }
 
         private void ReaderForm_FormClosing(object sender, FormClosingEventArgs e)

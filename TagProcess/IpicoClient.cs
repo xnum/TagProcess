@@ -95,7 +95,7 @@ namespace TagProcess
                 }
                 catch (Exception ex)
                 {
-                    OnLog(ex.Message);
+                    OnLog(ex.Message + ex.StackTrace);
                     if (ex is SocketException)
                     {
                         SocketException sex = (SocketException)ex;
