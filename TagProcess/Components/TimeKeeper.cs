@@ -119,7 +119,7 @@ namespace TagProcess
                 station_id = station,
                 time = t
             });
-            OnLog(tag + " ok");
+            FileLogger.Instance.log(tag + " ok");
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace TagProcess
         public bool addData(int station, IPXCmd data)
         {
             FileLogger.Instance.logPacket(String.Format("{0}\t{1}\t{2}\t{3}",
-                station, data.data, data.time, DateTime.Now));
+                station, data.data, data.time.ToShortTimeString(), DateTime.Now.ToShortTimeString()));
 
             if (tag_id_to_participant_table.ContainsKey(data.data) == false)
             {
@@ -276,24 +276,6 @@ namespace TagProcess
             uploadTagData(true);
         }
 
-        public class Record
-        {
-            public int id;
-            public string tag_id;
-            public string station_id;
-            public DateTime time;
-        }
-
-        public class Group
-        {
-            public int id;
-            public string name;
-            public string reg;
-            public string type;
-
-            public DateTime batch_start_time;
-        }
-
         public class RecordResult
         {
             public int id;
@@ -305,7 +287,6 @@ namespace TagProcess
             public string tag_id;
             public string race_id;
             public int total_rank;
-            public int total_gender_rank;
             public int group_rank;
             public int activity_time;
             public int personal_time;
@@ -395,22 +376,30 @@ namespace TagProcess
         // 固定時間觸發伺服器工作
         public string triggerServer()
         {
-            RestRequest req = new RestRequest("api/json/update_records_time/" + server.competition_id, Method.POST);
-            var res = server.ExecuteHttpRequest(req);
+            try
+            {
+                RestRequest req = new RestRequest("api/json/update_records_time/" + server.competition_id, Method.POST);
+                var res = server.ExecuteHttpRequest(req);
 
-            var def = new { result = "", ret = "" };
-            var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
+                var def = new { result = "", ret = "" };
+                var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
 
-            //OnLog(res.Content);
+                FileLogger.Instance.log(obj.ret);
 
-            RestRequest req2 = new RestRequest("api/json/update_records_rank/" + server.competition_id, Method.POST);
-            var res2 = server.ExecuteHttpRequest(req2);
+                RestRequest req2 = new RestRequest("api/json/update_records_rank/" + server.competition_id, Method.POST);
+                var res2 = server.ExecuteHttpRequest(req2);
 
-            var obj2 = JsonConvert.DeserializeAnonymousType(res2.Content, def);
+                var obj2 = JsonConvert.DeserializeAnonymousType(res2.Content, def);
 
-            //OnLog(res2.Content);
+                FileLogger.Instance.log(obj2.ret);
 
-            return res.Content + "\r\n" + res2.Content;
+                return obj.ret + "\r\n" + obj2.ret;
+            }
+            catch(Exception ex)
+            {
+                OnLog("觸發定時工作錯誤：" + ex.Message);
+                return null;
+            }
         }
 
         public Dictionary<string, string> fetchStartRecords()
@@ -435,7 +424,7 @@ namespace TagProcess
             }
             catch (Exception ex)
             {
-                OnLog(ex.Message);
+                OnLog("讀取起點時間錯誤：" + ex.Message);
                 return null;
             }
         }

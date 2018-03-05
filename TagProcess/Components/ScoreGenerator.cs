@@ -68,7 +68,6 @@ namespace TagProcess.Components
             reg = res.reg;
             type = res.type;
             total_rank = res.total_rank;
-            total_gender_rank = res.total_gender_rank.ToString();
             team_rank = res.group_rank;
             var br_time = TimeSpan.FromSeconds(res.activity_time);
             batch_run_time = br_time.ToString(br_time.TotalSeconds >= 3600 ? @"hh' 小時 'mm' 分 'ss' 秒'" : @"mm' 分 'ss' 秒'");
