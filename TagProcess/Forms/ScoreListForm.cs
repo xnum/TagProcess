@@ -59,9 +59,10 @@ namespace TagProcess.Forms
                 args.tag_end_time
             );
 
-            if (!result.checkData())
+            string res = result.checkData();
+            if (res != null)
             {
-                dgv.Rows[0].Cells[0].Value = "異常";
+                dgv.Rows[0].Cells[0].Value = res;
                 return false;
             }
 

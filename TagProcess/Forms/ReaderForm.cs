@@ -107,6 +107,8 @@ namespace TagProcess
             int index = (int)e.Argument;
             e.Result = index;
             string ip = textBox_ip[index].Text;
+            textBox_ip[index].BackColor = Color.FromArgb(192, 255, 192);
+
             clients[index] = new IpicoClient(ip);
             clients[index].Log += (string msg) => { SetTextN(msg, index); };
             if (!clients[index].connect())
@@ -115,6 +117,8 @@ namespace TagProcess
             }
 
             clients[index].run();
+
+            textBox_ip[index].BackColor = Color.FromArgb(255, 192, 192);
 
             SetTextN("執行緒已終止", index);
         }
@@ -164,7 +168,9 @@ namespace TagProcess
                         try
                         {
                             touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
-                        }catch(Exception ex)
+                            touchedView.FirstDisplayedScrollingRowIndex = touchedView.RowCount - 1;
+                        }
+                        catch(Exception ex)
                         {
                             SetText0(ex.Message);
                         }

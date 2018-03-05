@@ -164,6 +164,7 @@
             // 
             // textBox_reader_ip1
             // 
+            this.textBox_reader_ip1.BackColor = System.Drawing.SystemColors.Window;
             this.textBox_reader_ip1.Location = new System.Drawing.Point(64, 50);
             this.textBox_reader_ip1.Name = "textBox_reader_ip1";
             this.textBox_reader_ip1.Size = new System.Drawing.Size(71, 22);

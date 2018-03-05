@@ -318,91 +318,41 @@ namespace TagProcess
             public DateTime chip_user_start_time;
             public DateTime chip_user_end_time;
 
-            public bool checkData()
+            public string checkData()
             {
                 // ScoreGenerator裡的Check也要修改
 
                 if (name == "")
                 {
-                    MessageBox.Show("姓名不存在");
-                    return false;
+                    return "姓名不存在";
                 }
 
                 if (chip_race_group_name == "")
                 {
-                    MessageBox.Show("報名組別不存在");
-                    return false;
+                    return "報名組別不存在";
                 }
 
                 if (total_rank <= 0)
                 {
-                    MessageBox.Show("總排名有誤");
-                    return false;
+                    return "總排名有誤";
                 }
 
                 if (activity_time <= 0 || personal_time <= 0)
                 {
-                    MessageBox.Show("成績有誤");
-                    return false;
+                    return "成績有誤";
                 }
 
                 if (chip_user_start_time.CompareTo(new DateTime(2017, 10, 28)) <= 0)
                 {
-                    MessageBox.Show("晶片感應時間異常: " + chip_user_start_time);
-                    return false;
+                    return "起點時間異常: " + chip_user_start_time;
                 }
 
-                /*
-                int station_count = 0;
-                foreach (var r in recs)
+                if (chip_user_end_time.CompareTo(new DateTime(2017, 10, 28)) <= 0)
                 {
-                    switch (r.station_id)
-                    {
-                        case "1":
-                        case "5":
-                            station_count += int.Parse(r.station_id);
-                            DateTime t = r.time;
-                            if (DateTime.Now.AddDays(-15) < t && t < DateTime.Now.AddDays(15))
-                            {
-                                // 進行第二個確認 給予容忍誤差60秒 (消去起跑時間早於組別起跑的時間誤差)
-                                t.AddSeconds(60);
-                                if (t.CompareTo(group.batch_start_time) <= 0)
-                                {
-                                    MessageBox.Show((r.station_id == "1" ? "起點" : "終點") + "時間異常 個別時間[" + r.time + "] 組別起跑時間[" + group.batch_start_time + "]");
-                                    return false;
-                                }
-                                break;
-                            }
-                            else
-                            {
-                                MessageBox.Show("站點" + r.station_id + "成績有誤" + t);
-                                return false;
-                            }
-                        default:
-                            break;
-                    }
+                    return "終點時間異常: " + chip_user_end_time;
                 }
-
-                switch (station_count)
-                {
-                    case 0:
-                        MessageBox.Show("缺少起點、終點資訊");
-                        return false;
-                    case 1:
-                        MessageBox.Show("缺少起點資訊");
-                        return false;
-                    case 5:
-                        MessageBox.Show("缺少終點資訊");
-                        return false;
-                    case 6:
-                        break;
-                    default:
-                        MessageBox.Show("紀錄例外: " + station_count);
-                        break;
-                }
-                */
-
-                return true;
+                
+                return null;
             }
         }
 
