@@ -58,13 +58,13 @@ namespace TagProcess
         public void ClearTagged()
         {
             HashSet<string> removeTags = new HashSet<string>();
-            foreach(string key in tag_store.Keys)
+            foreach (string key in tag_store.Keys)
             {
                 if (committed_tag.Contains(key) == false)
                     removeTags.Add(key);
             }
 
-            foreach(string key in removeTags)
+            foreach (string key in removeTags)
             {
                 tag_store.Remove(key);
             }
@@ -90,7 +90,7 @@ namespace TagProcess
         {
             foreach (int id in groups_id)
             {
-                if(!group_start_time.ContainsKey(id))
+                if (!group_start_time.ContainsKey(id))
                     group_start_time[id] = DateTime.Now;
             }
 
@@ -131,13 +131,13 @@ namespace TagProcess
         {
             DateTime nowt = now.GetValueOrDefault(DateTime.Now);
             // 從 tag_store 撈出該上傳的資料
-            foreach(KeyValuePair<string, DateTime> tag in tag_store)
+            foreach (KeyValuePair<string, DateTime> tag in tag_store)
             {
                 if (committed_tag.Contains(tag.Key)) continue;
 
                 DateTime rec_time = tag.Value;
                 // 記錄到的資料 比10秒前還早 代表為10秒之前的資料
-                if(rec_time <= nowt.Subtract(TimeSpan.FromSeconds(10)))
+                if (rec_time <= nowt.Subtract(TimeSpan.FromSeconds(10)))
                 {
                     if (station_id == 1)
                     {
@@ -167,7 +167,7 @@ namespace TagProcess
                 }
             }
 
-            if(buffered_data.Count >= 10 || (force == true && buffered_data.Count >= 1))
+            if (buffered_data.Count >= 10 || (force == true && buffered_data.Count >= 1))
             {
                 RestRequest req = new RestRequest("api/json/chip_records/batch_create", Method.POST);
                 req.AddParameter("tag_data", JsonConvert.SerializeObject(buffered_data));
@@ -188,7 +188,7 @@ namespace TagProcess
                 var def = new { result = "", total = 0, error = new List<Dictionary<string, string>>() };
                 var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
 
-                foreach(var ele in obj.error)
+                foreach (var ele in obj.error)
                 {
                     OnLog("Error: " + ele["tag_id"] + " " + ele["error"]);
                 }
@@ -212,7 +212,7 @@ namespace TagProcess
 
             Participant p = tag_id_to_participant_table[data.data];
 
-            if(station != 1)
+            if (station != 1)
             {
                 if (tag_store.ContainsKey(data.data) == false)
                 {
@@ -241,7 +241,7 @@ namespace TagProcess
             // 已經起跑 比對已存成績和目前成績 決定是否更新
             // 紀錄時間比群組時間早 才有必要更新
             DateTime group_time = group_start_time[p.group_id];
-            if(tag_store[data.data] <= group_time && tag_store[data.data] != data.time)
+            if (tag_store[data.data] <= group_time && tag_store[data.data] != data.time)
             {
                 tag_store[data.data] = data.time;
                 uploadTagData(false);
@@ -340,12 +340,12 @@ namespace TagProcess
                     return false;
                 }
 
-                if(activity_time <= 0 || personal_time <= 0)
+                if (activity_time <= 0 || personal_time <= 0)
                 {
                     MessageBox.Show("成績有誤");
                     return false;
                 }
-               
+
                 if (chip_user_start_time.CompareTo(new DateTime(2017, 10, 28)) <= 0)
                 {
                     MessageBox.Show("晶片感應時間異常: " + chip_user_start_time);
@@ -410,24 +410,33 @@ namespace TagProcess
         {
             try
             {
-            RestRequest req = new RestRequest("api/json/chip_user/records", Method.GET);
-            req.AddParameter("activity", server.competition_id);
-            if (tag != null) req.AddParameter("tag_id", tag);
-            else if (race != null) req.AddParameter("race_id", race);
-            var res = server.ExecuteHttpRequest(req);
+                RestRequest req = new RestRequest("api/json/chip_user/records", Method.GET);
+                req.AddParameter("activity", server.competition_id);
+                if (tag != null) req.AddParameter("tag_id", tag);
+                else if (race != null) req.AddParameter("race_id", race);
+                var res = server.ExecuteHttpRequest(req);
 
-            var def = new { result = "", ret = new RecordResult() };
-            var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
+                var def = new { result = "", ret = new RecordResult() };
+                var obj = JsonConvert.DeserializeAnonymousType(res.Content, def);
 
-            if (obj.result == "ok")
-                return obj.ret;
-            else
-                MessageBox.Show(obj.result);
-            OnLog(res.Content);
+                if (obj.result == "ok")
+                {
+                    return obj.ret;
+                }
+                else
+                {
+                    var redef = new { result = "", msg = "" };
+                    var reobj = JsonConvert.DeserializeAnonymousType(res.Content, redef);
+
+                    OnLog(reobj.msg);
+                }
+
+                FileLogger.Instance.log("抓取成績錯誤：" + res.Content);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                OnLog(ex.Message);
+                OnLog("伺服器錯誤");
+                FileLogger.Instance.log("抓取成績錯誤：" + ex.Message);
                 return null;
             }
             return null;
@@ -474,7 +483,7 @@ namespace TagProcess
 
                 return ret;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 OnLog(ex.Message);
                 return null;
