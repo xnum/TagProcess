@@ -345,15 +345,14 @@ namespace TagProcess
                     MessageBox.Show("成績有誤");
                     return false;
                 }
-
-                /*
-                if (group.batch_start_time.CompareTo(new DateTime(2017, 10, 28)) <= 0)
+               
+                if (chip_user_start_time.CompareTo(new DateTime(2017, 10, 28)) <= 0)
                 {
-                    MessageBox.Show("組別[" + group.name + "]起跑時間異常: " + group.batch_start_time.ToString());
+                    MessageBox.Show("晶片感應時間異常: " + chip_user_start_time);
                     return false;
                 }
-                
 
+                /*
                 int station_count = 0;
                 foreach (var r in recs)
                 {

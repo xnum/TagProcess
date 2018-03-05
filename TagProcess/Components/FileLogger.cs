@@ -17,9 +17,13 @@ namespace TagProcess
 
         private FileLogger()
         {
-            TextWriterTraceListener mylog = new TextWriterTraceListener(System.IO.File.CreateText("log.txt"));
+            StreamWriter writer;
+            writer = new StreamWriter("log.txt", true);
+            TextWriterTraceListener mylog = new TextWriterTraceListener(writer);
             Debug.Listeners.Add(mylog);
             Debug.AutoFlush = true;
+
+            Trace.WriteLine("---- Program started at " + DateTime.Now.ToString() + "----");
 
             pacFile = new FileStream("packet.txt", FileMode.Append, FileAccess.Write, FileShare.Read, bufferSize: 4096);
             pacWriter = new StreamWriter(pacFile, Encoding.ASCII);

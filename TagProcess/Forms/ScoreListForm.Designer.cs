@@ -238,6 +238,8 @@
             this.Controls.Add(this.dgv);
             this.Name = "ScoreListForm";
             this.Text = "成績列表";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ScoreListForm_FormClosing);
+            this.Load += new System.EventHandler(this.ScoreListForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

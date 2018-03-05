@@ -364,6 +364,8 @@
             this.Controls.Add(this.textBox_tag_id);
             this.Name = "ScoreReviewForm";
             this.Text = "ScoreReviewForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ScoreReviewForm_FormClosed);
+            this.Load += new System.EventHandler(this.ScoreReviewForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

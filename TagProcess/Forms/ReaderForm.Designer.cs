@@ -45,7 +45,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_log = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.dgv_group = new System.Windows.Forms.DataGridView();
             this.Column7 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,7 +76,7 @@
             this.touchedView.Name = "touchedView";
             this.touchedView.RowHeadersVisible = false;
             this.touchedView.RowTemplate.Height = 24;
-            this.touchedView.Size = new System.Drawing.Size(687, 470);
+            this.touchedView.Size = new System.Drawing.Size(687, 481);
             this.touchedView.TabIndex = 19;
             // 
             // Column5
@@ -167,15 +166,15 @@
             // 
             this.textBox_reader_ip1.Location = new System.Drawing.Point(64, 50);
             this.textBox_reader_ip1.Name = "textBox_reader_ip1";
-            this.textBox_reader_ip1.Size = new System.Drawing.Size(100, 22);
+            this.textBox_reader_ip1.Size = new System.Drawing.Size(71, 22);
             this.textBox_reader_ip1.TabIndex = 22;
             this.textBox_reader_ip1.Text = "10.19.1.55";
             // 
             // button_reader_conn1
             // 
-            this.button_reader_conn1.Location = new System.Drawing.Point(170, 50);
+            this.button_reader_conn1.Location = new System.Drawing.Point(141, 50);
             this.button_reader_conn1.Name = "button_reader_conn1";
-            this.button_reader_conn1.Size = new System.Drawing.Size(75, 23);
+            this.button_reader_conn1.Size = new System.Drawing.Size(54, 23);
             this.button_reader_conn1.TabIndex = 23;
             this.button_reader_conn1.Tag = "0";
             this.button_reader_conn1.Text = "連線";
@@ -184,9 +183,9 @@
             // 
             // button_reader_conn2
             // 
-            this.button_reader_conn2.Location = new System.Drawing.Point(170, 78);
+            this.button_reader_conn2.Location = new System.Drawing.Point(141, 78);
             this.button_reader_conn2.Name = "button_reader_conn2";
-            this.button_reader_conn2.Size = new System.Drawing.Size(75, 23);
+            this.button_reader_conn2.Size = new System.Drawing.Size(54, 23);
             this.button_reader_conn2.TabIndex = 26;
             this.button_reader_conn2.Tag = "1";
             this.button_reader_conn2.Text = "連線";
@@ -197,7 +196,7 @@
             // 
             this.textBox_reader_ip2.Location = new System.Drawing.Point(64, 78);
             this.textBox_reader_ip2.Name = "textBox_reader_ip2";
-            this.textBox_reader_ip2.Size = new System.Drawing.Size(100, 22);
+            this.textBox_reader_ip2.Size = new System.Drawing.Size(71, 22);
             this.textBox_reader_ip2.TabIndex = 25;
             this.textBox_reader_ip2.Text = "10.19.1.56";
             // 
@@ -212,9 +211,9 @@
             // 
             // button_reader_conn3
             // 
-            this.button_reader_conn3.Location = new System.Drawing.Point(170, 106);
+            this.button_reader_conn3.Location = new System.Drawing.Point(141, 106);
             this.button_reader_conn3.Name = "button_reader_conn3";
-            this.button_reader_conn3.Size = new System.Drawing.Size(75, 23);
+            this.button_reader_conn3.Size = new System.Drawing.Size(54, 23);
             this.button_reader_conn3.TabIndex = 29;
             this.button_reader_conn3.Tag = "2";
             this.button_reader_conn3.Text = "連線";
@@ -225,7 +224,7 @@
             // 
             this.textBox_reader_ip3.Location = new System.Drawing.Point(64, 106);
             this.textBox_reader_ip3.Name = "textBox_reader_ip3";
-            this.textBox_reader_ip3.Size = new System.Drawing.Size(100, 22);
+            this.textBox_reader_ip3.Size = new System.Drawing.Size(71, 22);
             this.textBox_reader_ip3.TabIndex = 28;
             // 
             // label_reader3
@@ -247,9 +246,9 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 352);
+            this.groupBox1.Location = new System.Drawing.Point(16, 189);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(182, 130);
+            this.groupBox1.Size = new System.Drawing.Size(179, 130);
             this.groupBox1.TabIndex = 30;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "人數資訊";
@@ -328,21 +327,12 @@
             // 
             // textBox_log
             // 
-            this.textBox_log.Location = new System.Drawing.Point(210, 352);
+            this.textBox_log.Location = new System.Drawing.Point(206, 12);
             this.textBox_log.Multiline = true;
             this.textBox_log.Name = "textBox_log";
             this.textBox_log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox_log.Size = new System.Drawing.Size(307, 130);
+            this.textBox_log.Size = new System.Drawing.Size(302, 307);
             this.textBox_log.TabIndex = 31;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(208, 326);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(53, 12);
-            this.label6.TabIndex = 32;
-            this.label6.Text = "異常狀況";
             // 
             // dgv_group
             // 
@@ -353,7 +343,7 @@
             this.Column10,
             this.Column8,
             this.Column9});
-            this.dgv_group.Location = new System.Drawing.Point(14, 152);
+            this.dgv_group.Location = new System.Drawing.Point(12, 334);
             this.dgv_group.Name = "dgv_group";
             this.dgv_group.RowHeadersVisible = false;
             this.dgv_group.RowTemplate.Height = 24;
@@ -390,7 +380,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(433, 173);
+            this.button1.Location = new System.Drawing.Point(433, 371);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 34;
@@ -407,7 +397,7 @@
             "檢查點2",
             "檢查點3",
             "終點"});
-            this.comboBox_station.Location = new System.Drawing.Point(387, 48);
+            this.comboBox_station.Location = new System.Drawing.Point(36, 135);
             this.comboBox_station.Name = "comboBox_station";
             this.comboBox_station.Size = new System.Drawing.Size(121, 20);
             this.comboBox_station.TabIndex = 35;
@@ -423,7 +413,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(433, 203);
+            this.button2.Location = new System.Drawing.Point(433, 401);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 36;
@@ -435,25 +425,25 @@
             // checkBox_station
             // 
             this.checkBox_station.AutoSize = true;
-            this.checkBox_station.Location = new System.Drawing.Point(324, 78);
+            this.checkBox_station.Location = new System.Drawing.Point(35, 163);
             this.checkBox_station.Name = "checkBox_station";
-            this.checkBox_station.Size = new System.Drawing.Size(60, 16);
+            this.checkBox_station.Size = new System.Drawing.Size(48, 16);
             this.checkBox_station.TabIndex = 37;
-            this.checkBox_station.Text = "自訂站";
+            this.checkBox_station.Text = "自訂";
             this.checkBox_station.UseVisualStyleBackColor = true;
             this.checkBox_station.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // textBox_station
             // 
-            this.textBox_station.Location = new System.Drawing.Point(387, 76);
+            this.textBox_station.Location = new System.Drawing.Point(86, 161);
             this.textBox_station.Name = "textBox_station";
-            this.textBox_station.Size = new System.Drawing.Size(100, 22);
+            this.textBox_station.Size = new System.Drawing.Size(71, 22);
             this.textBox_station.TabIndex = 38;
             this.textBox_station.TextChanged += new System.EventHandler(this.textBox_station_TextChanged);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(433, 233);
+            this.button3.Location = new System.Drawing.Point(433, 431);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 39;
@@ -473,7 +463,6 @@
             this.Controls.Add(this.comboBox_station);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dgv_group);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox_log);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button_reader_conn3);
@@ -520,7 +509,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox_log;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DataGridView dgv_group;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column7;

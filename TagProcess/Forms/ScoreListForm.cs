@@ -86,17 +86,6 @@ namespace TagProcess.Forms
             
             var result = keeper.fetchResultByTagOrRace(null, textBox_race_id.Text);
 
-            /*
-            textBox_date.Text = DateTime.Now.ToShortDateString();
-            textBox_name.Text = res.p["name"];
-            textBox_group.Text = res.group.name;
-            textBox_team_name.Text = "";
-            textBox_batch_start.Text = res.group.batch_start_time.ToLongTimeString();
-            textBox_overall_rank.Text = res.overall.ToString();
-            textBox_team_rank.Text = res.team.ToString();
-            textBox_team_name.Text = res.p["team_name"];
-            */
-
             if (!add(result)) return;
             
             textBox_race_id.Text = "";
@@ -142,6 +131,20 @@ namespace TagProcess.Forms
                 return;
             }
 
+        }
+        public void LogToMe(string msg)
+        {
+            MessageBox.Show(msg);
+        }
+
+        private void ScoreListForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            keeper.Log -= LogToMe;
+        }
+
+        private void ScoreListForm_Load(object sender, EventArgs e)
+        {
+            keeper.Log += LogToMe;
         }
     }
 }

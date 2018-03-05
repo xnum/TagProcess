@@ -21,15 +21,9 @@ namespace TagProcess.Forms
         string tag_id = "";
         public ScoreReviewForm()
         {
-            InitializeComponent();
-
-            keeper.Log += LogToMe;
+            InitializeComponent();          
         }
 
-        ~ScoreReviewForm()
-        {
-            keeper.Log -= LogToMe;
-        }
 
         public void LogToMe(string msg)
         {
@@ -153,6 +147,16 @@ namespace TagProcess.Forms
         {
             if (e.KeyCode == Keys.Enter)
                 button_search_race_Click(null, null);
+        }
+
+        private void ScoreReviewForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            keeper.Log -= LogToMe;
+        }
+
+        private void ScoreReviewForm_Load(object sender, EventArgs e)
+        {
+            keeper.Log += LogToMe;
         }
     }
 }
