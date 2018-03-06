@@ -239,6 +239,7 @@ namespace TagProcess
                             DataGridViewCheckBoxCell chkbox = (DataGridViewCheckBoxCell)dgv_group.Rows[i].Cells[0];
                             chkbox.FlatStyle = FlatStyle.Flat;
                             chkbox.Style.ForeColor = Color.DarkGray;
+                            chkbox.Value = false;
                             chkbox.ReadOnly = true;
                             dgv_group.Rows[i].Cells[3].Value = DateTime.Now.ToString();
                         }
