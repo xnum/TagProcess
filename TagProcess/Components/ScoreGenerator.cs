@@ -19,11 +19,12 @@ namespace TagProcess.Components
     {
         public string today;
         public string name;
+        public int male;
         public string race_id;
         public string group;
         public string team_name;
         public int total_rank;
-        public string total_gender_rank;
+        public int total_gender_rank;
         public int team_rank;
         public DateTime tag_start_time;
         public DateTime tag_end_time;
@@ -36,6 +37,8 @@ namespace TagProcess.Components
 
         public int group_count;
         public int class_count;
+        public int class_boy_count;
+        public int class_girl_count;
 
         public bool Check()
         {
@@ -62,12 +65,14 @@ namespace TagProcess.Components
         {
             today = DateTime.Now.ToShortDateString();
             name = res.name;
+            male = res.male;
             race_id = res.race_id;
             group = res.chip_race_group_name;
             team_name = res.team_name;
             reg = res.reg;
             type = res.type;
             total_rank = res.total_rank;
+            total_gender_rank = res.total_gender_rank;
             team_rank = res.group_rank;
             var br_time = TimeSpan.FromSeconds(res.activity_time);
             batch_run_time = br_time.ToString(br_time.TotalSeconds >= 3600 ? @"hh' 小時 'mm' 分 'ss' 秒'" : @"mm' 分 'ss' 秒'");
@@ -78,6 +83,8 @@ namespace TagProcess.Components
             tag_start_time = res.chip_user_end_time;
             group_count = ActivityCountHelper.getGroupCount(res.group_id);
             class_count = ActivityCountHelper.getClassCount(res.group_id);
+            class_boy_count = ActivityCountHelper.getClassBoyCount(res.group_id);
+            class_girl_count = ActivityCountHelper.getClassGirlCount(res.group_id);
         }
 
     }
@@ -107,6 +114,23 @@ namespace TagProcess.Components
                 e.Graphics.DrawString("大會名次  :   N / A", font, Brushes.Black, 200, 910, new StringFormat());
             }
 
+            if (args.total_gender_rank > 0)
+            {
+                if (args.male == 1)
+                {
+                    e.Graphics.DrawString("性別名次  :   " + args.total_gender_rank + " / " + args.class_boy_count, font, Brushes.Black, 200, 990, new StringFormat());
+                }
+
+                if (args.male == 2)
+                {
+                    e.Graphics.DrawString("性別名次  :   " + args.total_gender_rank + " / " + args.class_girl_count, font, Brushes.Black, 200, 990, new StringFormat());
+                }
+            }
+            else
+            {
+                e.Graphics.DrawString("性別名次  :   N / A", font, Brushes.Black, 200, 990, new StringFormat());
+            }
+            /*
             if (args.team_rank > 0)
             {
                 e.Graphics.DrawString("分組名次  :   " + args.team_rank + " / " + args.group_count, font, Brushes.Black, 200, 990, new StringFormat());
@@ -115,6 +139,7 @@ namespace TagProcess.Components
             {
                 e.Graphics.DrawString("分組名次  :   N / A", font, Brushes.Black, 200, 990, new StringFormat());
             }
+            */
         }
 
         public static void Worker()

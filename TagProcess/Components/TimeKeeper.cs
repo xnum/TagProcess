@@ -287,6 +287,7 @@ namespace TagProcess
             public string tag_id;
             public string race_id;
             public int total_rank;
+            public int total_gender_rank;
             public int group_rank;
             public int activity_time;
             public int personal_time;

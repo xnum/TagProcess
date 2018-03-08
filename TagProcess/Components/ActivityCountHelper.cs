@@ -15,6 +15,8 @@ namespace TagProcess.Components
         {
             public int group_count = 0;
             public int class_count = 0;
+            public int class_boy_count = 0;
+            public int class_girl_count = 0;
         }
 
         private static Dictionary<int, GroupCount> list = null;
@@ -57,6 +59,22 @@ namespace TagProcess.Components
             if (list.ContainsKey(key))
                 return list[key].class_count;
             FileLogger.Instance.log("不存在的group_id"+key);
+            return 0;
+        }
+        public static int getClassBoyCount(int key)
+        {
+            fetchGroupCounts();
+            if (list.ContainsKey(key))
+                return list[key].class_boy_count;
+            FileLogger.Instance.log("不存在的group_id" + key);
+            return 0;
+        }
+        public static int getClassGirlCount(int key)
+        {
+            fetchGroupCounts();
+            if (list.ContainsKey(key))
+                return list[key].class_girl_count;
+            FileLogger.Instance.log("不存在的group_id" + key);
             return 0;
         }
     }
