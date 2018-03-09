@@ -229,8 +229,8 @@
             // panel_main
             // 
             this.panel_main.Controls.Add(this.panel_act);
-            this.panel_main.Controls.Add(this.grpbUnused1);
             this.panel_main.Controls.Add(this.grpbUnused2);
+            this.panel_main.Controls.Add(this.grpbUnused1);
             this.panel_main.Location = new System.Drawing.Point(0, 27);
             this.panel_main.Name = "panel_main";
             this.panel_main.Size = new System.Drawing.Size(378, 91);

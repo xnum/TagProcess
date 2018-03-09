@@ -202,7 +202,7 @@ namespace TagProcess
         public bool addData(int station, IPXCmd data)
         {
             FileLogger.Instance.logPacket(String.Format("{0}\t{1}\t{2}\t{3}",
-                station, data.data, data.time.ToShortTimeString(), DateTime.Now.ToShortTimeString()));
+                station, data.data, data.time.ToString(), DateTime.Now.ToString()));
 
             if (tag_id_to_participant_table.ContainsKey(data.data) == false)
             {

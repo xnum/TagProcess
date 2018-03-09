@@ -26,7 +26,7 @@ namespace TagProcess
             Trace.WriteLine("---- Program started at " + DateTime.Now.ToString() + "----");
 
             pacFile = new FileStream("packet.txt", FileMode.Append, FileAccess.Write, FileShare.Read, bufferSize: 4096);
-            pacWriter = new StreamWriter(pacFile, Encoding.ASCII);
+            pacWriter = new StreamWriter(pacFile, Encoding.UTF8);
             pacWriter.AutoFlush = true;
 
             pacWriter.WriteLine("---- Program started at " + DateTime.Now.ToString() + "----");
