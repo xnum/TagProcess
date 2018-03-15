@@ -24,7 +24,6 @@
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.refresh_timer = new System.Windows.Forms.Timer(this.components);
-            this.label4 = new System.Windows.Forms.Label();
             this.label_localtime = new System.Windows.Forms.Label();
             this.label_reader1 = new System.Windows.Forms.Label();
             this.textBox_reader_ip1 = new System.Windows.Forms.TextBox();
@@ -134,20 +133,11 @@
             this.refresh_timer.Enabled = true;
             this.refresh_timer.Tick += new System.EventHandler(this.refresh_timer_Tick);
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 21);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 12);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "電腦時間";
-            // 
             // label_localtime
             // 
             this.label_localtime.AutoSize = true;
             this.label_localtime.Font = new System.Drawing.Font("新細明體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label_localtime.Location = new System.Drawing.Point(72, 17);
+            this.label_localtime.Location = new System.Drawing.Point(12, 17);
             this.label_localtime.Name = "label_localtime";
             this.label_localtime.Size = new System.Drawing.Size(53, 19);
             this.label_localtime.TabIndex = 20;
@@ -477,7 +467,6 @@
             this.Controls.Add(this.label_reader1);
             this.Controls.Add(this.label_localtime);
             this.Controls.Add(this.touchedView);
-            this.Controls.Add(this.label4);
             this.Name = "ReaderForm";
             this.Text = "ReaderForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReaderForm_FormClosing);
@@ -494,7 +483,6 @@
         #endregion
         private System.Windows.Forms.DataGridView touchedView;
         private System.Windows.Forms.Timer refresh_timer;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label_localtime;
         private System.Windows.Forms.Label label_reader1;
         private System.Windows.Forms.TextBox textBox_reader_ip1;

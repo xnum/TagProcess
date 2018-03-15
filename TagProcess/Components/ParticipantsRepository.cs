@@ -66,7 +66,8 @@ namespace TagProcess
                 if (group_id == g.id) return g.name;
             }
 
-            throw new Exception("Unknown Group ID: " + group_id);
+            return "";
+            //throw new Exception("Unknown Group ID: " + group_id);
         }
 
         public int groupStringToInt(string group)

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TagProcess.Components;
 
 namespace TagProcess
 {
@@ -35,6 +36,9 @@ namespace TagProcess
         private HashSet<string> committed_tag = new HashSet<string>();
         // 待上傳資料
         private List<UploadType> buffered_data = new List<UploadType>();
+
+        // 檢測組別
+        private DuplicationChecker gcheck = new DuplicationChecker();
 
         protected void OnLog(string msg)
         {
@@ -93,6 +97,8 @@ namespace TagProcess
                 if (!group_start_time.ContainsKey(id))
                     group_start_time[id] = DateTime.Now;
             }
+
+            gcheck.Set(new HashSet<int>(groups_id));
             
             RestRequest req = new RestRequest("api/json/chip_race_group/batch_start", Method.PUT);
             req.AddParameter("groups", JsonConvert.SerializeObject(groups_id));
@@ -223,6 +229,8 @@ namespace TagProcess
                     return false;
             }
 
+            bool is_current_group = gcheck.Check(p.group_id, data.data);
+
             // 無資料 存最後一筆
             if (tag_store.ContainsKey(data.data) == false)
             {
@@ -237,12 +245,17 @@ namespace TagProcess
                 return false;
             }
 
-
             // 已經起跑 比對已存成績和目前成績 決定是否更新
             // 紀錄時間比群組時間早 才有必要更新
             DateTime group_time = group_start_time[p.group_id];
             if (tag_store[data.data] <= group_time && tag_store[data.data] != data.time)
             {
+                //多加判斷是否為當前組別
+                if (false == is_current_group)
+                {
+                    return false;
+                }
+
                 tag_store[data.data] = data.time;
                 uploadTagData(false);
                 return true;

@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\ActivityCountHelper.cs" />
+    <Compile Include="Components\DuplicationChecker.cs" />
     <Compile Include="Components\ScoreGenerator.cs" />
     <Compile Include="Components\TagUSBReader.cs" />
     <Compile Include="Components\RaceServer.cs" />

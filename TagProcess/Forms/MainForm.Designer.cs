@@ -55,6 +55,7 @@
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleExtender2 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleExtender3 = new MetroFramework.Components.MetroStyleExtender(this.components);
+            this.選擇活動ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpbUnused1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -145,7 +146,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiSetup,
-            this.tsmiLogFile});
+            this.tsmiLogFile,
+            this.選擇活動ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(20, 60);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(481, 24);
@@ -264,7 +266,7 @@
             // 
             // button_choose_act
             // 
-            this.button_choose_act.Location = new System.Drawing.Point(296, 50);
+            this.button_choose_act.Location = new System.Drawing.Point(368, 50);
             this.button_choose_act.Name = "button_choose_act";
             this.button_choose_act.Size = new System.Drawing.Size(93, 30);
             this.button_choose_act.TabIndex = 1;
@@ -278,7 +280,7 @@
             this.comboBox_act.ItemHeight = 23;
             this.comboBox_act.Location = new System.Drawing.Point(26, 51);
             this.comboBox_act.Name = "comboBox_act";
-            this.comboBox_act.Size = new System.Drawing.Size(263, 29);
+            this.comboBox_act.Size = new System.Drawing.Size(329, 29);
             this.comboBox_act.TabIndex = 0;
             this.comboBox_act.UseSelectable = true;
             // 
@@ -286,15 +288,22 @@
             // 
             this.metroStyleManager1.Owner = null;
             // 
+            // 選擇活動ToolStripMenuItem
+            // 
+            this.選擇活動ToolStripMenuItem.Name = "選擇活動ToolStripMenuItem";
+            this.選擇活動ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.選擇活動ToolStripMenuItem.Text = "選擇活動";
+            this.選擇活動ToolStripMenuItem.Click += new System.EventHandler(this.選擇活動ToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(521, 298);
-            this.Controls.Add(this.panel_main);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.panel_act);
+            this.Controls.Add(this.panel_main);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "主選單";
@@ -344,6 +353,7 @@
         private MetroFramework.Components.MetroStyleExtender metroStyleExtender1;
         private MetroFramework.Components.MetroStyleExtender metroStyleExtender2;
         private MetroFramework.Components.MetroStyleExtender metroStyleExtender3;
+        private System.Windows.Forms.ToolStripMenuItem 選擇活動ToolStripMenuItem;
     }
 }
 

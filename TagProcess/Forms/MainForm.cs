@@ -403,11 +403,25 @@ namespace TagProcess
 
             panel_act.Hide();
             panel_main.Show();
+
+            Text = act.name;
+
+            Refresh();
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             ScoreGenerator.queue.CompleteAdding();
+        }
+
+        private void 選擇活動ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Text = "主選單";
+          
+            panel_act.Show();
+            panel_main.Hide();
+
+            Refresh();
         }
     }
 }
