@@ -13,7 +13,7 @@ using TagProcess.Components;
 
 namespace TagProcess
 {
-    public partial class MainForm : Form
+    public partial class MainForm : MetroFramework.Forms.MetroForm
     {
         private RaceServer server = null;
         private TagUSBReader usbReader = null;
