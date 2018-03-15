@@ -173,7 +173,24 @@ namespace TagProcess
                         if (station_id == 1) stime = "";
                         try
                         {
-                            touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
+                            bool found = false;
+                            for(int j = 0; j < touchedView.Rows.Count; ++j)
+                            {
+                                if(touchedView.Rows[j].Cells[0].FormattedValue.ToString() == got_cmd.data)
+                                {
+                                    found = true;
+
+                                    touchedView.Rows[j].Cells[4].Value = got_cmd.time.ToLongTimeString();
+
+                                    break;
+                                }
+                            }
+
+                            if (!found)
+                            {
+                                touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
+                            }
+
                             touchedView.FirstDisplayedScrollingRowIndex = touchedView.RowCount - 1;
                         }
                         catch(Exception ex)

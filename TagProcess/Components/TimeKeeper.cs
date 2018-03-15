@@ -241,7 +241,12 @@ namespace TagProcess
             // 還沒起跑 存最後一筆
             if (group_start_time.ContainsKey(p.group_id) == false)
             {
-                tag_store[data.data] = data.time;
+                if (tag_store[data.data] != data.time)
+                {
+                    tag_store[data.data] = data.time;
+                    return true;
+                }
+
                 return false;
             }
 
