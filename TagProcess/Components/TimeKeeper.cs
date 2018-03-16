@@ -222,6 +222,7 @@ namespace TagProcess
             {
                 if (tag_store.ContainsKey(data.data) == false)
                 {
+                    OnLog(data.data + " 非起點 update");
                     tag_store[data.data] = data.time;
                     return true;
                 }
@@ -239,6 +240,7 @@ namespace TagProcess
                 // 時間與上次記錄相異 更新值
                 if (tag_store[data.data] != data.time)
                 {
+                    OnLog(data.data + " 還沒起跑 update");
                     tag_store[data.data] = data.time;
                     return true;
                 }
@@ -254,6 +256,7 @@ namespace TagProcess
                 // 判斷是否為當前起跑組別
                 if (is_current_group == true)
                 {               
+                    OnLog(data.data + " 尚無資料 update");
                     tag_store[data.data] = data.time;
                     return true;
                 }
@@ -274,6 +277,7 @@ namespace TagProcess
                     return false;
                 }
 
+                OnLog(data.data + " 已起跑 新成績 update");
                 tag_store[data.data] = data.time;
                 uploadTagData(false);
                 return true;
