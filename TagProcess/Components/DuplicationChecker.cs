@@ -42,17 +42,25 @@ namespace TagProcess.Components
             }
         }
 
-        public bool Check(int n, string tag)
+        public enum CheckResult
+        {
+            Ok,
+            Fail,
+            Dup
+        }
+        public CheckResult Check(int n, string tag)
         {
             if (group.Contains(n))
-                return true;
+                return CheckResult.Ok;
 
             if (tags.Contains(tag) == false)
             {
                 pacWriter.WriteLine("---- " + DateTime.Now.ToString() + " 組別錯誤 -- " + tag + " ----");
                 tags.Add(tag);
+                return CheckResult.Fail;
             }
-            return false;
+
+            return CheckResult.Dup;
         }
 
         public int Count()

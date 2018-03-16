@@ -145,7 +145,7 @@ namespace TagProcess
         private void refresh_timer_Tick(object sender, EventArgs e)
         {
             refresh_count++;
-            label_localtime.Text = DateTime.Now.ToShortTimeString();
+            label_localtime.Text = DateTime.Now.ToLongTimeString();
 
             for(int i = 0; i < 3; ++i)
             {
@@ -158,7 +158,9 @@ namespace TagProcess
                     {
                         var result = keeper.addData(station_id, got_cmd);
                         // 新增失敗就不做以下動作
-                        if(result == TimeKeeper.AddResult.Invalid)
+                        if(result == TimeKeeper.AddResult.Invalid || 
+                           result == TimeKeeper.AddResult.DefeatDup ||
+                           result == TimeKeeper.AddResult.NormalDup)
                             continue;
                         
                         string race_id = "";
@@ -174,22 +176,23 @@ namespace TagProcess
                         string stime = start_time.ContainsKey(got_cmd.data) ? start_time[got_cmd.data] : "查無資料";
 
                         if (station_id == 1) stime = "";
-                        if (result == TimeKeeper.AddResult.Defeat) stime = "組別錯誤";
+                        if (result == TimeKeeper.AddResult.DefeatFirst) stime = "組別錯誤";
 
                         try
                         {
-                            for(int j = 0; j < touchedView.Rows.Count; ++j)
+                            bool found = false;
+                            for(int j = 0; j < touchedView.Rows.Count && !found; ++j)
                             {
                                 if(touchedView.Rows[j].Cells[0].FormattedValue.ToString() == got_cmd.data)
                                 {
-                                    touchedView.Rows.RemoveAt(j);
-                                    //touchedView.Rows[j].Cells[4].Value = got_cmd.time.ToLongTimeString();
-
+                                    touchedView.Rows[j].Cells[4].Value = got_cmd.time.ToLongTimeString();
+                                    found = true;
                                     break;
                                 }
                             }
 
-                            touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
+                            if(!found)
+                                touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
 
                             touchedView.FirstDisplayedScrollingRowIndex = touchedView.RowCount - 1;
                         }
@@ -226,6 +229,7 @@ namespace TagProcess
             label_total.Text = keeper.GetTotalCount().ToString();
             label_upload.Text = keeper.GetUploadedCount().ToString();
             label_buffered.Text = keeper.GetBufferedCount().ToString();
+            label_dup.Text = keeper.GetDupCount().ToString();           
         }
 
         private void button1_Click(object sender, EventArgs e)

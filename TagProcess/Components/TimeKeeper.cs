@@ -174,7 +174,7 @@ namespace TagProcess
                     }
                 }
             }
-            
+
             if (buffered_data.Count >= 10 || (force == true && buffered_data.Count >= 1))
             {
                 RestRequest req = new RestRequest("api/json/chip_records/batch_create", Method.POST);
@@ -209,8 +209,10 @@ namespace TagProcess
 
         public enum AddResult
         {
-            Normal,
-            Defeat,
+            NormalFirst,
+            NormalDup,
+            DefeatFirst,
+            DefeatDup,
             Invalid
         }
 
@@ -233,7 +235,7 @@ namespace TagProcess
                 {
                     //OnLog(data.data + " 非起點 update");
                     tag_store[data.data] = data.time;
-                    return AddResult.Normal;
+                    return AddResult.NormalFirst;
                 }
                 else
                     return AddResult.Invalid;
@@ -241,36 +243,43 @@ namespace TagProcess
 
             // 以下皆為判斷起點資料
             
-            bool is_current_group = gcheck.Check(p.group_id, data.data);
-
             // 還沒起跑
             if (group_start_time.ContainsKey(p.group_id) == false)
             {
                 // 時間與上次記錄相異 更新值
-                if (tag_store.ContainsKey(data.data) == false || tag_store[data.data] != data.time)
+                if (tag_store.ContainsKey(data.data) == false)
                 {
-                    //OnLog(data.data + " 還沒起跑 update");
                     tag_store[data.data] = data.time;
-                    return AddResult.Normal;
+
+                    return AddResult.NormalFirst;
+                }
+                
+                if(tag_store[data.data] != data.time)
+                {
+                    tag_store[data.data] = data.time;
+                    // 大量感應會塞爆UI 不重複顯示
+                    return AddResult.NormalFirst;
                 }
 
                 return AddResult.Invalid;
-            }            
-            
+            }
+
             // 以下皆為 起點 + 該組別已起跑
-            
+
+            var is_current_group = gcheck.Check(p.group_id, data.data);
+
             // 尚無資料
             if (tag_store.ContainsKey(data.data) == false)
             {
                 // 判斷是否為當前起跑組別
-                if (is_current_group == true)
+                if (is_current_group == DuplicationChecker.CheckResult.Ok)
                 {               
                     //OnLog(data.data + " 尚無資料 update");
                     tag_store[data.data] = data.time;
-                    return AddResult.Normal;
+                    return AddResult.NormalFirst;
                 }
                 
-                return AddResult.Defeat;
+                return is_current_group == DuplicationChecker.CheckResult.Fail ? AddResult.DefeatFirst : AddResult.DefeatDup;
             }
 
             // 以下為 起點 + 該組別已經起跑 + 已經有該選手感應過的資料
@@ -281,15 +290,15 @@ namespace TagProcess
             if (tag_store[data.data] <= group_time && tag_store[data.data] != data.time)
             {
                 //多加判斷是否為當前組別
-                if (false == is_current_group)
+                if (is_current_group != DuplicationChecker.CheckResult.Ok)
                 {
-                    return AddResult.Defeat;
+                    return is_current_group == DuplicationChecker.CheckResult.Fail ? AddResult.DefeatFirst : AddResult.DefeatDup;
                 }
 
                 //OnLog(data.data + " 已起跑 新成績 update");
                 tag_store[data.data] = data.time;
                 uploadTagData(false);
-                return AddResult.Normal;
+                return AddResult.NormalFirst;
             }
 
             return AddResult.Invalid;
@@ -300,9 +309,14 @@ namespace TagProcess
             return ParticipantsRepository.Instance.participants.Count;
         }
 
+        public int GetDupCount()
+        {
+            return gcheck.Count();
+        }
+
         public int GetTagCount()
         {
-            return tag_store.Count + gcheck.Count();
+            return tag_store.Count;
         }
 
         public int GetUploadedCount()

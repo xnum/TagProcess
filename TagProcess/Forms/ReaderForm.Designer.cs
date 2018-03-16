@@ -56,6 +56,8 @@
             this.checkBox_station = new System.Windows.Forms.CheckBox();
             this.textBox_station = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.label_dup = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.touchedView)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_group)).BeginInit();
@@ -229,6 +231,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label_dup);
+            this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label_buffered);
             this.groupBox1.Controls.Add(this.label_upload);
             this.groupBox1.Controls.Add(this.label_total);
@@ -247,7 +251,7 @@
             // label_buffered
             // 
             this.label_buffered.AutoSize = true;
-            this.label_buffered.Location = new System.Drawing.Point(92, 98);
+            this.label_buffered.Location = new System.Drawing.Point(115, 83);
             this.label_buffered.Name = "label_buffered";
             this.label_buffered.Size = new System.Drawing.Size(11, 12);
             this.label_buffered.TabIndex = 7;
@@ -256,7 +260,7 @@
             // label_upload
             // 
             this.label_upload.AutoSize = true;
-            this.label_upload.Location = new System.Drawing.Point(92, 72);
+            this.label_upload.Location = new System.Drawing.Point(115, 62);
             this.label_upload.Name = "label_upload";
             this.label_upload.Size = new System.Drawing.Size(11, 12);
             this.label_upload.TabIndex = 6;
@@ -265,7 +269,7 @@
             // label_total
             // 
             this.label_total.AutoSize = true;
-            this.label_total.Location = new System.Drawing.Point(92, 46);
+            this.label_total.Location = new System.Drawing.Point(115, 42);
             this.label_total.Name = "label_total";
             this.label_total.Size = new System.Drawing.Size(11, 12);
             this.label_total.TabIndex = 5;
@@ -274,7 +278,7 @@
             // label_tagged
             // 
             this.label_tagged.AutoSize = true;
-            this.label_tagged.Location = new System.Drawing.Point(92, 21);
+            this.label_tagged.Location = new System.Drawing.Point(115, 21);
             this.label_tagged.Name = "label_tagged";
             this.label_tagged.Size = new System.Drawing.Size(11, 12);
             this.label_tagged.TabIndex = 4;
@@ -283,7 +287,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 100);
+            this.label5.Location = new System.Drawing.Point(8, 84);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(77, 12);
             this.label5.TabIndex = 3;
@@ -292,7 +296,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 47);
+            this.label3.Location = new System.Drawing.Point(8, 43);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 12);
             this.label3.TabIndex = 2;
@@ -301,7 +305,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 74);
+            this.label2.Location = new System.Drawing.Point(8, 64);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 12);
             this.label2.TabIndex = 1;
@@ -442,6 +446,24 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // label_dup
+            // 
+            this.label_dup.AutoSize = true;
+            this.label_dup.Location = new System.Drawing.Point(115, 104);
+            this.label_dup.Name = "label_dup";
+            this.label_dup.Size = new System.Drawing.Size(11, 12);
+            this.label_dup.TabIndex = 9;
+            this.label_dup.Text = "0";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(8, 105);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(89, 12);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "組別錯誤人數：";
+            // 
             // ReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -521,5 +543,7 @@
         private System.Windows.Forms.CheckBox checkBox_station;
         private System.Windows.Forms.TextBox textBox_station;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label_dup;
+        private System.Windows.Forms.Label label6;
     }
 }
