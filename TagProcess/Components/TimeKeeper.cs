@@ -229,18 +229,14 @@ namespace TagProcess
                     return false;
             }
 
+            // 以下皆為判斷起點資料
+            
             bool is_current_group = gcheck.Check(p.group_id, data.data);
 
-            // 無資料 存最後一筆
-            if (tag_store.ContainsKey(data.data) == false)
-            {
-                tag_store[data.data] = data.time;
-                return true;
-            }
-
-            // 還沒起跑 存最後一筆
+            // 還沒起跑
             if (group_start_time.ContainsKey(p.group_id) == false)
             {
+                // 時間與上次記錄相異 更新值
                 if (tag_store[data.data] != data.time)
                 {
                     tag_store[data.data] = data.time;
@@ -248,8 +244,25 @@ namespace TagProcess
                 }
 
                 return false;
+            }            
+            
+            // 以下皆為 起點 + 該組別已起跑
+            
+            // 尚無資料
+            if (tag_store.ContainsKey(data.data) == false)
+            {
+                // 判斷是否為當前起跑組別
+                if (is_current_group == true)
+                {               
+                    tag_store[data.data] = data.time;
+                    return true;
+                }
+                
+                return false;
             }
 
+            // 以下為 起點 + 該組別已經起跑 + 已經有該選手感應過的資料
+            
             // 已經起跑 比對已存成績和目前成績 決定是否更新
             // 紀錄時間比群組時間早 才有必要更新
             DateTime group_time = group_start_time[p.group_id];
