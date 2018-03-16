@@ -60,7 +60,7 @@ namespace TagProcess.Components
             return tags.Count;
         }
 
-        void Clear()
+        public void Clear()
         {
             tags.Clear();
         }
