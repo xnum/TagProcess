@@ -161,7 +161,7 @@ namespace TagProcess
                         // 感應時間 - 起跑時間
                         TimeSpan timediff = rec_time.Subtract(gtime);
                         double timediff_sec = timediff.TotalSeconds;
-                        if (-3 <= timediff_sec && timediff_sec <= 600)
+                        if (-3 <= timediff_sec)
                         {
                             enqueue(tag.Key, station_id, tag.Value < gtime ? gtime : tag.Value);
                         }
@@ -238,7 +238,7 @@ namespace TagProcess
             if (group_start_time.ContainsKey(p.group_id) == false)
             {
                 // 時間與上次記錄相異 更新值
-                if (tag_store[data.data] != data.time)
+                if (tag_store.ContainsKey(data.data) == false || tag_store[data.data] != data.time)
                 {
                     OnLog(data.data + " 還沒起跑 update");
                     tag_store[data.data] = data.time;
