@@ -72,6 +72,8 @@ namespace TagProcess
             {
                 tag_store.Remove(key);
             }
+
+            gcheck.Clear();
         }
 
         public void Init(int n)
@@ -205,7 +207,14 @@ namespace TagProcess
             return true;
         }
 
-        public bool addData(int station, IPXCmd data)
+        public enum AddResult
+        {
+            Normal,
+            Defeat,
+            Invalid
+        }
+
+        public AddResult addData(int station, IPXCmd data)
         {
             FileLogger.Instance.logPacket(String.Format("{0}\t{1}\t{2}\t{3}",
                 station, data.data, data.time.ToString(), DateTime.Now.ToString()));
@@ -213,7 +222,7 @@ namespace TagProcess
             if (tag_id_to_participant_table.ContainsKey(data.data) == false)
             {
                 OnLog(data.data + "不存在");
-                return false;
+                return AddResult.Invalid;
             }
 
             Participant p = tag_id_to_participant_table[data.data];
@@ -222,12 +231,12 @@ namespace TagProcess
             {
                 if (tag_store.ContainsKey(data.data) == false)
                 {
-                    OnLog(data.data + " 非起點 update");
+                    //OnLog(data.data + " 非起點 update");
                     tag_store[data.data] = data.time;
-                    return true;
+                    return AddResult.Normal;
                 }
                 else
-                    return false;
+                    return AddResult.Invalid;
             }
 
             // 以下皆為判斷起點資料
@@ -240,12 +249,12 @@ namespace TagProcess
                 // 時間與上次記錄相異 更新值
                 if (tag_store.ContainsKey(data.data) == false || tag_store[data.data] != data.time)
                 {
-                    OnLog(data.data + " 還沒起跑 update");
+                    //OnLog(data.data + " 還沒起跑 update");
                     tag_store[data.data] = data.time;
-                    return true;
+                    return AddResult.Normal;
                 }
 
-                return false;
+                return AddResult.Invalid;
             }            
             
             // 以下皆為 起點 + 該組別已起跑
@@ -256,12 +265,12 @@ namespace TagProcess
                 // 判斷是否為當前起跑組別
                 if (is_current_group == true)
                 {               
-                    OnLog(data.data + " 尚無資料 update");
+                    //OnLog(data.data + " 尚無資料 update");
                     tag_store[data.data] = data.time;
-                    return true;
+                    return AddResult.Normal;
                 }
                 
-                return false;
+                return AddResult.Defeat;
             }
 
             // 以下為 起點 + 該組別已經起跑 + 已經有該選手感應過的資料
@@ -274,16 +283,16 @@ namespace TagProcess
                 //多加判斷是否為當前組別
                 if (false == is_current_group)
                 {
-                    return false;
+                    return AddResult.Defeat;
                 }
 
-                OnLog(data.data + " 已起跑 新成績 update");
+                //OnLog(data.data + " 已起跑 新成績 update");
                 tag_store[data.data] = data.time;
                 uploadTagData(false);
-                return true;
+                return AddResult.Normal;
             }
 
-            return false;
+            return AddResult.Invalid;
         }
 
         public int GetTotalCount()
@@ -293,7 +302,7 @@ namespace TagProcess
 
         public int GetTagCount()
         {
-            return tag_store.Count;
+            return tag_store.Count + gcheck.Count();
         }
 
         public int GetUploadedCount()

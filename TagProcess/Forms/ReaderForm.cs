@@ -156,7 +156,9 @@ namespace TagProcess
                 {
                     if (got_cmd.type == IPXCmd.Type.GetTag)
                     {
-                        if (!keeper.addData(station_id, got_cmd)) // 新增失敗就不做以下動作
+                        var result = keeper.addData(station_id, got_cmd);
+                        // 新增失敗就不做以下動作
+                        if(result == TimeKeeper.AddResult.Invalid)
                             continue;
                         
                         string race_id = "";
@@ -170,26 +172,24 @@ namespace TagProcess
                             group = p.group;
                         }
                         string stime = start_time.ContainsKey(got_cmd.data) ? start_time[got_cmd.data] : "查無資料";
+
                         if (station_id == 1) stime = "";
+                        if (result == TimeKeeper.AddResult.Defeat) stime = "組別錯誤";
+
                         try
                         {
-                            bool found = false;
                             for(int j = 0; j < touchedView.Rows.Count; ++j)
                             {
                                 if(touchedView.Rows[j].Cells[0].FormattedValue.ToString() == got_cmd.data)
                                 {
-                                    found = true;
-
-                                    touchedView.Rows[j].Cells[4].Value = got_cmd.time.ToLongTimeString();
+                                    touchedView.Rows.RemoveAt(j);
+                                    //touchedView.Rows[j].Cells[4].Value = got_cmd.time.ToLongTimeString();
 
                                     break;
                                 }
                             }
 
-                            if (!found)
-                            {
-                                touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
-                            }
+                            touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
 
                             touchedView.FirstDisplayedScrollingRowIndex = touchedView.RowCount - 1;
                         }

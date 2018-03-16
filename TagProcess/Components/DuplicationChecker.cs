@@ -57,7 +57,12 @@ namespace TagProcess.Components
 
         public int Count()
         {
-            return group.Count;
+            return tags.Count;
+        }
+
+        void Clear()
+        {
+            tags.Clear();
         }
     }
 }
