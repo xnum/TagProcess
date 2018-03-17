@@ -145,7 +145,7 @@ namespace TagProcess
 
                 DateTime rec_time = tag.Value;
                 // 記錄到的資料 比10秒前還早 代表為10秒之前的資料
-                if (rec_time <= nowt.Subtract(TimeSpan.FromSeconds(10)))
+                if (rec_time <= nowt.Subtract(TimeSpan.FromSeconds(8)))
                 {
                     if (station_id == 1)
                     {

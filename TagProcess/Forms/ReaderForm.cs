@@ -216,7 +216,7 @@ namespace TagProcess
                 }
             }
 
-            if (refresh_count % 100 == 1) // 每10秒提醒一次 該發送資料了
+            if (refresh_count % 70 == 1) // 每7秒提醒一次 該發送資料了
                 keeper.notifyTimeout();
 
             if (refresh_count % 300 == 1)
@@ -297,7 +297,7 @@ namespace TagProcess
                 SetTextN(DateTime.Now.ToString(), 0);
                 string res = keeper.triggerServer();
                 wk.ReportProgress(0, res);
-                Thread.Sleep(10000);
+                Thread.Sleep(8000);
             }
         }
 
