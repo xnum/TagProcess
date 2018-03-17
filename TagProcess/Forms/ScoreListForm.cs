@@ -87,10 +87,10 @@ namespace TagProcess.Forms
             
             var result = keeper.fetchResultByTagOrRace(null, textBox_race_id.Text);
 
-            if (!add(result)) return;
-            
             textBox_race_id.Text = "";
-            
+
+            if (!add(result)) return;
+                     
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -147,5 +147,6 @@ namespace TagProcess.Forms
         {
             keeper.Log += LogToMe;
         }
+
     }
 }
