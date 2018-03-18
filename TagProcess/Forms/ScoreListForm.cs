@@ -45,7 +45,7 @@ namespace TagProcess.Forms
 
             dgv.Rows.Insert(0,
                 "未檢查",
-                textBox_race_id.Text, 
+                args.race_id, 
                 args.name,
                 args.team_name,
                 args.reg,
