@@ -11,7 +11,7 @@ using TagProcess.Components;
 
 namespace TagProcess.Forms
 {
-    public partial class ScoreReviewForm : Form
+    public partial class ScoreReviewForm : MetroFramework.Forms.MetroForm
     {
         private ParticipantsRepository repo = ParticipantsRepository.Instance;
         private TimeKeeper keeper = TimeKeeper.Instance;

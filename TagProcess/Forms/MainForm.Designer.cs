@@ -43,6 +43,7 @@
             this.tsmiRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiServerUrl = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiLogFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.選擇活動ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpbUnused2 = new System.Windows.Forms.GroupBox();
             this.btnScoreReview = new MetroFramework.Controls.MetroButton();
             this.btnPrintScore = new MetroFramework.Controls.MetroButton();
@@ -55,7 +56,6 @@
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleExtender2 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleExtender3 = new MetroFramework.Components.MetroStyleExtender(this.components);
-            this.選擇活動ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpbUnused1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -192,6 +192,13 @@
             this.tsmiLogFile.Text = "Log檔";
             this.tsmiLogFile.Click += new System.EventHandler(this.tsmiLogFile_Click);
             // 
+            // 選擇活動ToolStripMenuItem
+            // 
+            this.選擇活動ToolStripMenuItem.Name = "選擇活動ToolStripMenuItem";
+            this.選擇活動ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.選擇活動ToolStripMenuItem.Text = "選擇活動";
+            this.選擇活動ToolStripMenuItem.Click += new System.EventHandler(this.選擇活動ToolStripMenuItem_Click);
+            // 
             // grpbUnused2
             // 
             this.grpbUnused2.Controls.Add(this.btnScoreReview);
@@ -256,9 +263,9 @@
             this.panel_act.HorizontalScrollbarBarColor = true;
             this.panel_act.HorizontalScrollbarHighlightOnWheel = false;
             this.panel_act.HorizontalScrollbarSize = 10;
-            this.panel_act.Location = new System.Drawing.Point(22, 87);
+            this.panel_act.Location = new System.Drawing.Point(23, 86);
             this.panel_act.Name = "panel_act";
-            this.panel_act.Size = new System.Drawing.Size(479, 166);
+            this.panel_act.Size = new System.Drawing.Size(478, 167);
             this.panel_act.TabIndex = 5;
             this.panel_act.VerticalScrollbarBarColor = true;
             this.panel_act.VerticalScrollbarHighlightOnWheel = false;
@@ -288,13 +295,6 @@
             // 
             this.metroStyleManager1.Owner = null;
             // 
-            // 選擇活動ToolStripMenuItem
-            // 
-            this.選擇活動ToolStripMenuItem.Name = "選擇活動ToolStripMenuItem";
-            this.選擇活動ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
-            this.選擇活動ToolStripMenuItem.Text = "選擇活動";
-            this.選擇活動ToolStripMenuItem.Click += new System.EventHandler(this.選擇活動ToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -306,6 +306,7 @@
             this.Controls.Add(this.panel_main);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
+            this.Resizable = false;
             this.Text = "主選單";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.grpbUnused1.ResumeLayout(false);

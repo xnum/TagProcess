@@ -208,6 +208,7 @@
             this.textBox_race_id.Name = "textBox_race_id";
             this.textBox_race_id.Size = new System.Drawing.Size(76, 27);
             this.textBox_race_id.TabIndex = 1;
+            this.textBox_race_id.TextChanged += new System.EventHandler(this.textBox_race_id_TextChanged);
             this.textBox_race_id.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_race_id_KeyDown);
             // 
             // label1

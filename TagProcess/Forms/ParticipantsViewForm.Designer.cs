@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.mainDGV = new System.Windows.Forms.DataGridView();
-            this.textBox_race_id = new System.Windows.Forms.TextBox();
-            this.search_by_race_id_button = new System.Windows.Forms.Button();
-            this.search_by_tag_id_button = new System.Windows.Forms.Button();
-            this.textBox_tag_id = new System.Windows.Forms.TextBox();
             this.col_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_birth = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -42,6 +38,10 @@
             this.col_race_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_team_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_edit = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.textBox_race_id = new System.Windows.Forms.TextBox();
+            this.search_by_race_id_button = new System.Windows.Forms.Button();
+            this.search_by_tag_id_button = new System.Windows.Forms.Button();
+            this.textBox_tag_id = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.mainDGV)).BeginInit();
             this.SuspendLayout();
             // 
@@ -61,7 +61,7 @@
             this.col_race_id,
             this.col_team_name,
             this.col_edit});
-            this.mainDGV.Location = new System.Drawing.Point(12, 46);
+            this.mainDGV.Location = new System.Drawing.Point(27, 92);
             this.mainDGV.MultiSelect = false;
             this.mainDGV.Name = "mainDGV";
             this.mainDGV.ReadOnly = true;
@@ -69,41 +69,6 @@
             this.mainDGV.Size = new System.Drawing.Size(747, 349);
             this.mainDGV.TabIndex = 0;
             this.mainDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.mainDGV_CellContentClick);
-            // 
-            // textBox_race_id
-            // 
-            this.textBox_race_id.Location = new System.Drawing.Point(13, 13);
-            this.textBox_race_id.Name = "textBox_race_id";
-            this.textBox_race_id.Size = new System.Drawing.Size(100, 22);
-            this.textBox_race_id.TabIndex = 1;
-            // 
-            // search_by_race_id_button
-            // 
-            this.search_by_race_id_button.Location = new System.Drawing.Point(120, 13);
-            this.search_by_race_id_button.Name = "search_by_race_id_button";
-            this.search_by_race_id_button.Size = new System.Drawing.Size(75, 23);
-            this.search_by_race_id_button.TabIndex = 2;
-            this.search_by_race_id_button.Text = "號碼布搜尋";
-            this.search_by_race_id_button.UseVisualStyleBackColor = true;
-            this.search_by_race_id_button.Click += new System.EventHandler(this.search_by_race_id_button_Click);
-            // 
-            // search_by_tag_id_button
-            // 
-            this.search_by_tag_id_button.Location = new System.Drawing.Point(388, 12);
-            this.search_by_tag_id_button.Name = "search_by_tag_id_button";
-            this.search_by_tag_id_button.Size = new System.Drawing.Size(75, 23);
-            this.search_by_tag_id_button.TabIndex = 3;
-            this.search_by_tag_id_button.Text = "以晶片搜尋";
-            this.search_by_tag_id_button.UseVisualStyleBackColor = true;
-            this.search_by_tag_id_button.Click += new System.EventHandler(this.SearchByTagIdButtonClick);
-            // 
-            // textBox_tag_id
-            // 
-            this.textBox_tag_id.Location = new System.Drawing.Point(249, 13);
-            this.textBox_tag_id.Name = "textBox_tag_id";
-            this.textBox_tag_id.ReadOnly = true;
-            this.textBox_tag_id.Size = new System.Drawing.Size(133, 22);
-            this.textBox_tag_id.TabIndex = 4;
             // 
             // col_id
             // 
@@ -113,7 +78,6 @@
             this.col_id.Name = "col_id";
             this.col_id.ReadOnly = true;
             this.col_id.Visible = false;
-            this.col_id.Width = 42;
             // 
             // col_name
             // 
@@ -181,11 +145,46 @@
             this.col_edit.Name = "col_edit";
             this.col_edit.ReadOnly = true;
             // 
+            // textBox_race_id
+            // 
+            this.textBox_race_id.Location = new System.Drawing.Point(28, 59);
+            this.textBox_race_id.Name = "textBox_race_id";
+            this.textBox_race_id.Size = new System.Drawing.Size(100, 22);
+            this.textBox_race_id.TabIndex = 1;
+            // 
+            // search_by_race_id_button
+            // 
+            this.search_by_race_id_button.Location = new System.Drawing.Point(135, 59);
+            this.search_by_race_id_button.Name = "search_by_race_id_button";
+            this.search_by_race_id_button.Size = new System.Drawing.Size(75, 23);
+            this.search_by_race_id_button.TabIndex = 2;
+            this.search_by_race_id_button.Text = "號碼布搜尋";
+            this.search_by_race_id_button.UseVisualStyleBackColor = true;
+            this.search_by_race_id_button.Click += new System.EventHandler(this.search_by_race_id_button_Click);
+            // 
+            // search_by_tag_id_button
+            // 
+            this.search_by_tag_id_button.Location = new System.Drawing.Point(403, 58);
+            this.search_by_tag_id_button.Name = "search_by_tag_id_button";
+            this.search_by_tag_id_button.Size = new System.Drawing.Size(75, 23);
+            this.search_by_tag_id_button.TabIndex = 3;
+            this.search_by_tag_id_button.Text = "以晶片搜尋";
+            this.search_by_tag_id_button.UseVisualStyleBackColor = true;
+            this.search_by_tag_id_button.Click += new System.EventHandler(this.SearchByTagIdButtonClick);
+            // 
+            // textBox_tag_id
+            // 
+            this.textBox_tag_id.Location = new System.Drawing.Point(264, 59);
+            this.textBox_tag_id.Name = "textBox_tag_id";
+            this.textBox_tag_id.ReadOnly = true;
+            this.textBox_tag_id.Size = new System.Drawing.Size(133, 22);
+            this.textBox_tag_id.TabIndex = 4;
+            // 
             // ParticipantsViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(769, 411);
+            this.ClientSize = new System.Drawing.Size(806, 464);
             this.Controls.Add(this.textBox_tag_id);
             this.Controls.Add(this.search_by_tag_id_button);
             this.Controls.Add(this.search_by_race_id_button);

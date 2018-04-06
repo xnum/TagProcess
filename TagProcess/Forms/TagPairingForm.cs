@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace TagProcess
 {
-    public partial class TagPairingForm : Form
+    public partial class TagPairingForm : MetroFramework.Forms.MetroForm
     {
         private ParticipantsRepository repo = ParticipantsRepository.Instance;
         private TagUSBReader usbReader = TagUSBReader.Instance;
@@ -183,6 +183,11 @@ namespace TagProcess
         {
             getTagWorker.CancelAsync();
             consumer_timer.Enabled = false;
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

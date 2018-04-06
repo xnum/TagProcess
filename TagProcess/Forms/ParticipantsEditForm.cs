@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace TagProcess
 {
-    public partial class ParticipantsEditForm : Form
+    public partial class ParticipantsEditForm : MetroFramework.Forms.MetroForm
     {
         public Participant retParticipant;
         string currentReceivedTag = String.Empty;

@@ -148,5 +148,9 @@ namespace TagProcess.Forms
             keeper.Log += LogToMe;
         }
 
+        private void textBox_race_id_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

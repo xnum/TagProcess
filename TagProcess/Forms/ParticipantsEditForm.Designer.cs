@@ -63,7 +63,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 23);
+            this.label1.Location = new System.Drawing.Point(24, 58);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 12);
             this.label1.TabIndex = 0;
@@ -71,7 +71,7 @@
             // 
             // textBox_tag_id
             // 
-            this.textBox_tag_id.Location = new System.Drawing.Point(26, 38);
+            this.textBox_tag_id.Location = new System.Drawing.Point(26, 73);
             this.textBox_tag_id.Name = "textBox_tag_id";
             this.textBox_tag_id.ReadOnly = true;
             this.textBox_tag_id.Size = new System.Drawing.Size(116, 22);
@@ -79,7 +79,7 @@
             // 
             // changeTagID
             // 
-            this.changeTagID.Location = new System.Drawing.Point(148, 37);
+            this.changeTagID.Location = new System.Drawing.Point(148, 72);
             this.changeTagID.Name = "changeTagID";
             this.changeTagID.Size = new System.Drawing.Size(75, 23);
             this.changeTagID.TabIndex = 2;
@@ -107,7 +107,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.textBox_name);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Location = new System.Drawing.Point(26, 82);
+            this.groupBox1.Location = new System.Drawing.Point(26, 117);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(455, 133);
             this.groupBox1.TabIndex = 3;
@@ -270,7 +270,7 @@
             // 
             // textBox_race_id
             // 
-            this.textBox_race_id.Location = new System.Drawing.Point(291, 38);
+            this.textBox_race_id.Location = new System.Drawing.Point(291, 73);
             this.textBox_race_id.Name = "textBox_race_id";
             this.textBox_race_id.ReadOnly = true;
             this.textBox_race_id.Size = new System.Drawing.Size(63, 22);
@@ -279,7 +279,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(289, 23);
+            this.label9.Location = new System.Drawing.Point(289, 58);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(65, 12);
             this.label9.TabIndex = 4;
@@ -289,7 +289,7 @@
             // 
             this.button_ok.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.button_ok.Font = new System.Drawing.Font("新細明體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.button_ok.Location = new System.Drawing.Point(364, 25);
+            this.button_ok.Location = new System.Drawing.Point(364, 60);
             this.button_ok.Name = "button_ok";
             this.button_ok.Size = new System.Drawing.Size(115, 40);
             this.button_ok.TabIndex = 6;
@@ -301,9 +301,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 229);
+            this.statusStrip1.Location = new System.Drawing.Point(20, 261);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(506, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(466, 22);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -322,7 +322,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(506, 251);
+            this.ClientSize = new System.Drawing.Size(506, 303);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.button_ok);
             this.Controls.Add(this.textBox_race_id);
@@ -332,6 +332,7 @@
             this.Controls.Add(this.textBox_tag_id);
             this.Controls.Add(this.label1);
             this.Name = "ParticipantsEditForm";
+            this.Resizable = false;
             this.Text = "參賽選手編輯";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ParticipantsEdit_FormClosing);
             this.groupBox1.ResumeLayout(false);

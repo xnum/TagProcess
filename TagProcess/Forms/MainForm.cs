@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
 using TagProcess.Forms;
 using System.IO;
 using ExcelDataReader;
@@ -152,11 +149,13 @@ namespace TagProcess
                 return;
             }
 
+            /*
             if (!usbReader.IsConnected())
             {
                 MessageBox.Show("讀卡機尚未設定PORT");
                 return;
             }
+            */
 
             printToStatusLabel("下載選手資料中，請稍後");
             if (!repo.fetchParticipants())
@@ -399,6 +398,7 @@ namespace TagProcess
         private void button_choose_act_Click(object sender, EventArgs e)
         {
             RaceServer.Activity act = (RaceServer.Activity)comboBox_act.SelectedItem;
+            if (act == null) return;
             server.competition_id = act.id;
 
             panel_act.Hide();

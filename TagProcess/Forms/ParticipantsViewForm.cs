@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace TagProcess
 {
-    public partial class ParticipantsViewForm : Form
+    public partial class ParticipantsViewForm : MetroFramework.Forms.MetroForm
     {
         private ParticipantsRepository repo = ParticipantsRepository.Instance;
         private TagUSBReader usbReader = TagUSBReader.Instance;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MetroFramework.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,13 +13,13 @@ using System.Windows.Forms;
 
 namespace TagProcess
 {
-    public partial class ReaderForm : Form
+    public partial class ReaderForm : MetroFramework.Forms.MetroForm
     {
         delegate void SetTextNCallback(string text, int index);
         delegate void SetText0Callback(string text);
 
         private System.ComponentModel.BackgroundWorker[] readerWorker;
-        private TextBox[] textBox_ip;
+        private MetroTextBox[] textBox_ip;
         private int refresh_count = 0;
         private string[] result = new string[] { "", "", ""};
         private int station_id = -1;
@@ -40,7 +41,7 @@ namespace TagProcess
             comboBox_station.DisplayMember = "Key"; 
             comboBox_station.ValueMember = "Value";
 
-            textBox_ip = new TextBox[] { textBox_reader_ip1, textBox_reader_ip2, textBox_reader_ip3 };
+            textBox_ip = new MetroTextBox[] { textBox_reader_ip1, textBox_reader_ip2, textBox_reader_ip3 };
 
             readerWorker = new BackgroundWorker[3];
             for (int i = 0; i < this.readerWorker.Length; ++i)
