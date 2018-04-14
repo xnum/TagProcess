@@ -724,7 +724,7 @@
             this.metroButton2.Name = "metroButton2";
             this.metroButton2.Size = new System.Drawing.Size(120, 33);
             this.metroButton2.TabIndex = 41;
-            this.metroButton2.Text = "紀錄鳴槍";
+            this.metroButton2.Text = "紀錄鳴槍(正";
             this.metroButton2.UseSelectable = true;
             this.metroButton2.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -735,8 +735,9 @@
             this.metroButton1.Name = "metroButton1";
             this.metroButton1.Size = new System.Drawing.Size(120, 33);
             this.metroButton1.TabIndex = 40;
-            this.metroButton1.Text = "設定起跑";
+            this.metroButton1.Text = "設定起跑(預";
             this.metroButton1.UseSelectable = true;
+            this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
             // 
             // metroPanel1
             // 

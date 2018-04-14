@@ -386,5 +386,24 @@ namespace TagProcess
                 }
             }
         }
+
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            List<int> ids = new List<int>();
+            string msg = "";
+            for (int i = 0; i < dgv_group.Rows.Count; ++i)
+            {
+                DataGridViewCheckBoxCell chkbox = (DataGridViewCheckBoxCell)dgv_group.Rows[i].Cells[0];
+                if (chkbox != null && (bool)chkbox.FormattedValue == true)
+                {
+                    string id = dgv_group.Rows[i].Cells[1].Value.ToString();
+                    ids.Add(Int32.Parse(id));
+                    msg += id + ":" + dgv_group.Rows[i].Cells[2].Value.ToString() + "\r\n";
+                }
+            }
+
+            SetText0("設定起跑組別為：" + msg);
+            keeper.setStartingGroups(ids);
+        }
     }
 }

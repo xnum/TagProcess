@@ -99,9 +99,7 @@ namespace TagProcess
                 if (!group_start_time.ContainsKey(id))
                     group_start_time[id] = DateTime.Now;
             }
-
-            gcheck.Set(new HashSet<int>(groups_id));
-            
+           
             RestRequest req = new RestRequest("api/json/chip_race_group/batch_start", Method.PUT);
             req.AddParameter("groups", JsonConvert.SerializeObject(groups_id));
             req.AddParameter("time", DateTime.Now.ToString(MySqlDateTimeFormat));
@@ -116,6 +114,15 @@ namespace TagProcess
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// 預起跑功能，先設定等等起跑的組別
+        /// </summary>
+        /// <param name="groups_id"></param>
+        public void setStartingGroups(List<int> groups_id)
+        {           
+            gcheck.Set(new HashSet<int>(groups_id));
         }
 
         private void enqueue(string tag, int station, DateTime t)
