@@ -177,25 +177,31 @@ namespace TagProcess
                         string stime = start_time.ContainsKey(got_cmd.data) ? start_time[got_cmd.data] : "查無資料";
 
                         if (station_id == 1) stime = "";
-                        if (result == TimeKeeper.AddResult.DefeatFirst) stime = "組別錯誤";
+                        
+                        if (result == TimeKeeper.AddResult.DefeatFirst)
+                        {
+                            stime = "組別錯誤";
+                        }
+
+                        MetroGrid targetView = (result != TimeKeeper.AddResult.DefeatFirst) ? touchedView : faultView;
 
                         try
                         {
                             bool found = false;
-                            for(int j = 0; j < touchedView.Rows.Count && !found; ++j)
+                            for(int j = 0; j < targetView.Rows.Count && !found; ++j)
                             {
-                                if(touchedView.Rows[j].Cells[0].FormattedValue.ToString() == got_cmd.data)
+                                if(targetView.Rows[j].Cells[0].FormattedValue.ToString() == got_cmd.data)
                                 {
-                                    touchedView.Rows[j].Cells[4].Value = got_cmd.time.ToLongTimeString();
+                                    targetView.Rows[j].Cells[4].Value = got_cmd.time.ToLongTimeString();
                                     found = true;
                                     break;
                                 }
                             }
 
                             if(!found)
-                                touchedView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
+                                targetView.Rows.Add(got_cmd.data, race_id, name, group, got_cmd.time.ToLongTimeString(), stime);
 
-                            touchedView.FirstDisplayedScrollingRowIndex = touchedView.RowCount - 1;
+                            targetView.FirstDisplayedScrollingRowIndex = targetView.RowCount - 1;
                         }
                         catch(Exception ex)
                         {
@@ -365,6 +371,7 @@ namespace TagProcess
         {
             keeper.ClearTagged();
             touchedView.Rows.Clear();
+            faultView.Rows.Clear();
         }
 
         private void ReaderForm_FormClosing(object sender, FormClosingEventArgs e)
