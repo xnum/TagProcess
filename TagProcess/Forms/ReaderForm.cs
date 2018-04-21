@@ -376,7 +376,15 @@ namespace TagProcess
 
         private void ReaderForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            for(int i = 0; i < readerWorker.Length; ++i)
+            if(backgroundWorker1.IsBusy)
+            {
+                backgroundWorker1.CancelAsync();
+                SetText0("等待停止中，無法關閉視窗");
+                e.Cancel = true;
+                return;
+            }
+
+            for (int i = 0; i < readerWorker.Length; ++i)
             {
                 if(readerWorker[i].IsBusy)
                 {
