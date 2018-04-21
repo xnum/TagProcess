@@ -495,7 +495,7 @@
             this.textBox_log.Name = "textBox_log";
             this.textBox_log.PasswordChar = '\0';
             this.tableLayoutPanel1.SetRowSpan(this.textBox_log, 2);
-            this.textBox_log.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox_log.SelectedText = "";
             this.textBox_log.SelectionLength = 0;
             this.textBox_log.SelectionStart = 0;
@@ -714,6 +714,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(120, 33);
             this.button2.TabIndex = 43;
+            this.button2.Tag = "0";
             this.button2.Text = "定時工作";
             this.button2.UseSelectable = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
